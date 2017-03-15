@@ -1,7 +1,7 @@
 /* copyright vfreitas & thiagobbt */
 
-#ifndef _LINE_GTK_H_
-#define _LINE_GTK_H_
+#ifndef _POINT_GTK_H_
+#define _POINT_GTK_H_
 
 #include <vector>
 #include <gtk/gtk.h>
@@ -9,14 +9,14 @@
 #include "Coordinate.h"
 #include "DrawingManager.h"
 
-class LineGTK : public Drawable_GTK {
+class PointGTK : public Drawable_GTK {
  private:
  	std::vector<Coordinate>& coords;
  	const utils::Color& color;
 
  public:
-    LineGTK(std::vector<Coordinate>&, utils::Color, bool);
+    PointGTK(std::vector<Coordinate>&, utils::Color, bool);
     void draw(cairo_surface_t&);
 };
 
-#endif /* _LINE_GTK_H_ */
+#endif /* _POINT_GTK_H_ */

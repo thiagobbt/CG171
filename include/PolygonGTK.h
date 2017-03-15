@@ -1,7 +1,7 @@
 /* copyright vfreitas & thiagobbt */
 
-#ifndef _LINE_GTK_H_
-#define _LINE_GTK_H_
+#ifndef _POLYGON_GTK_H_
+#define _POLYGON_GTK_H_
 
 #include <vector>
 #include <gtk/gtk.h>
@@ -9,14 +9,15 @@
 #include "Coordinate.h"
 #include "DrawingManager.h"
 
-class LineGTK : public Drawable_GTK {
+class PolygonGTK : public Drawable_GTK {
  private:
  	std::vector<Coordinate>& coords;
  	const utils::Color& color;
+ 	const bool &fill;
 
  public:
-    LineGTK(std::vector<Coordinate>&, utils::Color, bool);
+    PolygonGTK(std::vector<Coordinate>&, utils::Color, bool);
     void draw(cairo_surface_t&);
 };
 
-#endif /* _LINE_GTK_H_ */
+#endif /* _POLYGON_GTK_H_ */

@@ -1,11 +1,12 @@
 /* vfreitas & thiagobbt */
 
 #include "Point.h"
+#include "PointGTK.h"
 
 
 Point::Point(std::vector<Coordinate>& coordinates, utils::Color c) 
 		: location(coordinates), color(c) {
-	drawable_obj = Point_GTK(location, c, false);
+	drawable_obj = PointGTK(location, c, false);
 }
 
 Point::Point() {

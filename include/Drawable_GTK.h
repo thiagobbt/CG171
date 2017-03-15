@@ -9,7 +9,7 @@
 #include "Coordinate.h"
 #include "DrawingManager.h"
 
-class Drawable_GTK : Drawable {
+class Drawable_GTK : public Drawable {
  private:
  	
  public:

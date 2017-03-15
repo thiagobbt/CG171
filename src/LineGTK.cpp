@@ -3,7 +3,7 @@
 #include "LineGTK.h"
 
 LineGTK::LineGTK(std::vector<Coordinate>& coords, utils::Color color, bool fill) 
-		: coords(coords), color(color), fill(fill) {}
+		: coords(coords), color(color) {}
 
 void LineGTK::draw(cairo_surface_t& surface) {
     cairo_t *cr = cairo_create(&surface);

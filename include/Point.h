@@ -12,7 +12,7 @@ class Point : Object {
     std::vector<Coordinate> location;
     utils::Color color;
  public:
-    Point(std::vector<Coordinate>&, utils::color);
+    Point(std::vector<Coordinate>&, utils::Color);
     Point();
     void draw();
 };
