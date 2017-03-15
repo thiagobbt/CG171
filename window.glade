@@ -1154,20 +1154,6 @@
                     <property name="row_spacing">2</property>
                     <property name="column_spacing">2</property>
                     <child>
-                      <object class="GtkButton" id="button1">
-                        <property name="label" translatable="yes">Z-</property>
-                        <property name="width_request">78</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="btn_z_minus_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkButton" id="button2">
                         <property name="width_request">78</property>
                         <property name="visible">True</property>
@@ -1188,21 +1174,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="button3">
-                        <property name="label" translatable="yes">Z+</property>
-                        <property name="width_request">78</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="btn_z_plus_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkButton" id="button4">
+                        <property name="width_request">78</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1222,12 +1195,14 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="button5">
+                        <property name="width_request">78</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="btn_down_cb" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image4">
+                            <property name="width_request">-1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="stock">gtk-go-down</property>
@@ -1241,6 +1216,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="button6">
+                        <property name="width_request">78</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1258,6 +1234,12 @@
                         <property name="left_attach">2</property>
                         <property name="top_attach">1</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>

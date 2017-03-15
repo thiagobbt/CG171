@@ -166,8 +166,9 @@ extern "C" G_MODULE_EXPORT void btn_add_point_cb() {
     gtk_color_chooser_get_rgba(btn_color, &rgba);
     gdk_cairo_set_source_rgba(cr, &rgba);
 
-    cairo_set_line_width(cr, 10);
-    cairo_move_to(cr, (int)x, (int)y);
+    cairo_set_line_width(cr, 1);
+    cairo_move_to(cr, x, y);
+    cairo_line_to(cr, x+1, y+1);
     cairo_close_path(cr);
     cairo_stroke(cr);
     gtk_widget_queue_draw (window_widget);
