@@ -2,6 +2,7 @@
 #define _CALLBACKS_H_
 
 #include <gtk/gtk.h>
+#include <iostream>
 
 #include "DrawingManager.h"
 
@@ -40,6 +41,7 @@ namespace cb {
 
     /* Redraw the screen from the surface */
     inline gboolean redraw (GtkWidget *widget, cairo_t *cr, gpointer data){
+        std::cout << "redraw\n";
         cairo_set_source_surface(cr, surface, 0, 0);
         cairo_paint(cr);
 

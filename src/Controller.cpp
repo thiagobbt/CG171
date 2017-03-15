@@ -5,6 +5,7 @@
 #include "Polygon.h"
 
 
+
 bool Controller::add_point(const string& id, double x, double y, utils::Color c) {
 	Coordinate coord(x,y);
 	return win.get_world().add_obj(id, new Point({coord}, c));
@@ -12,8 +13,12 @@ bool Controller::add_point(const string& id, double x, double y, utils::Color c)
 
 bool Controller::add_line(const string& id, double x1, double y1,
 							double x2, double y2, utils::Color c) {
+	std::cout << "ctrl addline\n";
 	Coordinate c1(x1,y1);
 	Coordinate c2(x2,y2);
+	std:: cout << c1.get_x() << " " << c1.get_y() << "\n";
+	std:: cout << c2.get_x() << " " << c2.get_y() << "\n";
+
 	return win.get_world().add_obj(id, new Line({c1,c2},c));
 }
 

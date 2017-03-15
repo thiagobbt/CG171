@@ -4,7 +4,9 @@
 #include <cstdlib>
 #include <cstring>
 #include "Callbacks.h"
+#include "Controller.h"
 #include "DrawingManager.h"
+
 
 GtkWidget *window_widget;
 GtkWidget *new_object_widget;
@@ -13,6 +15,8 @@ GtkBuilder  *gtkBuilder;
 GtkTextView *log_box;
 
 GtkTextBuffer *log_buffer;
+
+Controller ctrl;
 
 void log_print(const char* text) {
     GtkTextIter log_iter;
@@ -167,7 +171,7 @@ extern "C" G_MODULE_EXPORT void btn_add_point_cb() {
 extern "C" G_MODULE_EXPORT void btn_add_line_cb() {
     log_print("Add line\n");
 
-    // GtkEntry *entry_line_name = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_line_name"));
+    GtkEntry *entry_line_name = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_line_name"));
     GtkEntry *entry_line_x1 = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_line_x1"));
     GtkEntry *entry_line_y1 = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_line_y1"));
     // GtkEntry *entry_line_z1 = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_line_z1"));
@@ -175,7 +179,7 @@ extern "C" G_MODULE_EXPORT void btn_add_line_cb() {
     GtkEntry *entry_line_y2 = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_line_y2"));
     // GtkEntry *entry_line_z2 = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_line_z2"));
 
-    // const char* name = (char*)gtk_entry_get_text(entry_line_name);
+    const char* name = (char*)gtk_entry_get_text(entry_line_name);
     const char* x1_c = (char*)gtk_entry_get_text(entry_line_x1);
     const char* y1_c = (char*)gtk_entry_get_text(entry_line_y1);
     // const char* z1_c = (char*)gtk_entry_get_text(entry_line_z1);
@@ -192,18 +196,23 @@ extern "C" G_MODULE_EXPORT void btn_add_line_cb() {
 
     GtkColorChooser* btn_color = GTK_COLOR_CHOOSER(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "colorbutton_line"));
     GdkRGBA rgba;
-
-    cairo_t *cr = cairo_create(surface);
-
     gtk_color_chooser_get_rgba(btn_color, &rgba);
-    // gdk_cairo_set_source_rgba(cr, &rgba);
-    cairo_set_source_rgb (cr, rgba.red, rgba.green, rgba.blue);
 
-    cairo_set_line_width(cr, 1);
-    cairo_move_to(cr, x1, y1);
-    cairo_line_to(cr, x2, y2);
-    cairo_close_path(cr);
-    cairo_stroke(cr);
+    std::cout << x1 << ", " << y1 << "\n";
+    std::cout << x2 << ", " << y2 << "\n";
+
+    ctrl.add_line(name, x1, y1, x2, y2, utils::Color{rgba.red, rgba.green, rgba.blue});
+
+    // cairo_t *cr = cairo_create(surface);
+
+    // // gdk_cairo_set_source_rgba(cr, &rgba);
+    // cairo_set_source_rgb (cr, rgba.red, rgba.green, rgba.blue);
+
+    // cairo_set_line_width(cr, 1);
+    // cairo_move_to(cr, x1, y1);
+    // cairo_line_to(cr, x2, y2);
+    // cairo_close_path(cr);
+    // cairo_stroke(cr);
     gtk_widget_queue_draw (window_widget);
 
     gtk_widget_hide(new_object_widget);

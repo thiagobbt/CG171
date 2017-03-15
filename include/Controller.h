@@ -15,7 +15,7 @@ class Controller {
  	Window win;
 
  public:
-  	Controller();
+  	Controller() {}
  	bool add_point(const string&, double, double, utils::Color);
  	bool add_line(const string&, double, double, double, double, utils::Color);
  	bool add_polygon(const string&, const std::vector<double>&, utils::Color, bool);

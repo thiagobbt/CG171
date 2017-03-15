@@ -5,8 +5,10 @@ World::~World() {
 }
 
 bool World::add_obj(string id, Object* obj) {
+	std::cout << "window add obj\n";
 	if (!display_file.count(id)) {
 		display_file[id] = obj;
+		obj->draw();
 		return true;
 	} else {
 		return false;
