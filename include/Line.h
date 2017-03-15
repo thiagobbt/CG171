@@ -6,7 +6,7 @@
 #include "Object.h"
 #include "DrawingManager.h"
 
-class Line : Object {
+class Line : public Object {
  private:
     Drawable drawable_obj;
     std::vector<Coordinate> location;

@@ -5,9 +5,10 @@
 
 #include <vector>
 #include <string>
-#include "World.h"
 
-using std::string = string;
+using std::string;
+
+class World;
 
 class Controller {
  private:

@@ -4,17 +4,20 @@
 #define WORLD_H
 
 #include "Object.h"
-#include "Window.h"
+#include <unordered_map>
+
+using std::string;
 
 class World {
  private:
-    std::list<const Object&> display_file;
-    Window& window;
+    std::unordered_map<string, Object*> display_file;
 
  public:
-    World(const World&);
-    World(Window&);
-
+    World() {}
+    ~World();
+    bool add_object(string, Object*);
+    void delete_object(string);
+    void clear();    
 };
 
 #endif /* WORLD_H */

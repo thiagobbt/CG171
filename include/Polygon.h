@@ -6,7 +6,7 @@
 #include "Object.h"
 #include "DrawingManager.h"
 
-class Polygon : Object {
+class Polygon : public Object {
  private:
     Drawable drawable_obj;
     std::vector<Coordinate> location;
