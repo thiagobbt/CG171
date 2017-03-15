@@ -11,8 +11,9 @@ class Polygon : public Object {
     Drawable drawable_obj;
     std::vector<Coordinate> location;
     utils::Color color;
+    bool fill;
  public:
-    Polygon(const std::vector<Coordinate>&);
+    Polygon(std::vector<Coordinate>&, utils::Color, bool);
     void draw();
 };
 
