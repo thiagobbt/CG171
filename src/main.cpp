@@ -2,8 +2,10 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <cstring>
+#include "Callbacks.h"
 
-static cairo_surface_t *surface = NULL;
+
 GtkWidget *drawing_area;
 GtkWidget *window_widget;
 GtkWidget *new_object_widget;
@@ -21,38 +23,7 @@ void log_print(const char* text) {
     gtk_text_view_scroll_to_mark(log_box, log_mark, 0, false, 0, 0);
 }
 
-/*Clear the surface, removing the scribbles*/
-static void clear_surface() {
-    cairo_t *cr;
 
-    cr = cairo_create(surface);
-
-    cairo_set_source_rgb(cr, 1, 1, 1);
-    cairo_paint(cr);
-
-    cairo_destroy(cr);
-}
-
-/*Creates the surface*/
-static gboolean create_surface (GtkWidget *widget, GdkEventConfigure *event, gpointer data){
-    if (surface)
-        cairo_surface_destroy(surface);
-
-    surface = gdk_window_create_similar_surface(gtk_widget_get_window(widget),
-                                                CAIRO_CONTENT_COLOR,
-                                                gtk_widget_get_allocated_width(widget),
-                                                gtk_widget_get_allocated_height(widget));
-    clear_surface();
-    return TRUE;
-}
-
-/* Redraw the screen from the surface */
-static gboolean redraw (GtkWidget *widget, cairo_t *cr, gpointer data){
-    cairo_set_source_surface(cr, surface, 0, 0);
-    cairo_paint(cr);
-
-    return FALSE;
-}
 
 extern "C" G_MODULE_EXPORT void btn_new_cb(){
     log_print("Open new object window.\n");
@@ -61,10 +32,24 @@ extern "C" G_MODULE_EXPORT void btn_new_cb(){
 
 extern "C" G_MODULE_EXPORT void btn_delete_cb(){
     log_print("Delete object\n");
+
+    GtkTreeSelection *objects_treeview_selection = GTK_TREE_SELECTION(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "objects_treeview_selection"));
+    GtkListStore *object_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
+    GtkTreeIter iter;
+
+    if (!gtk_tree_selection_get_selected(objects_treeview_selection, NULL, &iter)) {
+        log_print("   Error: Could not get selection\n");
+        return;
+    }
+    gtk_list_store_remove(object_store, &iter);
+
 }
 
 extern "C" G_MODULE_EXPORT void btn_clear_cb(){
     log_print("Clear all objects\n");
+
+    GtkListStore *object_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
+    gtk_list_store_clear(object_store);
 }
 
 extern "C" G_MODULE_EXPORT void btn_cancel_obj_cb(){
@@ -133,23 +118,21 @@ extern "C" G_MODULE_EXPORT void btn_down_cb() {
     log_print("Down\n");
 }
 
-extern "C" G_MODULE_EXPORT void btn_z_plus_cb() {
-    log_print("Z+\n");
-}
-
-extern "C" G_MODULE_EXPORT void btn_z_minus_cb() {
-    log_print("Z-\n");
-}
-
 extern "C" G_MODULE_EXPORT void btn_add_point_cb() {
     log_print("Add point\n");
 
-    // GtkEntry *entry_point_name = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_point_name"));
+    GtkEntry *entry_point_name = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_point_name"));
     GtkEntry *entry_point_x = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_point_x"));
     GtkEntry *entry_point_y = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_point_y"));
     // GtkEntry *entry_point_z = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_point_z"));
 
-    // const char* name = (char*)gtk_entry_get_text(entry_point_name);
+    const char* name = (char*)gtk_entry_get_text(entry_point_name);
+
+    if (strcmp(name, "") == 0) {
+        log_print("   Error: Object name can't be empty\n");
+        return;
+    }
+
     const char* x_c = (char*)gtk_entry_get_text(entry_point_x);
     const char* y_c = (char*)gtk_entry_get_text(entry_point_y);
     // const char* z_c = (char*)gtk_entry_get_text(entry_point_z);
@@ -172,6 +155,14 @@ extern "C" G_MODULE_EXPORT void btn_add_point_cb() {
     cairo_close_path(cr);
     cairo_stroke(cr);
     gtk_widget_queue_draw (window_widget);
+
+    GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
+    GtkTreeIter obj_store_iter;
+    gtk_list_store_append(obj_store, &obj_store_iter);
+    gtk_list_store_set (obj_store, &obj_store_iter,
+                      0, name,
+                      1, "Point",
+                      -1);
 
     gtk_widget_hide(new_object_widget);
 }
@@ -208,9 +199,10 @@ extern "C" G_MODULE_EXPORT void btn_add_line_cb() {
     cairo_t *cr = cairo_create(surface);
 
     gtk_color_chooser_get_rgba(btn_color, &rgba);
-    gdk_cairo_set_source_rgba(cr, &rgba);
+    // gdk_cairo_set_source_rgba(cr, &rgba);
+    cairo_set_source_rgb (cr, rgba.red, rgba.green, rgba.blue);
 
-    cairo_set_line_width(cr, 10);
+    cairo_set_line_width(cr, 1);
     cairo_move_to(cr, x1, y1);
     cairo_line_to(cr, x2, y2);
     cairo_close_path(cr);
@@ -223,11 +215,6 @@ extern "C" G_MODULE_EXPORT void btn_add_line_cb() {
 extern "C" G_MODULE_EXPORT void btn_add_polygon_cb() {
     log_print("Add polygon\n");
     gtk_widget_hide(new_object_widget);
-}
-
-void close_window(GtkWidget *widget, gpointer window) {
-    gtk_widget_destroy(GTK_WIDGET(widget));
-    gtk_main_quit();
 }
 
 
@@ -250,9 +237,9 @@ int main(int argc, char *argv[]){
     gtk_window_set_type_hint((GtkWindow*)window_widget, GDK_WINDOW_TYPE_HINT_UTILITY);
     gtk_window_set_type_hint((GtkWindow*)new_object_widget, GDK_WINDOW_TYPE_HINT_UTILITY);
 
-    g_signal_connect (drawing_area, "draw", G_CALLBACK (redraw), NULL);
-    g_signal_connect (drawing_area,"configure-event", G_CALLBACK (create_surface), NULL);
-    g_signal_connect (window_widget, "delete_event", G_CALLBACK (close_window), NULL);
+    g_signal_connect(drawing_area, "draw", G_CALLBACK(cb::redraw), NULL);
+    g_signal_connect(drawing_area,"configure-event", G_CALLBACK(cb::create_surface), NULL);
+    g_signal_connect(window_widget, "delete_event", G_CALLBACK(cb::close_window), NULL);
 
     gtk_builder_connect_signals(gtkBuilder, NULL);
     gtk_widget_show_all(window_widget);

@@ -4,14 +4,15 @@
 #include <gtk/gtk.h>
 #include "Drawable_GTK.h"
 #include "Coordinate.h"
+#include "DrawingManager.h"
 
 class PointGTK : Drawable_GTK {
  public:
     PointGTK();
 
-    void draw(std::vector<Coordinate> &points, cairo_surface_t& surface, GdkRGBA& color, bool fill) {
+    void draw(std::vector<Coordinate> &points, cairo_surface_t& surface, utils::Color& color, bool fill) {
     	cairo_t *cr = cairo_create(&surface);
-    	gdk_cairo_set_source_rgba(cr, &color);
+    	// gdk_cairo_set_source_rgba(cr, &color);
 
     	double x = points[0].get_x();
     	double y = points[0].get_y();
