@@ -12,7 +12,7 @@ class PointGTK : Drawable_GTK {
 
     void draw(std::vector<Coordinate> &points, cairo_surface_t& surface, utils::Color& color, bool fill) {
     	cairo_t *cr = cairo_create(&surface);
-    	// gdk_cairo_set_source_rgba(cr, &color);
+        cairo_set_source_rgb(cr, color.r, color.g, color.b);
 
     	double x = points[0].get_x();
     	double y = points[0].get_y();

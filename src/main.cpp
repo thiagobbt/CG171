@@ -5,8 +5,6 @@
 #include <cstring>
 #include "Callbacks.h"
 
-
-GtkWidget *drawing_area;
 GtkWidget *window_widget;
 GtkWidget *new_object_widget;
 
@@ -22,8 +20,6 @@ void log_print(const char* text) {
     gtk_text_buffer_insert(log_buffer, &log_iter, text, -1);
     gtk_text_view_scroll_to_mark(log_box, log_mark, 0, false, 0, 0);
 }
-
-
 
 extern "C" G_MODULE_EXPORT void btn_new_cb(){
     log_print("Open new object window.\n");
@@ -220,6 +216,8 @@ extern "C" G_MODULE_EXPORT void btn_add_polygon_cb() {
 
 int main(int argc, char *argv[]){
     gtk_init(&argc, &argv);
+
+    GtkWidget *drawing_area;
 
     gtkBuilder = gtk_builder_new();
     gtk_builder_add_from_file(gtkBuilder, "window.glade", NULL);

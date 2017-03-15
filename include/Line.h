@@ -4,6 +4,7 @@
 #define LINE_H
 
 #include "Object.h"
+#include "DrawingManager.h"
 
 class Line : Object {
  private:

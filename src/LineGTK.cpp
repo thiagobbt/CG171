@@ -1,21 +1,16 @@
 /* copyright vfreitas & thiagobbt */
 
-#include <vector>
-#include <gtk/gtk.h>
-#include "Drawable_GTK.h"
-#include "Coordinate.h"
+#include "LineGTK.h"
 
-class LineGTK : Drawable_GTK {
- public:
-    LineGTK();
+LineGTK::LineGTK(std::vector<Coordinate>& coords, utils::Color color, bool fill) 
+		: coords(coords), color(color), fill(fill) {}
 
-    void draw(std::vector<Coordinate> &points, cairo_surface_t& surface, GdkRGBA& color, bool fill) {
-        cairo_t *cr = cairo_create(&surface);
-        gdk_cairo_set_source_rgba(cr, &color);
+void LineGTK::draw(cairo_surface_t& surface) {
+    cairo_t *cr = cairo_create(&surface);
+    cairo_set_source_rgb(cr, color.r, color.g, color.b);
 
-        cairo_move_to(cr, points[0].get_x(), points[0].get_y());
-        cairo_line_to(cr, points[1].get_x(), points[1].get_y());
+    cairo_move_to(cr, coords[0].get_x(), coords[0].get_y());
+    cairo_line_to(cr, coords[1].get_x(), coords[1].get_y());
 
-        cairo_stroke(cr);
-    }
-};
+    cairo_stroke(cr);
+}

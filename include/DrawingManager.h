@@ -10,7 +10,7 @@ class DrawingManager {
  	DrawingManager() = default;
  public:
  	static DrawingManager& instance();
- 	void draw(const Drawable&);
+ 	void draw(Drawable&);
 };
 
 
