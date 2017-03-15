@@ -8,10 +8,9 @@
 class Line : Object {
  private:
     Drawable& drawable_obj;
-    std::vector<Coordinate&> location;
+    std::vector<Coordinate> location;
  public:
-    Line(const Line&);
-    Line(Coordinate&, Coordinate&);
+    Line(const Coordinate&, const Coordinate&);
     void draw();
 };
 

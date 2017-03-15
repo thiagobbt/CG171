@@ -4,14 +4,15 @@
 #define POLYGON_H
 
 #include "Object.h"
+#include "DrawingManager.h"
 
 class Polygon : Object {
  private:
-    Drawable& drawable_obj;
-    std::vector<Coordinate&> location;
+    Drawable drawable_obj;
+    std::vector<Coordinate> location;
+    utils::Color color;
  public:
-    Polygon(const Polygon&);
-    Polygon(const std::vector<Coordinate&>&);
+    Polygon(const std::vector<Coordinate>&);
     void draw();
 };
 

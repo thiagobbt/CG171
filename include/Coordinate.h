@@ -7,7 +7,8 @@ class Coordinate {
  private:
  	double x, y, z, w;
  public:
- 	Coordinate(const Coordinate&);
+ 	Coordinate() {}
+ 	Coordinate(const Coordinate&) {}
  	Coordinate(double, double, double, double);
 
  	double get_x() { return x; }

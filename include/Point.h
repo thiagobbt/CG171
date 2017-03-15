@@ -4,14 +4,15 @@
 #define _POINT_H_
 
 #include "Object.h"
+#include "DrawingManager.h"
 
 class Point : Object {
  private:
-    Drawable& drawable_obj;
-    std::vector<Coordinate&> location;
+    Drawable drawable_obj;
+    std::vector<Coordinate> location;
  public:
-    Point(const Point&);
-    Point(Coordinate&);
+    Point(std::vector<Coordinate>&);
+    Point();
     void draw();
 };
 

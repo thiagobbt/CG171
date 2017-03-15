@@ -7,8 +7,8 @@ class Drawable {
  private:
  	
  public:
- 	Drawable(const Drawable&);
- 	void draw();
+ 	Drawable() {}
+ 	virtual void draw() {}
 };
 
 #endif /* _DRAWABLE_H_ */

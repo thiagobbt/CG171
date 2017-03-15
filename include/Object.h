@@ -7,15 +7,17 @@
 #include "Coordinate.h"
 #include "Drawable.h"
 
+#include "gtk/gtk.h"
+
 class Object {
  private:
- 	Drawable& drawable_obj;
- 	std::vector<Coordinate&> location;
+ 	Drawable drawable_obj;
+ 	std::vector<Coordinate> location;
 
  public:
- 	Object(const Object&);
- 	Object(std::vector<Coordinate&>);
- 	void draw();
+ 	//Object() {}
+  	//Object(std::vector<Coordinate>&) {}
+ 	virtual void draw() = 0;
 };
 
 #endif /* _OBJECT_H_ */
