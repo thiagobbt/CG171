@@ -6,13 +6,13 @@
 #include "Object.h"
 #include "DrawingManager.h"
 
-class Point : Object {
+class Point : public Object {
  private:
     Drawable* drawable_obj;
     std::vector<Coordinate> location;
     utils::Color color;
  public:
-    Point(std::vector<Coordinate>&, utils::Color);
+    Point(std::vector<Coordinate>, utils::Color);
     Point();
     void draw();
 };

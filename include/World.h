@@ -15,8 +15,8 @@ class World {
  public:
     World() {}
     ~World();
-    bool add_object(string, Object*);
-    void delete_object(string);
+    bool add_obj(string, Object*);
+    void delete_obj(string);
     void clear();    
 };
 

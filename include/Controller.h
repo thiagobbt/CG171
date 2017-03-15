@@ -5,20 +5,20 @@
 
 #include <vector>
 #include <string>
+#include "DrawingManager.h"
+#include "Window.h"
 
 using std::string;
 
-class World;
-
 class Controller {
  private:
- 	World* world;
+ 	Window win;
 
  public:
   	Controller();
  	bool add_point(const string&, double, double, utils::Color);
  	bool add_line(const string&, double, double, double, double, utils::Color);
- 	bool add_polygon(string, const std::vector<double>&, utils::Color, bool);
+ 	bool add_polygon(const string&, const std::vector<double>&, utils::Color, bool);
  	
  	void delete_obj(const string&);
  	

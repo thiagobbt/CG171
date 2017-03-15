@@ -12,7 +12,7 @@ class Line : public Object {
     std::vector<Coordinate> location;
     utils::Color color;
  public:
-    Line(std::vector<Coordinate>&, utils::Color);
+    Line(std::vector<Coordinate>, utils::Color);
     void draw();
 };
 

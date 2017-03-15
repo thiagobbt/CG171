@@ -4,7 +4,7 @@ World::~World() {
 	clear();
 }
 
-bool World::add_object(string id, Object* obj) {
+bool World::add_obj(string id, Object* obj) {
 	if (!display_file.count(id)) {
 		display_file[id] = obj;
 		return true;
@@ -13,7 +13,7 @@ bool World::add_object(string id, Object* obj) {
 	}
 }
 
-void World::delete_object(string id) {
+void World::delete_obj(string id) {
 	display_file.erase(id);
 }
 
