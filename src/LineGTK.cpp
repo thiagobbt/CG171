@@ -1,8 +1,5 @@
 /* copyright vfreitas & thiagobbt */
 
-#ifndef _LINE_GTK_H_
-#define _LINE_GTK_H_
-
 #include <vector>
 #include <gtk/gtk.h>
 #include "Drawable_GTK.h"
@@ -22,5 +19,3 @@ class LineGTK : Drawable_GTK {
         cairo_stroke(cr);
     }
 };
-
-#endif /* LINE_GTK_H */

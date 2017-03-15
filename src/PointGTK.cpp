@@ -1,8 +1,5 @@
 /* copyright vfreitas & thiagobbt */
 
-#ifndef _POINT_GTK_H_
-#define _POINT_GTK_H_
-
 #include <vector>
 #include <gtk/gtk.h>
 #include "Drawable_GTK.h"
@@ -25,5 +22,3 @@ class PointGTK : Drawable_GTK {
 	    cairo_stroke(cr);
     }
 };
-
-#endif /* POINT_GTK_H_ */
