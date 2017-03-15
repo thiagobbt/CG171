@@ -18,7 +18,7 @@ class Window {
     Window(const Coordinate&, const Coordinate&);
     void move(double, double, double); // x,y,z
     void zoom(double);
-    Coordinate to_viewport();
+    Coordinate to_viewport(Coordinate&);
     World& get_world() { return world; }
 };
 

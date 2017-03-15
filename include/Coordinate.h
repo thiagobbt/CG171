@@ -7,11 +7,11 @@ class Coordinate {
  private:
  	double x, y, z, w;
  public:
- 	Coordinate() {}
  	Coordinate(const Coordinate&) {}
- 	Coordinate(double, double, double, double);
+ 	Coordinate(double x = 0, double y = 0, double z = 0, double w = 0)
+ 		: x(x), y(y), z(z), w(w) {}
 
- 	void sum_coords(double a, double b, double c, double d) {
+ 	void sum_coords(double a = 0, double b = 0, double c = 0, double d = 0) {
  		x += a;
  		y += b;
  		z += c;

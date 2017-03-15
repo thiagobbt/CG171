@@ -24,8 +24,4 @@ namespace utils {
 	};
 }
 
-// namespace Control {
-//  	DrawingManager mngr;
-// }
-
 #endif /* _DRAWING_MANAGER_H_ */
