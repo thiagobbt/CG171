@@ -16,6 +16,7 @@ class Object {
 
  public:
   	//Object(std::vector<Coordinate>&) {}
+  	virtual ~Object() {}
  	virtual void draw() = 0;
 };
 
