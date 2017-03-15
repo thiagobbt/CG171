@@ -11,6 +11,13 @@ class Coordinate {
  	Coordinate(const Coordinate&) {}
  	Coordinate(double, double, double, double);
 
+ 	void sum_coords(double a, double b, double c, double d) {
+ 		x += a;
+ 		y += b;
+ 		z += c;
+ 		w += d;
+ 	}
+
  	double get_x() { return x; }
  	double get_y() { return y; }
  	double get_z() { return z; }

@@ -4,18 +4,22 @@
 #define WINDOW_H
 
 #include "Object.h"
+#include "World.h"
 
-class World {
+
+class Window {
  private:
-    Coordinate& starting_point;
-    Coordinate& end_point;
+    Coordinate starting_point;
+    Coordinate end_point;
+    World world;
 
  public:
-    World(const World&);
-    World(const Coordinate&, double);
-    void move(double, double, double);
+ 	Window();
+    Window(const Coordinate&, const Coordinate&);
+    void move(double, double, double); // x,y,z
     void zoom(double);
-    Coordinate toViewport(Coordinate&, Coordinate&, Coordinate&);
+    Coordinate to_viewport();
+    World& get_world() { return world; }
 };
 
 #endif /* WINDOW_H */
