@@ -8,7 +8,7 @@
 
 class Point : Object {
  private:
-    Drawable drawable_obj;
+    Drawable* drawable_obj;
     std::vector<Coordinate> location;
     utils::Color color;
  public:

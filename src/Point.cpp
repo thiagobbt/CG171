@@ -6,7 +6,7 @@
 
 Point::Point(std::vector<Coordinate>& coordinates, utils::Color c) 
 		: location(coordinates), color(c) {
-	drawable_obj = PointGTK(location, c, false);
+	drawable_obj = new PointGTK(location, c, false);
 }
 
 Point::Point() {
@@ -14,5 +14,5 @@ Point::Point() {
 }
 
 void Point::draw() {
-	DrawingManager::instance().draw(drawable_obj);
+	DrawingManager::instance().draw(*drawable_obj);
 }

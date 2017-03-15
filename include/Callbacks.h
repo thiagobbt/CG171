@@ -3,6 +3,8 @@
 
 #include <gtk/gtk.h>
 
+#include "DrawingManager.h"
+
 namespace {
     static cairo_surface_t *surface = NULL;
 
@@ -29,6 +31,9 @@ namespace cb {
                                                     CAIRO_CONTENT_COLOR,
                                                     gtk_widget_get_allocated_width(widget),
                                                     gtk_widget_get_allocated_height(widget));
+        DrawingManager& dm = DrawingManager::instance();
+        dm.setSurface(surface);
+
         clear_surface();
         return TRUE;
     }

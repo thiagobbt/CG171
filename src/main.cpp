@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 #include "Callbacks.h"
+#include "DrawingManager.h"
 
 GtkWidget *window_widget;
 GtkWidget *new_object_widget;

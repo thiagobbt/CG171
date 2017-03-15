@@ -5,11 +5,11 @@
 
 #include <vector>
 #include <gtk/gtk.h>
-#include "Drawable_GTK.h"
+#include "Drawable.h"
 #include "Coordinate.h"
 #include "DrawingManager.h"
 
-class PolygonGTK : public Drawable_GTK {
+class PolygonGTK : public Drawable {
  private:
  	std::vector<Coordinate>& coords;
  	const utils::Color& color;

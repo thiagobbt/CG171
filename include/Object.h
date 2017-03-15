@@ -11,7 +11,7 @@
 
 class Object {
  private:
- 	Drawable drawable_obj;
+ 	Drawable* drawable_obj;
  	std::vector<Coordinate> location;
 
  public:

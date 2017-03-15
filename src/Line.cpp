@@ -4,9 +4,9 @@
 
 Line::Line(std::vector<Coordinate>& a, utils::Color c) 
 		: location(a), color(c) {
-	drawable_obj = LineGTK(a, c, false); 
+	drawable_obj = new LineGTK(a, c, false); 
 }
 
 void Line::draw() {
-	DrawingManager::instance().draw(drawable_obj);
+	DrawingManager::instance().draw(*drawable_obj);
 }
