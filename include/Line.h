@@ -7,10 +7,11 @@
 
 class Line : Object {
  private:
-    Drawable& drawable_obj;
+    Drawable drawable_obj;
     std::vector<Coordinate> location;
+    utils::Color color;
  public:
-    Line(const Coordinate&, const Coordinate&);
+    Line(std::vector<Coordinate>&, utils::Color);
     void draw();
 };
 

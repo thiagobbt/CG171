@@ -3,9 +3,9 @@
 #include "Point.h"
 
 
-Point::Point(std::vector<Coordinate>& coordinates) {
-	location = coordinates;
-	//drawable_obj = Point_GTK(location);
+Point::Point(std::vector<Coordinate>& coordinates, utils::Color c) 
+		: location(coordinates), color(c) {
+	drawable_obj = Point_GTK(location, c, false);
 }
 
 Point::Point() {
@@ -13,5 +13,5 @@ Point::Point() {
 }
 
 void Point::draw() {
-	//Control::mngr.draw(drawable_obj);
+	DrawingManager::instance().draw(drawable_obj);
 }
