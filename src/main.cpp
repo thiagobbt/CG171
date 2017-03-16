@@ -145,17 +145,19 @@ extern "C" G_MODULE_EXPORT void btn_add_point_cb() {
     GtkColorChooser* btn_color = GTK_COLOR_CHOOSER(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "colorbutton_point"));
     GdkRGBA rgba;
 
-    cairo_t *cr = cairo_create(surface);
+    // cairo_t *cr = cairo_create(surface);
 
     gtk_color_chooser_get_rgba(btn_color, &rgba);
-    gdk_cairo_set_source_rgba(cr, &rgba);
+    // gdk_cairo_set_source_rgba(cr, &rgba);
 
-    cairo_set_line_width(cr, 1);
-    cairo_move_to(cr, x, y);
-    cairo_line_to(cr, x+1, y+1);
-    cairo_close_path(cr);
-    cairo_stroke(cr);
+    // cairo_set_line_width(cr, 1);
+    // cairo_move_to(cr, x, y);
+    // cairo_line_to(cr, x+1, y+1);
+    // cairo_close_path(cr);
+    // cairo_stroke(cr);
     gtk_widget_queue_draw (window_widget);
+
+    ctrl.add_point(name, x, y, utils::Color{rgba.red, rgba.green, rgba.blue});
 
     GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
     GtkTreeIter obj_store_iter;
@@ -220,6 +222,26 @@ extern "C" G_MODULE_EXPORT void btn_add_line_cb() {
 
 extern "C" G_MODULE_EXPORT void btn_add_polygon_cb() {
     log_print("Add polygon\n");
+
+    GtkTreeModel *pol_coordinates = GTK_TREE_MODEL(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "list_store_pol_coordinates"));
+
+    GtkTreeIter iter;
+    gtk_tree_model_get_iter_first(pol_coordinates, &iter);
+
+    while (iter != NULL) {
+        gtk_tree_model_get
+    }
+
+    GtkEntry *entry_line_name = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_pol_name"));
+    const char* name = (char*)gtk_entry_get_text(entry_line_name);
+
+    GtkColorChooser* btn_color = GTK_COLOR_CHOOSER(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "colorbutton_line"));
+    GdkRGBA rgba;
+    gtk_color_chooser_get_rgba(btn_color, &rgba);
+
+    
+    ctrl.add_polygon(name, const std::vector<double> &, utils::Color{rgba.red, rgba.green, rgba.blue})
+
     gtk_widget_hide(new_object_widget);
 }
 
@@ -252,6 +274,7 @@ int main(int argc, char *argv[]){
     gtk_builder_connect_signals(gtkBuilder, NULL);
     gtk_widget_show_all(window_widget);
 
+    ctrl.add_polygon(name, const std::vector<double> &, utils::Color, bool)
 
     gtk_main ();
     return 0;

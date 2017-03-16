@@ -2,7 +2,7 @@
 
 #include "PolygonGTK.h"
 
-PolygonGTK::PolygonGTK(std::vector<Coordinate>& coords, utils::Color color, bool fill) 
+PolygonGTK::PolygonGTK(const std::vector<Coordinate>& coords, utils::Color color, bool fill) 
         : coords(coords), color(color), fill(fill) {}
 
 void PolygonGTK::draw(cairo_surface_t& surface, Window& win) {

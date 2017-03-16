@@ -2,7 +2,7 @@
 
 #include "PointGTK.h"
 
-PointGTK::PointGTK(std::vector<Coordinate>& coords, utils::Color color, bool fill) 
+PointGTK::PointGTK(const std::vector<Coordinate>& coords, utils::Color color, bool fill) 
         : coords(coords), color(color) {}
 
 void PointGTK::draw(cairo_surface_t& surface, Window& win) {
