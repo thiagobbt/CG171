@@ -53,3 +53,12 @@ void Controller::zoom_in(double zoom) {
 void Controller::zoom_out(double zoom) {
 	win.zoom(zoom);
 }
+
+void Controller::pan_x(double x) {
+	std::cout << "pan_x" << std::endl;
+	win.move(x,0,0);
+}
+
+void Controller::pan_y(double y) {
+	win.move(0,y,0);
+}

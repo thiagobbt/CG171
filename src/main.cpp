@@ -118,18 +118,26 @@ extern "C" G_MODULE_EXPORT void btn_zoom_out_cb() {
 
 extern "C" G_MODULE_EXPORT void btn_right_cb() {
     log_print("Right\n");
+    ctrl.pan_x(20);
+    gtk_widget_queue_draw(window_widget);
 }
 
 extern "C" G_MODULE_EXPORT void btn_left_cb() {
     log_print("Left\n");
+    ctrl.pan_x(-20);
+    gtk_widget_queue_draw(window_widget);
 }
 
 extern "C" G_MODULE_EXPORT void btn_up_cb() {
     log_print("Up\n");
+    ctrl.pan_y(20);
+    gtk_widget_queue_draw(window_widget);
 }
 
 extern "C" G_MODULE_EXPORT void btn_down_cb() {
     log_print("Down\n");
+    ctrl.pan_y(-20);
+    gtk_widget_queue_draw(window_widget);
 }
 
 extern "C" G_MODULE_EXPORT void btn_add_point_cb() {
