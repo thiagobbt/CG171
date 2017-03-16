@@ -9,7 +9,6 @@
 namespace {
     static cairo_surface_t *surface = NULL;
 
-    /*Clear the surface, removing the scribbles*/
     void clear_surface() {
         cairo_t *cr;
 
@@ -23,7 +22,6 @@ namespace {
 }
 
 namespace cb {
-    /*Creates the surface*/
     inline gboolean create_surface (GtkWidget *widget, GdkEventConfigure *event, gpointer data){
         if (surface)
             cairo_surface_destroy(surface);
@@ -41,7 +39,6 @@ namespace cb {
 
     /* Redraw the screen from the surface */
     inline gboolean redraw (GtkWidget *widget, cairo_t *cr, gpointer data){
-        std::cout << "redraw\n";
         clear_surface();
         DrawingManager::instance().redraw();
         cairo_set_source_surface(cr, surface, 0, 0);

@@ -58,6 +58,9 @@ extern "C" G_MODULE_EXPORT void btn_delete_cb(){
 extern "C" G_MODULE_EXPORT void btn_clear_cb(){
     log_print("Clear all objects\n");
 
+    ctrl.clear_world();
+    gtk_widget_queue_draw(window_widget);
+
     GtkListStore *object_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
     gtk_list_store_clear(object_store);
 }
@@ -224,8 +227,8 @@ extern "C" G_MODULE_EXPORT void btn_add_line_cb() {
     GdkRGBA rgba;
     gtk_color_chooser_get_rgba(btn_color, &rgba);
 
-    std::cout << x1 << ", " << y1 << "\n";
-    std::cout << x2 << ", " << y2 << "\n";
+
+
 
     bool success = ctrl.add_line(name, x1, y1, x2, y2, utils::Color{rgba.red, rgba.green, rgba.blue});
 
@@ -262,7 +265,7 @@ int append_pol_coord_vector(GtkTreeModel *model,
                         // 2, &z,
                         -1);
 
-    std::cout << x << ", " << y << "\n";
+
 
     pol_coord_vector.push_back(x);
     pol_coord_vector.push_back(y);
@@ -279,14 +282,6 @@ extern "C" G_MODULE_EXPORT void btn_add_polygon_cb() {
     gtk_tree_model_get_iter_first(pol_coordinates, &iter);
 
     gtk_tree_model_foreach(pol_coordinates, append_pol_coord_vector, NULL);
-
-    // while (iter != NULL) {
-    //     gtk_tree_model_get
-    // }
-
-    for (auto element : pol_coord_vector) {
-        std::cout << element << "\n";
-    }
 
     GtkEntry *entry_line_name = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_pol_name"));
     const char* name = (char*)gtk_entry_get_text(entry_line_name);

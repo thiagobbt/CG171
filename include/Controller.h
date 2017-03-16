@@ -21,6 +21,7 @@ class Controller {
  	bool add_polygon(const string&, const std::vector<double>&, utils::Color, bool);
  	
  	void delete_obj(const string&);
+ 	void clear_world();
  	
  	void zoom_in(double);
  	void zoom_out(double);

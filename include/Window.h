@@ -13,6 +13,9 @@ class Window {
     Coordinate end_point;
     std::pair<Coordinate, Coordinate> viewport;
     World world;
+    double default_width, default_height;
+    double current_zoom = 1;
+    double zoom_factor = 0.1;
 
  public:
  	Window();
