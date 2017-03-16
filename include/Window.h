@@ -11,6 +11,7 @@ class Window {
  private:
     Coordinate starting_point;
     Coordinate end_point;
+    std::pair<Coordinate, Coordinate> viewport;
     World world;
 
  public:

@@ -7,6 +7,8 @@
 #include <gtk/gtk.h>
 #include "Coordinate.h"
 
+class Window;
+
 class Drawable {
  private:
  	
@@ -14,7 +16,7 @@ class Drawable {
  	Drawable() = default;
  	Drawable(const Drawable&);
  	virtual ~Drawable() {}
- 	virtual void draw(cairo_surface_t& surface) = 0;
+ 	virtual void draw(cairo_surface_t& surface, Window&) = 0;
 };
 
 #endif /* _DRAWABLE_GTK_H_ */

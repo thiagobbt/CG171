@@ -13,11 +13,11 @@ class PolygonGTK : public Drawable {
  private:
  	std::vector<Coordinate>& coords;
  	const utils::Color& color;
- 	const bool &fill;
+ 	bool fill;
 
  public:
     PolygonGTK(std::vector<Coordinate>&, utils::Color, bool);
-    void draw(cairo_surface_t&);
+    void draw(cairo_surface_t&, Window&);
 };
 
 #endif /* _POLYGON_GTK_H_ */

@@ -16,7 +16,7 @@ class LineGTK : public Drawable {
 
  public:
     LineGTK(const std::vector<Coordinate>&, utils::Color, bool);
-    void draw(cairo_surface_t&);
+    void draw(cairo_surface_t&, Window&);
 };
 
 #endif /* _LINE_GTK_H_ */

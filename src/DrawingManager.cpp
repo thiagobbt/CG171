@@ -7,7 +7,7 @@ DrawingManager& DrawingManager::instance() {
 }
 
 void DrawingManager::draw(Drawable& drawable) {
-	drawable.draw(*surface);
+	drawable.draw(*surface, window());
 }
 
 void DrawingManager::setSurface(cairo_surface_t* s) {

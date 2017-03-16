@@ -1,12 +1,17 @@
 #include "Window.h"
+#include "DrawingManager.h"
 
 Window::Window() {
 	starting_point = Coordinate(0,0);
 	end_point = Coordinate(400,400);
+	viewport = {Coordinate(0,0), Coordinate(400, 400)};
+	DrawingManager::instance().set_window(this);
 }
 
 Window::Window(const Coordinate& low, const Coordinate& up) 
 	: starting_point(low), end_point(up) {
+	viewport = {Coordinate(0,0), Coordinate(400, 400)};
+	DrawingManager::instance().set_window(this);
 }
 
 void Window::move(double x, double y, double z) {
@@ -46,15 +51,16 @@ void Window::zoom(double zoom) {
 }
 
 Coordinate Window::to_viewport(Coordinate& coord) {
-	// double x = (coord.get_x() - start_point.get_x())
- //               / (end_point.get_x() - start_point.get_x())
- //               * ((*viewport.second).get_x() - (*viewport.first).get_x())
- //               + (*viewport.first).get_x();
- //    double y = (1 - (coord.get_y() - start_point.get_y())
- //               / (end_point.get_y() - start_point.get_y()))
- //               * ((*viewport.second).get_y() - (*viewport.first).get_y())
- //               + (*viewport.first).get_y();
-	double x = 0;
-	double y = 0;
+	double x = (coord.get_x() - starting_point.get_x())
+               / (end_point.get_x() - starting_point.get_x())
+               * ((viewport.second).get_x() - (viewport.first).get_x())
+               + (viewport.first).get_x();
+    double y = (1 - (coord.get_y() - starting_point.get_y())
+               / (end_point.get_y() - starting_point.get_y()))
+               * ((viewport.second).get_y() - (viewport.first).get_y())
+               + (viewport.first).get_y();
+	//double x = 0;
+	//double y = 0;
+
     return Coordinate(x, y);
 }

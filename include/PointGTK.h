@@ -16,7 +16,7 @@ class PointGTK : public Drawable {
 
  public:
     PointGTK(std::vector<Coordinate>&, utils::Color, bool);
-    void draw(cairo_surface_t&);
+    void draw(cairo_surface_t&, Window&);
 };
 
 #endif /* _POINT_GTK_H_ */
