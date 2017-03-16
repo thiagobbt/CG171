@@ -310,6 +310,8 @@ extern "C" G_MODULE_EXPORT void btn_add_polygon_cb() {
                       1, "Polygon",
                       -1);
 
+    gtk_widget_queue_draw (window_widget);
+
     gtk_widget_hide(new_object_widget);
 }
 

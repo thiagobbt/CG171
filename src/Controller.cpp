@@ -46,7 +46,7 @@ void Controller::delete_obj(const string& key) {
 }
 
 void Controller::zoom_in(double zoom) {
-	win.zoom(zoom);
+	win.zoom(1/zoom);
 }
 
 

@@ -1,6 +1,8 @@
 #include "Window.h"
 #include "DrawingManager.h"
 
+#define DEBUG(X) std::cout << #X << ": " << X << std::endl;
+
 Window::Window() {
 	starting_point = Coordinate(0,0);
 	end_point = Coordinate(400,400);
@@ -29,6 +31,15 @@ void Window::zoom(double zoom) {
 	double center_x = (start_x + end_x)/2;
 	double center_y = (start_y + end_y)/2;
 
+	DEBUG(start_x);
+	DEBUG(end_x);
+	DEBUG(start_y);
+	DEBUG(end_y);
+	DEBUG(width);
+	DEBUG(height);
+	DEBUG(center_x);
+	DEBUG(center_y);
+
 	// if (zoom > 1) {
 		double new_width = width/zoom;
 		double new_height = height/zoom;
@@ -36,6 +47,14 @@ void Window::zoom(double zoom) {
 		double new_end_x = center_x + new_width;
 		double new_start_y = center_y - new_height;
 		double new_end_y = center_y + new_height;
+
+		DEBUG(new_width);
+		DEBUG(new_height);
+		DEBUG(new_start_x);
+		DEBUG(new_start_y);
+		DEBUG(new_end_x);
+		DEBUG(new_end_y);
+
 		starting_point = Coordinate(new_start_x, new_start_y);
 		end_point = Coordinate(new_end_x, new_end_y);
 	// } else {
@@ -59,8 +78,6 @@ Coordinate Window::to_viewport(Coordinate& coord) {
                / (end_point.get_y() - starting_point.get_y()))
                * ((viewport.second).get_y() - (viewport.first).get_y())
                + (viewport.first).get_y();
-	//double x = 0;
-	//double y = 0;
 
     return Coordinate(x, y);
 }
