@@ -42,6 +42,15 @@ extern "C" G_MODULE_EXPORT void btn_delete_cb(){
         log_print("   Error: Could not get selection\n");
         return;
     }
+
+    char* name;
+
+    gtk_tree_model_get(GTK_TREE_MODEL(object_store), &iter, 0, &name, -1);
+
+    ctrl.delete_obj(std::string(name));
+
+    gtk_widget_queue_draw(window_widget);
+
     gtk_list_store_remove(object_store, &iter);
 
 }
@@ -97,10 +106,14 @@ extern "C" G_MODULE_EXPORT void btn_delete_polygon_coord_cb(){
 
 extern "C" G_MODULE_EXPORT void btn_zoom_in_cb() {
     log_print("Zoom In\n");
+    ctrl.zoom_in(1.2);
+    gtk_widget_queue_draw(window_widget);
 }
 
 extern "C" G_MODULE_EXPORT void btn_zoom_out_cb() {
     log_print("Zoom Out\n");
+    ctrl.zoom_out(1.2);
+    gtk_widget_queue_draw(window_widget);
 }
 
 extern "C" G_MODULE_EXPORT void btn_right_cb() {
@@ -145,19 +158,16 @@ extern "C" G_MODULE_EXPORT void btn_add_point_cb() {
     GtkColorChooser* btn_color = GTK_COLOR_CHOOSER(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "colorbutton_point"));
     GdkRGBA rgba;
 
-    // cairo_t *cr = cairo_create(surface);
-
     gtk_color_chooser_get_rgba(btn_color, &rgba);
-    // gdk_cairo_set_source_rgba(cr, &rgba);
 
-    // cairo_set_line_width(cr, 1);
-    // cairo_move_to(cr, x, y);
-    // cairo_line_to(cr, x+1, y+1);
-    // cairo_close_path(cr);
-    // cairo_stroke(cr);
-    gtk_widget_queue_draw (window_widget);
+    gtk_widget_queue_draw(window_widget);
 
-    ctrl.add_point(name, x, y, utils::Color{rgba.red, rgba.green, rgba.blue});
+    bool success = ctrl.add_point(name, x, y, utils::Color{rgba.red, rgba.green, rgba.blue});
+
+    if (!success) {
+        log_print("   Error: Object name repetition\n");
+        return;
+    }
 
     GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
     GtkTreeIter obj_store_iter;
@@ -182,6 +192,12 @@ extern "C" G_MODULE_EXPORT void btn_add_line_cb() {
     // GtkEntry *entry_line_z2 = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_line_z2"));
 
     const char* name = (char*)gtk_entry_get_text(entry_line_name);
+
+    if (strcmp(name, "") == 0) {
+        log_print("   Error: Object name can't be empty\n");
+        return;
+    }
+
     const char* x1_c = (char*)gtk_entry_get_text(entry_line_x1);
     const char* y1_c = (char*)gtk_entry_get_text(entry_line_y1);
     // const char* z1_c = (char*)gtk_entry_get_text(entry_line_z1);
@@ -203,21 +219,47 @@ extern "C" G_MODULE_EXPORT void btn_add_line_cb() {
     std::cout << x1 << ", " << y1 << "\n";
     std::cout << x2 << ", " << y2 << "\n";
 
-    ctrl.add_line(name, x1, y1, x2, y2, utils::Color{rgba.red, rgba.green, rgba.blue});
+    bool success = ctrl.add_line(name, x1, y1, x2, y2, utils::Color{rgba.red, rgba.green, rgba.blue});
 
-    // cairo_t *cr = cairo_create(surface);
+    if (!success) {
+        log_print("   Error: Object name repetition\n");
+        return;
+    }
 
-    // // gdk_cairo_set_source_rgba(cr, &rgba);
-    // cairo_set_source_rgb (cr, rgba.red, rgba.green, rgba.blue);
+    GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
+    GtkTreeIter obj_store_iter;
+    gtk_list_store_append(obj_store, &obj_store_iter);
+    gtk_list_store_set (obj_store, &obj_store_iter,
+                      0, name,
+                      1, "Line",
+                      -1);
 
-    // cairo_set_line_width(cr, 1);
-    // cairo_move_to(cr, x1, y1);
-    // cairo_line_to(cr, x2, y2);
-    // cairo_close_path(cr);
-    // cairo_stroke(cr);
     gtk_widget_queue_draw (window_widget);
 
     gtk_widget_hide(new_object_widget);
+}
+
+std::vector<double> pol_coord_vector;
+
+int append_pol_coord_vector(GtkTreeModel *model,
+                GtkTreePath  *path,
+                GtkTreeIter  *iter,
+                gpointer      user_data) {
+
+    double x, y;
+
+    gtk_tree_model_get (model, iter,
+                        0, &x,
+                        1, &y,
+                        // 2, &z,
+                        -1);
+
+    std::cout << x << ", " << y << "\n";
+
+    pol_coord_vector.push_back(x);
+    pol_coord_vector.push_back(y);
+
+    return 0; // Continue calling
 }
 
 extern "C" G_MODULE_EXPORT void btn_add_polygon_cb() {
@@ -228,19 +270,45 @@ extern "C" G_MODULE_EXPORT void btn_add_polygon_cb() {
     GtkTreeIter iter;
     gtk_tree_model_get_iter_first(pol_coordinates, &iter);
 
-    while (iter != NULL) {
-        gtk_tree_model_get
+    gtk_tree_model_foreach(pol_coordinates, append_pol_coord_vector, NULL);
+
+    // while (iter != NULL) {
+    //     gtk_tree_model_get
+    // }
+
+    for (auto element : pol_coord_vector) {
+        std::cout << element << "\n";
     }
 
     GtkEntry *entry_line_name = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_pol_name"));
     const char* name = (char*)gtk_entry_get_text(entry_line_name);
 
+    if (strcmp(name, "") == 0) {
+        log_print("   Error: Object name can't be empty\n");
+        return;
+    }
+
     GtkColorChooser* btn_color = GTK_COLOR_CHOOSER(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "colorbutton_line"));
     GdkRGBA rgba;
     gtk_color_chooser_get_rgba(btn_color, &rgba);
 
+    GtkToggleButton *btn_fill = GTK_TOGGLE_BUTTON(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "checkbutton_pol_fill"));
+    bool fill = gtk_toggle_button_get_active(btn_fill);
     
-    ctrl.add_polygon(name, const std::vector<double> &, utils::Color{rgba.red, rgba.green, rgba.blue})
+    bool success = ctrl.add_polygon(name, pol_coord_vector, utils::Color{rgba.red, rgba.green, rgba.blue}, fill);
+
+    if (!success) {
+        log_print("   Error: Object name repetition\n");
+        return;
+    }
+
+    GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
+    GtkTreeIter obj_store_iter;
+    gtk_list_store_append(obj_store, &obj_store_iter);
+    gtk_list_store_set (obj_store, &obj_store_iter,
+                      0, name,
+                      1, "Polygon",
+                      -1);
 
     gtk_widget_hide(new_object_widget);
 }
@@ -274,7 +342,7 @@ int main(int argc, char *argv[]){
     gtk_builder_connect_signals(gtkBuilder, NULL);
     gtk_widget_show_all(window_widget);
 
-    ctrl.add_polygon(name, const std::vector<double> &, utils::Color, bool)
+    //ctrl.add_polygon(name, const std::vector<double> &, utils::Color, bool)
 
     gtk_main ();
     return 0;

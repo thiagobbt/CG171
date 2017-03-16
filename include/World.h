@@ -18,6 +18,7 @@ class World {
     bool add_obj(string, Object*);
     void delete_obj(string);
     void clear();    
+    void redraw();
 };
 
 #endif /* WORLD_H */

@@ -25,9 +25,11 @@ bool Controller::add_line(const string& id, double x1, double y1,
 bool Controller::add_polygon(const string& id, const std::vector<double>& locs,
 							 utils::Color c, bool fill) {
 	std::vector<Coordinate> coords;
-	if (locs.size() % 2) {
+	std::cout << locs.size() << std::endl;
+	if (locs.size() % 2 == 0) {
 		for (size_t i = 0; i < locs.size(); i += 2) {
 			coords.push_back(Coordinate(locs[i], locs[i+1]));
+			std::cout << locs[i] << ", " << locs[i+1] << "\n";
 			// coords.emplace_back(locs[i], locs[i+1],0,0);
 		}
 		win.get_world().add_obj(id, new Polygon(coords, c, fill));
@@ -39,5 +41,15 @@ bool Controller::add_polygon(const string& id, const std::vector<double>& locs,
 }
 
 void Controller::delete_obj(const string& key) {
+	std::cout << "delete " << key << std::endl;
 	win.get_world().delete_obj(key);
+}
+
+void Controller::zoom_in(double zoom) {
+	win.zoom(zoom);
+}
+
+
+void Controller::zoom_out(double zoom) {
+	win.zoom(zoom);
 }

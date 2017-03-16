@@ -19,6 +19,7 @@ class DrawingManager {
  	void set_window(Window* w) { my_window = w; }
  	Window& window() { return *my_window; }
  	void setSurface(cairo_surface_t*);
+ 	void redraw();
 };
 
 

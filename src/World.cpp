@@ -26,3 +26,8 @@ void World::clear() {
 	display_file.clear();
 }
 
+void World::redraw() {
+	for (auto obj : display_file) {
+		obj.second->draw();
+	}
+}

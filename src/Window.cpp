@@ -29,7 +29,7 @@ void Window::zoom(double zoom) {
 	double center_x = (start_x + end_x)/2;
 	double center_y = (start_y + end_y)/2;
 
-	if (zoom > 0) {
+	// if (zoom > 1) {
 		double new_width = width/zoom;
 		double new_height = height/zoom;
 		double new_start_x = center_x - new_width;
@@ -38,16 +38,16 @@ void Window::zoom(double zoom) {
 		double new_end_y = center_y + new_height;
 		starting_point = Coordinate(new_start_x, new_start_y);
 		end_point = Coordinate(new_end_x, new_end_y);
-	} else {
-		double new_width = width*zoom;
-		double new_height = height*zoom;
-		double new_start_x = center_x - new_width;
-		double new_end_x = center_x + new_width;
-		double new_start_y = center_y - new_height;
-		double new_end_y = center_y + new_height;
-		starting_point = Coordinate(new_start_x, new_start_y);
-		end_point = Coordinate(new_end_x, new_end_y);
-	}
+	// } else {
+	// 	double new_width = width*zoom;
+	// 	double new_height = height*zoom;
+	// 	double new_start_x = center_x - new_width;
+	// 	double new_end_x = center_x + new_width;
+	// 	double new_start_y = center_y - new_height;
+	// 	double new_end_y = center_y + new_height;
+	// 	starting_point = Coordinate(new_start_x, new_start_y);
+	// 	end_point = Coordinate(new_end_x, new_end_y);
+	// }
 }
 
 Coordinate Window::to_viewport(Coordinate& coord) {

@@ -13,3 +13,7 @@ void DrawingManager::draw(Drawable& drawable) {
 void DrawingManager::setSurface(cairo_surface_t* s) {
 	surface = s;
 }
+
+void DrawingManager::redraw() {
+	window().get_world().redraw();
+}
