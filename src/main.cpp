@@ -318,6 +318,31 @@ extern "C" G_MODULE_EXPORT void btn_add_polygon_cb() {
     gtk_widget_hide(new_object_widget);
 }
 
+gboolean key_handler(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
+    switch (event->keyval) {
+        case GDK_KEY_Up: btn_up_cb(); break;
+        case GDK_KEY_Down: btn_down_cb(); break;
+        case GDK_KEY_Left: btn_left_cb(); break;
+        case GDK_KEY_Right: btn_right_cb(); break;
+        case GDK_KEY_plus: btn_zoom_in_cb(); break;
+        case GDK_KEY_minus: btn_zoom_out_cb(); break;
+        case GDK_KEY_q: gtk_main_quit(); break;
+        case GDK_KEY_p:
+            log_print("Add test_polygon\n");
+            ctrl.add_polygon("test_polygon", {150,150,150,250,250,250,250,150}, utils::Color{0, 0, 0}, true);
+            GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
+            GtkTreeIter obj_store_iter;
+            gtk_list_store_append(obj_store, &obj_store_iter);
+            gtk_list_store_set (obj_store, &obj_store_iter,
+                              0, "test_polygon",
+                              1, "Polygon",
+                              -1);
+            gtk_widget_queue_draw (window_widget);
+            break;
+    }
+
+    return false;
+}
 
 int main(int argc, char *argv[]){
     gtk_init(&argc, &argv);
@@ -342,7 +367,8 @@ int main(int argc, char *argv[]){
 
     g_signal_connect(drawing_area, "draw", G_CALLBACK(cb::redraw), NULL);
     g_signal_connect(drawing_area,"configure-event", G_CALLBACK(cb::create_surface), NULL);
-    g_signal_connect(window_widget, "delete_event", G_CALLBACK(cb::close_window), NULL);
+    g_signal_connect(window_widget, "delete_event", G_CALLBACK(gtk_main_quit), NULL);
+    g_signal_connect(window_widget, "key_press_event", G_CALLBACK (key_handler), NULL);
 
     gtk_builder_connect_signals(gtkBuilder, NULL);
     gtk_widget_show_all(window_widget);

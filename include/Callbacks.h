@@ -46,11 +46,6 @@ namespace cb {
 
         return FALSE;
     }
-
-    inline void close_window(GtkWidget *widget, gpointer window) {
-        gtk_widget_destroy(GTK_WIDGET(widget));
-        gtk_main_quit();
-    }
 }
 
 #endif /* _CALLBACKS_H_ */

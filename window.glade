@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkListStore" id="list_store_pol_coordinates">
@@ -979,6 +979,9 @@
         </child>
       </object>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkListStore" id="object_store">
     <columns>
@@ -1042,6 +1045,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="model">object_store</property>
+                            <property name="enable_search">False</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="objects_treeview_selection"/>
                             </child>
@@ -1404,6 +1408,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>
