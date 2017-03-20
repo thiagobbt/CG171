@@ -18,6 +18,7 @@ bool Controller::add_line(const string& id, double x1, double y1,
 	Coordinate c2(x2,y2);
 	std:: cout << c1.get_x() << " " << c1.get_y() << "\n";
 	std:: cout << c2.get_x() << " " << c2.get_y() << "\n";
+	std::cout << "red ctrl = " << c.r << std::endl;
 
 	return win.get_world().add_obj(id, new Line({c1,c2},c));
 }

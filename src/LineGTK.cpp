@@ -3,12 +3,14 @@
 #include "LineGTK.h"
 #include "Window.h"
 
-LineGTK::LineGTK(const std::vector<Coordinate>& coords, utils::Color color, bool fill) 
-		: coords(coords), color(color) {}
+LineGTK::LineGTK(const std::vector<Coordinate>& coords, utils::Color c, bool fill) 
+		: coords(coords), color(c) {}
 
 void LineGTK::draw(cairo_surface_t& surface, Window& win) {
 	Coordinate a = win.to_viewport(coords[0]);
 	Coordinate b = win.to_viewport(coords[1]);
+
+	std::cout << "red linegtk draw = " << color.r << std::endl;
 	
 	// std:: cout << "linegtk\n";
 	// std:: cout << coords[0].get_x() << " " << coords[0].get_y() << "\n";

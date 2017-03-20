@@ -298,6 +298,8 @@ extern "C" G_MODULE_EXPORT void btn_add_polygon_cb() {
 
     GtkToggleButton *btn_fill = GTK_TOGGLE_BUTTON(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "checkbutton_pol_fill"));
     bool fill = gtk_toggle_button_get_active(btn_fill);
+
+    std::cout << rgba.red << ", " << rgba.green << ", " << rgba.blue << std::endl;
     
     bool success = ctrl.add_polygon(name, pol_coord_vector, utils::Color{rgba.red, rgba.green, rgba.blue}, fill);
 
@@ -319,6 +321,20 @@ extern "C" G_MODULE_EXPORT void btn_add_polygon_cb() {
     gtk_widget_hide(new_object_widget);
 }
 
+extern "C" G_MODULE_EXPORT void btn_transform_cb() {
+    log_print("Open transform window.\n");
+
+    GtkWidget* transform_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "transform_window"));
+    gtk_widget_show(transform_widget);
+}
+
+extern "C" G_MODULE_EXPORT void btn_transform_cancel_cb() {
+    log_print("Cancel transform.\n");
+
+    GtkWidget* transform_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "transform_window"));
+    gtk_widget_hide(transform_widget);
+}
+
 gboolean key_handler(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
     switch (event->keyval) {
         case GDK_KEY_Up: btn_up_cb(); break;
@@ -330,7 +346,7 @@ gboolean key_handler(GtkWidget *widget, GdkEventKey *event, gpointer user_data) 
         case GDK_KEY_q: gtk_main_quit(); break;
         case GDK_KEY_p:
             log_print("Add test_polygon\n");
-            ctrl.add_polygon("test_polygon", {150,150,150,250,250,250,250,150}, utils::Color{0, 0, 0}, true);
+            ctrl.add_polygon("test_polygon", {150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true);
             GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
             GtkTreeIter obj_store_iter;
             gtk_list_store_append(obj_store, &obj_store_iter);
@@ -345,10 +361,28 @@ gboolean key_handler(GtkWidget *widget, GdkEventKey *event, gpointer user_data) 
     return false;
 }
 
+
+static gboolean treeview_button_handler(GtkWidget *widget, GdkEventButton *event, gpointer user_data) {
+    if (event->button == 3) {
+        GtkTreePath *path;
+        gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(widget), event->x, event->y, &path, NULL, NULL, NULL);
+
+        if (path == NULL) return false;
+
+        gtk_tree_view_set_cursor(GTK_TREE_VIEW(widget), path, NULL, false);
+
+        GtkMenu* menu_transform = GTK_MENU(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "menu_transform"));
+
+        gtk_menu_popup(menu_transform, NULL, NULL, NULL, NULL, 3, event->time);
+    }
+
+    return false;
+}
+
 int main(int argc, char *argv[]){
     gtk_init(&argc, &argv);
 
-    GtkWidget *drawing_area;
+    GtkWidget *drawing_area, *treeview_objects;
 
     gtkBuilder = gtk_builder_new();
     gtk_builder_add_from_file(gtkBuilder, "window.glade", NULL);
@@ -357,19 +391,17 @@ int main(int argc, char *argv[]){
     drawing_area = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "drawingarea1"));
     new_object_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "new_object_window"));
     log_box = GTK_TEXT_VIEW(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "log_box"));
+    treeview_objects = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "treeview_objects"));
 
     log_buffer = gtk_text_buffer_new(NULL);
     gtk_text_view_set_buffer(log_box, log_buffer);
     gtk_text_view_set_wrap_mode(log_box, GTK_WRAP_NONE);
 
-    // Set utility hint so window floats by default
-    gtk_window_set_type_hint((GtkWindow*)window_widget, GDK_WINDOW_TYPE_HINT_UTILITY);
-    gtk_window_set_type_hint((GtkWindow*)new_object_widget, GDK_WINDOW_TYPE_HINT_UTILITY);
-
     g_signal_connect(drawing_area, "draw", G_CALLBACK(cb::redraw), NULL);
     g_signal_connect(drawing_area,"configure-event", G_CALLBACK(cb::create_surface), NULL);
     g_signal_connect(window_widget, "delete_event", G_CALLBACK(gtk_main_quit), NULL);
-    g_signal_connect(window_widget, "key_press_event", G_CALLBACK (key_handler), NULL);
+    g_signal_connect(window_widget, "key_press_event", G_CALLBACK(key_handler), NULL);
+    g_signal_connect(treeview_objects, "button_press_event", G_CALLBACK(treeview_button_handler), NULL);
 
     gtk_builder_connect_signals(gtkBuilder, NULL);
     gtk_widget_show_all(window_widget);

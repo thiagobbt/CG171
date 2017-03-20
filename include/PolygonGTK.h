@@ -12,7 +12,7 @@
 class PolygonGTK : public Drawable {
  private:
  	std::vector<Coordinate> coords;
- 	const utils::Color& color;
+ 	const utils::Color color;
  	bool fill;
 
  public:

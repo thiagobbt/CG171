@@ -12,7 +12,7 @@
 class PointGTK : public Drawable {
  private:
  	std::vector<Coordinate> coords;
- 	const utils::Color& color;
+ 	const utils::Color color;
 
  public:
     PointGTK(const std::vector<Coordinate>&, utils::Color, bool);

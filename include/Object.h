@@ -4,7 +4,7 @@
 #define _OBJECT_H_
 
 #include <vector>
-#include <utils>
+#include "utils.h"
 #include "Coordinate.h"
 #include "Drawable.h"
 
@@ -18,7 +18,7 @@ class Object {
  public:
   	//Object(std::vector<Coordinate>&) {}
   	virtual ~Object() { delete drawable_obj; }
-  	virtual void t(const Matrix&) = 0; // Translação (0,1), Escalonamento (2,5), Rotação (6)
+  	virtual void transform(const utils::Matrix&) = 0; // Translação (0,1), Escalonamento (2,5), Rotação (6)
  	virtual void draw() = 0;
 };
 

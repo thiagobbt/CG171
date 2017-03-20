@@ -12,7 +12,7 @@
 class LineGTK : public Drawable {
  private:
  	std::vector<Coordinate> coords;
- 	const utils::Color& color;
+ 	const utils::Color color;
 
  public:
     LineGTK(const std::vector<Coordinate>&, utils::Color, bool);

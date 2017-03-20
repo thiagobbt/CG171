@@ -14,6 +14,7 @@ class Polygon : public Object {
     bool fill;
  public:
     Polygon(std::vector<Coordinate>, utils::Color, bool);
+    void transform(const utils::Matrix&);
     void draw();
 };
 
