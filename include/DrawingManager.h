@@ -23,10 +23,4 @@ class DrawingManager {
 };
 
 
-namespace utils {
-	struct Color {
-		double r, g, b, a;
-	};
-}
-
 #endif /* _DRAWING_MANAGER_H_ */
