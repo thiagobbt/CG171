@@ -281,6 +281,7 @@ extern "C" G_MODULE_EXPORT void btn_add_polygon_cb() {
     GtkTreeIter iter;
     gtk_tree_model_get_iter_first(pol_coordinates, &iter);
 
+    pol_coord_vector.clear();
     gtk_tree_model_foreach(pol_coordinates, append_pol_coord_vector, NULL);
 
     GtkEntry *entry_line_name = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_pol_name"));
