@@ -24,7 +24,7 @@ namespace utils {
 
 		void fill(double n = 0) {
 			for (unsigned int t = 0; t < dim_x*dim_y; ++t) {
-				data[t] = n;			
+				data.push_back(n);
 			}
 		}
 

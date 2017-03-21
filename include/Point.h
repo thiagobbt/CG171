@@ -14,6 +14,7 @@ class Point : public Object {
  public:
     Point(std::vector<Coordinate>, utils::Color);
     Point();
+    ~Point();
     void draw();
 };
 

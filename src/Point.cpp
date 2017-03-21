@@ -13,6 +13,10 @@ Point::Point() {
 	location = std::vector<Coordinate>(1);
 }
 
+Point::~Point() {
+	delete drawable_obj;
+}
+
 void Point::draw() {
 	DrawingManager::instance().draw(*drawable_obj);
 }
