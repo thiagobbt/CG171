@@ -1,5 +1,4 @@
 #include "DrawingManager.h"
-#include "Callbacks.h"
 
 DrawingManager& DrawingManager::instance() {
 	static DrawingManager instance;
