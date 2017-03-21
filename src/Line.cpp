@@ -8,10 +8,6 @@ Line::Line(const std::vector<Coordinate>& a, utils::Color c)
 	drawable_obj = new LineGTK(location, c, false); 
 }
 
-void Line::transform(const utils::Matrix &) {
-	
-}
-
 void Line::draw() {
 	DrawingManager::instance().draw(*drawable_obj);
 }

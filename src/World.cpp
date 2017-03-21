@@ -4,6 +4,11 @@ World::~World() {
 	clear();
 }
 
+World& World::instance() {
+	static World instance;
+	return instance;
+}
+
 bool World::add_obj(string id, Object* obj) {
 
 	if (!display_file.count(id)) {
@@ -30,4 +35,16 @@ void World::redraw() {
 	for (auto obj : display_file) {
 		obj.second->draw();
 	}
+}
+
+void World::move_obj(string, const utils::Matrix&) {
+
+}
+
+void World::scale_obj(string, const utils::Matrix&) {
+
+}
+
+void World::rotate_obj(string, const utils::Matrix&, const Coordinate&, bool) {
+
 }

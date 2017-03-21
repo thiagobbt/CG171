@@ -15,5 +15,5 @@ void DrawingManager::setSurface(cairo_surface_t* s) {
 }
 
 void DrawingManager::redraw() {
-	window().get_world().redraw();
+	World::instance().redraw();
 }

@@ -4,6 +4,7 @@
 #define WORLD_H
 
 #include "Object.h"
+// #include "utils.h"
 #include <unordered_map>
 
 using std::string;
@@ -13,12 +14,20 @@ class World {
     std::unordered_map<string, Object*> display_file;
 
  public:
-    World() {}
+ 	static World& instance();
     ~World();
     bool add_obj(string, Object*);
     void delete_obj(string);
+    void move_obj(string, const utils::Matrix&);
+    void scale_obj(string, const utils::Matrix&);
+    void rotate_obj(string, const utils::Matrix&, const Coordinate&, bool);
     void clear();    
     void redraw();
+    const Object& obj(const string&);
+
+ protected:
+    World() {}
+
 };
 
 #endif /* WORLD_H */

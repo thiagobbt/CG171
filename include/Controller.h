@@ -30,8 +30,8 @@ class Controller {
 	//pan_z(double);
 
 	void move_obj(const string&, double, double);
-	void rotate_obj(const string&, double, double, double);
-	void scale_obj(const string&, double);
+	void rotate_obj(const string&, double, double, double, bool);
+	void scale_obj(const string&, double, double);
 };
 
 #endif /* _CONTROLLER_H_ */

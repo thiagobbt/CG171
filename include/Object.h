@@ -18,8 +18,8 @@ class Object {
  public:
   	//Object(std::vector<Coordinate>&) {}
   	virtual ~Object() { delete drawable_obj; }
-  	virtual void transform(const utils::Matrix&) = 0; // Translação (0,1), Escalonamento (2,5), Rotação (6)
  	virtual void draw() = 0;
+  	void transform(const utils::Matrix&); // Translação (0,1), Escalonamento (2,5), Rotação (6)
 };
 
 #endif /* _OBJECT_H_ */

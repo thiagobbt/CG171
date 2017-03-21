@@ -13,7 +13,6 @@ class Line : public Object {
     utils::Color color;
  public:
     Line(const std::vector<Coordinate>&, utils::Color);
-    void transform(const utils::Matrix&);
     void draw();
 };
 

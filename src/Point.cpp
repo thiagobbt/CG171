@@ -13,10 +13,6 @@ Point::Point() {
 	location = std::vector<Coordinate>(1);
 }
 
-void Point::transform(const utils::Matrix& m) {
-
-}
-
 void Point::draw() {
 	DrawingManager::instance().draw(*drawable_obj);
 }

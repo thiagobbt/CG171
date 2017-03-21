@@ -3,12 +3,13 @@
 #include "Point.h"
 #include "Line.h"
 #include "Polygon.h"
+#include <cmath>
 
-
+#define PI 3.14159265
 
 bool Controller::add_point(const string& id, double x, double y, utils::Color c) {
 	Coordinate coord(x,y);
-	return win.get_world().add_obj(id, new Point({coord}, c));
+	return World::instance().add_obj(id, new Point({coord}, c));
 }
 
 bool Controller::add_line(const string& id, double x1, double y1,
@@ -20,7 +21,7 @@ bool Controller::add_line(const string& id, double x1, double y1,
 	std:: cout << c2.get_x() << " " << c2.get_y() << "\n";
 	std::cout << "red ctrl = " << c.r << std::endl;
 
-	return win.get_world().add_obj(id, new Line({c1,c2},c));
+	return World::instance().add_obj(id, new Line({c1,c2},c));
 }
 
 bool Controller::add_polygon(const string& id, const std::vector<double>& locs,
@@ -31,7 +32,7 @@ bool Controller::add_polygon(const string& id, const std::vector<double>& locs,
 		for (size_t i = 0; i < locs.size(); i += 2) {
 			coords.push_back(Coordinate(locs[i], locs[i+1]));
 		}
-		win.get_world().add_obj(id, new Polygon(coords, c, fill));
+		World::instance().add_obj(id, new Polygon(coords, c, fill));
 	} else {
 		return false;
 	}
@@ -41,11 +42,11 @@ bool Controller::add_polygon(const string& id, const std::vector<double>& locs,
 
 void Controller::delete_obj(const string& key) {
 
-	win.get_world().delete_obj(key);
+	World::instance().delete_obj(key);
 }
 
 void Controller::clear_world() {
-	win.get_world().clear();
+	World::instance().clear();
 }
 
 void Controller::zoom_in(double zoom) {
@@ -64,4 +65,37 @@ void Controller::pan_x(double x) {
 
 void Controller::pan_y(double y) {
 	win.move(0,y,0);
+}
+
+void Controller::move_obj(const string& id, double dx, double dy) {
+	utils::Matrix a(3,3);
+	a.fill(0);
+	a(0,0) = 1;
+	a(1,1) = 1;
+	a(2,2) = 1;
+	a(2,0) = dx;
+	a(2,1) = dy;
+	World::instance().move_obj(id, a);
+}
+
+void Controller::rotate_obj(const string& id, double teta, double x, double y, bool center) {
+	utils::Matrix a(3,3);
+	a.fill(0);
+	auto angle = teta*PI/180;
+	a(0,0) = cos(angle);
+	a(0,1) = - sin(angle);
+	a(1,0) = sin(angle);
+	a(1,1) = cos(angle);
+	a(2,2) = 1;
+	Coordinate loc(x,y);
+	World::instance().rotate_obj(id, a, loc, center);
+} 
+
+void Controller::scale_obj(const string& id, double sx, double sy) {
+ 	utils::Matrix a(3,3);
+	a.fill(0);
+	a(0,0) = sx;
+	a(1,1) = sy;
+	a(2,2) = 1;
+	World::instance().scale_obj(id, a);
 }

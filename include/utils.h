@@ -1,7 +1,14 @@
+#ifndef _UTILS_H_
+#define _UTILS_H_
+
 #include <vector>
 #include <cassert>
 
+
+
 namespace utils {
+	#define PI 3.14159265
+
 	struct Color {
 		double r, g, b, a;
 	};
@@ -19,6 +26,10 @@ namespace utils {
 			for (unsigned int t = 0; t < dim_x*dim_y; ++t) {
 				data[t] = n;			
 			}
+		}
+
+		void add(unsigned int i, unsigned int j, double dat) {
+			(*this)(i,j) = dat;
 		}
 
 		double& operator()(unsigned int i, unsigned int j) {
@@ -52,3 +63,4 @@ namespace utils {
 
 }
 
+#endif /* _UTILS_H_ */
