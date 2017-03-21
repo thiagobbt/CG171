@@ -6,6 +6,10 @@ Polygon::Polygon(std::vector<Coordinate> location, 	utils::Color color, bool fil
 	drawable_obj = new PolygonGTK(location, color, fill);
 }
 
+Polygon::~Polygon() {
+	delete drawable_obj;
+}
+
 void Polygon::draw() {
 	DrawingManager::instance().draw(*drawable_obj);
 }

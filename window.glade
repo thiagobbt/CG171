@@ -241,12 +241,11 @@
                 <property name="margin_bottom">2</property>
                 <property name="spacing">2</property>
                 <child>
-                  <object class="GtkButton" id="button17">
+                  <object class="GtkButton" id="btn_point_ok">
                     <property name="label" translatable="yes">OK</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="btn_add_point_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -255,12 +254,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button18">
+                  <object class="GtkButton" id="btn_point_cancel">
                     <property name="label" translatable="yes">Cancel</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="btn_cancel_obj_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -617,12 +615,11 @@
                 <property name="margin_bottom">2</property>
                 <property name="spacing">2</property>
                 <child>
-                  <object class="GtkButton" id="button15">
+                  <object class="GtkButton" id="btn_line_ok">
                     <property name="label" translatable="yes">OK</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="btn_add_line_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -631,12 +628,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button16">
+                  <object class="GtkButton" id="btn_line_cancel">
                     <property name="label" translatable="yes">Cancel</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="btn_cancel_obj_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -902,13 +898,12 @@
                 <property name="row_spacing">2</property>
                 <property name="column_spacing">2</property>
                 <child>
-                  <object class="GtkButton" id="button14">
+                  <object class="GtkButton" id="btn_polygon_add_coord">
                     <property name="label" translatable="yes">Add</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
-                    <signal name="clicked" handler="btn_add_polygon_coord_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -916,13 +911,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button19">
+                  <object class="GtkButton" id="btn_polygon_delete_coord">
                     <property name="label" translatable="yes">Delete</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
-                    <signal name="clicked" handler="btn_delete_polygon_coord_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -930,12 +924,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button12">
+                  <object class="GtkButton" id="btn_polygon_ok">
                     <property name="label" translatable="yes">OK</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="btn_add_polygon_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -948,7 +941,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="btn_cancel_obj_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -968,7 +960,7 @@
           </packing>
         </child>
         <child type="tab">
-          <object class="GtkLabel" id="label3">
+          <object class="GtkLabel" id="btn_polygon_cancel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Polygon</property>
@@ -985,12 +977,11 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="transform">
+      <object class="GtkMenuItem" id="menuitem_transform">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Transform</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="btn_transform_cb" swapped="no"/>
       </object>
     </child>
   </object>
@@ -1107,12 +1098,11 @@
                         <property name="margin_bottom">2</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkButton" id="button9">
+                          <object class="GtkButton" id="btn_new_obj">
                             <property name="label" translatable="yes">New</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <signal name="clicked" handler="btn_new_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1121,12 +1111,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button10">
+                          <object class="GtkButton" id="btn_delete_obj">
                             <property name="label" translatable="yes">Delete</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <signal name="clicked" handler="btn_delete_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1135,12 +1124,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button11">
+                          <object class="GtkButton" id="btn_clear_objs">
                             <property name="label" translatable="yes">Clear</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <signal name="clicked" handler="btn_clear_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1185,12 +1173,11 @@
                     <property name="row_spacing">2</property>
                     <property name="column_spacing">2</property>
                     <child>
-                      <object class="GtkButton" id="button2">
+                      <object class="GtkButton" id="btn_pan_up">
                         <property name="width_request">78</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="btn_up_cb" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image2">
                             <property name="visible">True</property>
@@ -1205,12 +1192,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="button4">
+                      <object class="GtkButton" id="btn_pan_left">
                         <property name="width_request">78</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="btn_left_cb" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image3">
                             <property name="visible">True</property>
@@ -1225,12 +1211,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="button5">
+                      <object class="GtkButton" id="btn_pan_down">
                         <property name="width_request">78</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="btn_down_cb" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image4">
                             <property name="width_request">-1</property>
@@ -1246,13 +1231,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="button6">
+                      <object class="GtkButton" id="btn_pan_right">
                         <property name="width_request">78</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="yalign">0.52999997138977051</property>
-                        <signal name="clicked" handler="btn_right_cb" swapped="no"/>
                         <child>
                           <object class="GtkImage" id="image1">
                             <property name="visible">True</property>
@@ -1289,13 +1273,12 @@
                     <property name="margin_bottom">2</property>
                     <property name="spacing">2</property>
                     <child>
-                      <object class="GtkButton" id="button7">
+                      <object class="GtkButton" id="btn_zoom_in">
                         <property name="label">gtk-zoom-in</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="clicked" handler="btn_zoom_in_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -1304,13 +1287,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="button8">
+                      <object class="GtkButton" id="btn_zoom_out">
                         <property name="label">gtk-zoom-out</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
-                        <signal name="clicked" handler="btn_zoom_out_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -1569,7 +1551,7 @@
                 <property name="margin_bottom">2</property>
                 <property name="spacing">2</property>
                 <child>
-                  <object class="GtkButton" id="button1">
+                  <object class="GtkButton" id="btn_translate_ok">
                     <property name="label" translatable="yes">OK</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1582,12 +1564,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button3">
+                  <object class="GtkButton" id="btn_translate_cancel">
                     <property name="label" translatable="yes">Cancel</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="btn_transform_cancel_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -1754,7 +1735,7 @@
                 <property name="margin_bottom">2</property>
                 <property name="spacing">2</property>
                 <child>
-                  <object class="GtkButton" id="button20">
+                  <object class="GtkButton" id="btn_scale_ok">
                     <property name="label" translatable="yes">OK</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -1767,12 +1748,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button21">
+                  <object class="GtkButton" id="btn_scale_cancel">
                     <property name="label" translatable="yes">Cancel</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="btn_transform_cancel_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -1828,7 +1808,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="entry_point_sz1">
+                  <object class="GtkEntry" id="entry_rotate_angle">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="placeholder_text" translatable="yes">0</property>
@@ -1872,7 +1852,7 @@
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkRadioButton" id="radiobutton1">
+                      <object class="GtkRadioButton" id="radio_rotate_world_center">
                         <property name="label" translatable="yes">Around the world's center</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -1888,7 +1868,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="radiobutton2">
+                      <object class="GtkRadioButton" id="radio__rotate_obj_center">
                         <property name="label" translatable="yes">Around the object's center</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -1896,7 +1876,7 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radiobutton1</property>
+                        <property name="group">radio_rotate_world_center</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1905,7 +1885,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="radiobutton3">
+                      <object class="GtkRadioButton" id="radio_rotate_point">
                         <property name="label" translatable="yes">Around the following point</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -1913,7 +1893,7 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radiobutton1</property>
+                        <property name="group">radio_rotate_world_center</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2027,7 +2007,7 @@
                 <property name="margin_bottom">2</property>
                 <property name="spacing">2</property>
                 <child>
-                  <object class="GtkButton" id="button22">
+                  <object class="GtkButton" id="btn_rotate_ok">
                     <property name="label" translatable="yes">OK</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -2040,12 +2020,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button23">
+                  <object class="GtkButton" id="btn_rotate_cancel">
                     <property name="label" translatable="yes">Cancel</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="btn_transform_cancel_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
