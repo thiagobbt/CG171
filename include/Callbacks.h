@@ -338,8 +338,6 @@ namespace cb {
 
         GtkToggleButton *btn_fill = GTK_TOGGLE_BUTTON(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "checkbutton_pol_fill"));
         bool fill = gtk_toggle_button_get_active(btn_fill);
-
-        std::cout << rgba.red << ", " << rgba.green << ", " << rgba.blue << std::endl;
         
         bool success = ctrl.add_polygon(name, pol_coord_vector, utils::Color{rgba.red, rgba.green, rgba.blue}, fill);
 
@@ -498,6 +496,7 @@ namespace cb {
             case GDK_KEY_plus: btn_zoom_in_cb(); break;
             case GDK_KEY_minus: btn_zoom_out_cb(); break;
             case GDK_KEY_q: gtk_main_quit(); break;
+            case GDK_KEY_t: ctrl.move_obj("test_polygon", 100, 100); break;
             case GDK_KEY_p:
                 log_print("Add test_polygon\n");
                 ctrl.add_polygon("test_polygon", {150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true);

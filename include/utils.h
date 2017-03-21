@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <cassert>
-
+#include <iostream>
 
 
 namespace utils {
@@ -20,25 +20,35 @@ namespace utils {
 		unsigned int dim_y;
 
  		// linhas, colunas
- 		Matrix(unsigned int x, unsigned int y) : dim_x(x), dim_y(y) {}
+ 		Matrix(unsigned int x, unsigned int y) : dim_x(x), dim_y(y) {
+ 			data = new double[x * y];
+ 			fill();
+ 		}
+
+ 		~Matrix() {
+ 			std::cout << "~Matrix()" << std::endl;
+ 			delete[] data;
+ 		};
 
 		void fill(double n = 0) {
-			for (unsigned int t = 0; t < dim_x*dim_y; ++t) {
-				data.push_back(n);
+			// data.reserve(dim_x * dim_y);
+			for (unsigned int t = 0; t < dim_x * dim_y; ++t) {
+				// data.push_back(n);
+				data[t] = n;
 			}
 		}
 
-		void add(unsigned int i, unsigned int j, double dat) {
-			(*this)(i,j) = dat;
-		}
-
 		double& operator()(unsigned int i, unsigned int j) {
-			return data[(j*dim_y + i)];
+			return data[j*dim_y + i];
 		}
 
 		const double& operator()(unsigned int i, unsigned int j) const {
-			return data[(j*dim_y + i)];
+			return data[j*dim_y + i];
 		}
+
+		// void add(unsigned int i, unsigned int j, double dat) {
+		// 	(*this)(i,j) = dat;
+		// }
 
 		Matrix operator*(const Matrix& b) {
 			assert(dim_y == b.dim_x);
@@ -48,7 +58,8 @@ namespace utils {
 				for (unsigned int j = 0; j < b.dim_y; ++j) {
 					unsigned int sum = 0;
 					for (unsigned int k = 0; k < dim_y; ++k) {
-						sum += (*this)(i,k) * b(k, j);
+						// sum += (*this)(i,k) * b(k, j);0
+						sum += (*this)(i, k) * b(k, j);
 					}
 					c(i,j) = sum;
 				}
@@ -57,7 +68,8 @@ namespace utils {
 		}
 
 	protected:
-		std::vector<double> data;
+		// std::vector<double> data;
+		double *data;
 	
 	};
 

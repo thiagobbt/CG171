@@ -11,7 +11,7 @@
 #include "gtk/gtk.h"
 
 class Object {
- private:
+ protected:
  	Drawable* drawable_obj;
  	std::vector<Coordinate> location;
 
@@ -19,7 +19,8 @@ class Object {
   	//Object(std::vector<Coordinate>&) {}
   	virtual ~Object() {}
  	virtual void draw() = 0;
-  	void transform(const utils::Matrix&); // Translação (0,1), Escalonamento (2,5), Rotação (6)
+  	void transform(utils::Matrix&); // Translação (0,1), Escalonamento (2,5), Rotação (6)
+  	Coordinate center();
 };
 
 #endif /* _OBJECT_H_ */

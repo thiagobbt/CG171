@@ -8,8 +8,6 @@
 
 class Polygon : public Object {
  private:
-    Drawable* drawable_obj;
-    std::vector<Coordinate> location;
     utils::Color color;
     bool fill;
  public:

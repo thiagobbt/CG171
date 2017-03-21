@@ -17,9 +17,6 @@ bool Controller::add_line(const string& id, double x1, double y1,
 
 	Coordinate c1(x1,y1);
 	Coordinate c2(x2,y2);
-	std:: cout << c1.get_x() << " " << c1.get_y() << "\n";
-	std:: cout << c2.get_x() << " " << c2.get_y() << "\n";
-	std::cout << "red ctrl = " << c.r << std::endl;
 
 	return World::instance().add_obj(id, new Line({c1,c2},c));
 }
@@ -68,14 +65,15 @@ void Controller::pan_y(double y) {
 }
 
 void Controller::move_obj(const string& id, double dx, double dy) {
-	utils::Matrix a(3,3);
-	a.fill(0);
-	a(0,0) = 1;
-	a(1,1) = 1;
-	a(2,2) = 1;
-	a(2,0) = dx;
-	a(2,1) = dy;
-	World::instance().move_obj(id, a);
+	std::cout << "ctrl::move_obj id=" << id << std::endl;
+	utils::Matrix *a = new utils::Matrix(3,3);
+	a->fill(0);
+	(*a)(0,0) = 1;
+	(*a)(1,1) = 1;
+	(*a)(2,2) = 1;
+	(*a)(2,0) = dx;
+	(*a)(2,1) = dy;
+	World::instance().move_obj(id, *a);
 }
 
 void Controller::rotate_obj(const string& id, double teta, double x, double y, bool center) {

@@ -8,8 +8,6 @@
 
 class Line : public Object {
  private:
-    Drawable* drawable_obj;
-    std::vector<Coordinate> location;
     utils::Color color;
  public:
     Line(const std::vector<Coordinate>&, utils::Color);

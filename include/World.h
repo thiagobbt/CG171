@@ -18,9 +18,9 @@ class World {
     ~World();
     bool add_obj(string, Object*);
     void delete_obj(string);
-    void move_obj(string, const utils::Matrix&);
-    void scale_obj(string, const utils::Matrix&);
-    void rotate_obj(string, const utils::Matrix&, const Coordinate&, bool);
+    void move_obj(string, utils::Matrix&);
+    void scale_obj(string, utils::Matrix&);
+    void rotate_obj(string, utils::Matrix&, const Coordinate&, bool);
     void clear();    
     void redraw();
     const Object& obj(const string&);

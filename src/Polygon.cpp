@@ -1,9 +1,10 @@
 #include "Polygon.h"
 #include "PolygonGTK.h"
 
-Polygon::Polygon(std::vector<Coordinate> location, 	utils::Color color, bool fill)
-		: location(location), color(color), fill(fill) {
-	drawable_obj = new PolygonGTK(location, color, fill);
+Polygon::Polygon(std::vector<Coordinate> coordinates, utils::Color color, bool fill)
+		: color(color), fill(fill) {
+	location = coordinates;
+	drawable_obj = new PolygonGTK(coordinates, color, fill);
 }
 
 Polygon::~Polygon() {

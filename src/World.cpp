@@ -37,14 +37,15 @@ void World::redraw() {
 	}
 }
 
-void World::move_obj(string, const utils::Matrix&) {
-
+void World::move_obj(string id, utils::Matrix& m) {
+	std::cout << "world::move_obj id=" << id << std::endl;
+	display_file[id]->transform(m);
 }
 
-void World::scale_obj(string, const utils::Matrix&) {
-
+void World::scale_obj(string id, utils::Matrix& m) {
+	display_file[id]->transform(m);
 }
 
-void World::rotate_obj(string, const utils::Matrix&, const Coordinate&, bool) {
+void World::rotate_obj(string id, utils::Matrix& m, const Coordinate& coord, bool use_coord) {
 
 }
