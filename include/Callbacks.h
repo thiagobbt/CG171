@@ -354,7 +354,7 @@ namespace cb {
                           1, "Polygon",
                           -1);
 
-        gtk_widget_queue_draw (window_widget);
+        gtk_widget_queue_draw(window_widget);
 
         GtkWidget *new_object_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "new_object_window"));
         gtk_widget_hide(new_object_widget);
@@ -403,6 +403,8 @@ namespace cb {
 
         ctrl.move_obj(string(name), dx, dy);
 
+        gtk_widget_queue_draw(window_widget);
+
         GtkWidget* transform_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "transform_window"));
         gtk_widget_hide(transform_widget);
     }
@@ -435,6 +437,8 @@ namespace cb {
         gtk_tree_model_get(GTK_TREE_MODEL(object_store), &iter, 0, &name, -1);
 
         ctrl.scale_obj(string(name), sx, sy);
+
+        gtk_widget_queue_draw(window_widget);
 
         GtkWidget* transform_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "transform_window"));
         gtk_widget_hide(transform_widget);
@@ -483,6 +487,8 @@ namespace cb {
             ctrl.rotate_obj(string(name), rotate_angle, x, y, true);
         }
 
+        gtk_widget_queue_draw(window_widget);
+
         GtkWidget* transform_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "transform_window"));
         gtk_widget_hide(transform_widget);
     }
@@ -496,7 +502,10 @@ namespace cb {
             case GDK_KEY_plus: btn_zoom_in_cb(); break;
             case GDK_KEY_minus: btn_zoom_out_cb(); break;
             case GDK_KEY_q: gtk_main_quit(); break;
-            case GDK_KEY_t: ctrl.move_obj("test_polygon", 100, 100); break;
+            case GDK_KEY_t:
+                ctrl.move_obj("test_polygon", 100, 100);
+                gtk_widget_queue_draw(window_widget);
+                break;
             case GDK_KEY_p:
                 log_print("Add test_polygon\n");
                 ctrl.add_polygon("test_polygon", {150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true);

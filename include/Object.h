@@ -13,7 +13,7 @@
 class Object {
  protected:
  	Drawable* drawable_obj;
- 	std::vector<Coordinate> location;
+ 	std::vector<Coordinate> *location;
 
  public:
   	//Object(std::vector<Coordinate>&) {}

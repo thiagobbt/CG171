@@ -7,72 +7,60 @@
 
 
 namespace utils {
-	#define PI 3.14159265
+#define PI 3.14159265
 
-	struct Color {
-		double r, g, b, a;
-	};
+struct Color {
+	double r, g, b, a;
+};
 
-	class Matrix {
+class Matrix {
+ protected:
+	std::vector<double> data;
 
- 	public:
-		unsigned int dim_x;
-		unsigned int dim_y;
+ public:
+	unsigned int dim_x;
+	unsigned int dim_y;
 
- 		// linhas, colunas
- 		Matrix(unsigned int x, unsigned int y) : dim_x(x), dim_y(y) {
- 			data = new double[x * y];
- 			fill();
- 		}
+	// linhas, colunas
+	Matrix(unsigned int x, unsigned int y) : dim_x(x), dim_y(y) {
+		fill();
+	}
 
- 		~Matrix() {
- 			std::cout << "~Matrix()" << std::endl;
- 			delete[] data;
- 		};
-
-		void fill(double n = 0) {
-			// data.reserve(dim_x * dim_y);
-			for (unsigned int t = 0; t < dim_x * dim_y; ++t) {
-				// data.push_back(n);
-				data[t] = n;
-			}
+	void fill(double n = 0) {
+		data.reserve(dim_x * dim_y);
+		for (unsigned int t = 0; t < dim_x * dim_y; ++t) {
+			data.push_back(n);
 		}
+	}
 
-		double& operator()(unsigned int i, unsigned int j) {
-			return data[j*dim_y + i];
-		}
+	double& operator()(unsigned int j, unsigned int i) {
+		return data[j*dim_y + i];
+	}
 
-		const double& operator()(unsigned int i, unsigned int j) const {
-			return data[j*dim_y + i];
-		}
+	const double& operator()(unsigned int j, unsigned int i) const {
+		return data[j*dim_y + i];
+	}
 
-		// void add(unsigned int i, unsigned int j, double dat) {
-		// 	(*this)(i,j) = dat;
-		// }
+	void add(unsigned int j, unsigned int i, double dat) {
+		(*this)(i,j) = dat;
+	}
 
-		Matrix operator*(const Matrix& b) {
-			assert(dim_y == b.dim_x);
+	Matrix operator*(const Matrix& b) {
+		assert(dim_y == b.dim_x);
 
-			Matrix c(dim_x, b.dim_y);
-			for (unsigned int i = 0; i < dim_x; ++i) {
-				for (unsigned int j = 0; j < b.dim_y; ++j) {
-					unsigned int sum = 0;
-					for (unsigned int k = 0; k < dim_y; ++k) {
-						// sum += (*this)(i,k) * b(k, j);0
-						sum += (*this)(i, k) * b(k, j);
-					}
-					c(i,j) = sum;
+		Matrix c(dim_x, b.dim_y);
+		for (unsigned int i = 0; i < dim_x; ++i) {
+			for (unsigned int j = 0; j < b.dim_y; ++j) {
+				unsigned int sum = 0;
+				for (unsigned int k = 0; k < dim_y; ++k) {
+					sum += (*this)(i, k) * b(k, j);
 				}
+				c(i,j) = sum;
 			}
-			return c;
 		}
-
-	protected:
-		// std::vector<double> data;
-		double *data;
-	
-	};
-
+		return c;
+	}
+};
 }
 
 #endif /* _UTILS_H_ */

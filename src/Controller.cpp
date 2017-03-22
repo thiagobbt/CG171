@@ -66,34 +66,31 @@ void Controller::pan_y(double y) {
 
 void Controller::move_obj(const string& id, double dx, double dy) {
 	std::cout << "ctrl::move_obj id=" << id << std::endl;
-	utils::Matrix *a = new utils::Matrix(3,3);
-	a->fill(0);
-	(*a)(0,0) = 1;
-	(*a)(1,1) = 1;
-	(*a)(2,2) = 1;
-	(*a)(2,0) = dx;
-	(*a)(2,1) = dy;
-	World::instance().move_obj(id, *a);
+	utils::Matrix a(3,3);
+	a(0, 0) = 1;
+	a(1, 1) = 1;
+	a(2, 2) = 1;
+	a(2, 0) = dx;
+	a(2, 1) = dy;
+	World::instance().move_obj(id, a);
 }
 
 void Controller::rotate_obj(const string& id, double teta, double x, double y, bool center) {
 	utils::Matrix a(3,3);
-	a.fill(0);
 	auto angle = teta*PI/180;
-	a(0,0) = cos(angle);
-	a(0,1) = - sin(angle);
-	a(1,0) = sin(angle);
-	a(1,1) = cos(angle);
-	a(2,2) = 1;
+	a(0, 0) = cos(angle);
+	a(0, 1) = - sin(angle);
+	a(1, 0) = sin(angle);
+	a(1, 1) = cos(angle);
+	a(2, 2) = 1;
 	Coordinate loc(x,y);
 	World::instance().rotate_obj(id, a, loc, center);
 } 
 
 void Controller::scale_obj(const string& id, double sx, double sy) {
  	utils::Matrix a(3,3);
-	a.fill(0);
-	a(0,0) = sx;
-	a(1,1) = sy;
-	a(2,2) = 1;
+	a(0, 0) = sx;
+	a(1, 1) = sy;
+	a(2, 2) = 1;
 	World::instance().scale_obj(id, a);
 }

@@ -11,11 +11,11 @@
 
 class LineGTK : public Drawable {
  private:
- 	std::vector<Coordinate> coords;
+ 	std::vector<Coordinate> *coords;
  	const utils::Color color;
 
  public:
-    LineGTK(const std::vector<Coordinate>&, utils::Color, bool);
+    LineGTK(std::vector<Coordinate>*, utils::Color, bool);
     void draw(cairo_surface_t&, Window&);
 };
 

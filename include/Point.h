@@ -10,7 +10,7 @@ class Point : public Object {
  private:
     utils::Color color;
  public:
-    Point(std::vector<Coordinate>, utils::Color);
+    Point(const std::vector<Coordinate>&, utils::Color);
     Point();
     ~Point();
     void draw();

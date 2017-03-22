@@ -4,14 +4,14 @@
 #include "PointGTK.h"
 
 
-Point::Point(std::vector<Coordinate> coordinates, utils::Color c) 
+Point::Point(const std::vector<Coordinate>& coordinates, utils::Color c) 
 		: color(c) {
-	location = coordinates;
+	location = new std::vector<Coordinate>(coordinates);
 	drawable_obj = new PointGTK(location, c, false);
 }
 
 Point::Point() {
-	location = std::vector<Coordinate>(1);
+	location = new std::vector<Coordinate>(1);
 }
 
 Point::~Point() {

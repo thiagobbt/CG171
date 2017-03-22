@@ -4,7 +4,6 @@
 #define WORLD_H
 
 #include "Object.h"
-// #include "utils.h"
 #include <unordered_map>
 
 using std::string;
