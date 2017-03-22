@@ -41,17 +41,13 @@ class Matrix {
 		return data[j*dim_y + i];
 	}
 
-	void add(unsigned int j, unsigned int i, double dat) {
-		(*this)(i,j) = dat;
-	}
-
 	Matrix operator*(const Matrix& b) {
 		assert(dim_y == b.dim_x);
 
 		Matrix c(dim_x, b.dim_y);
 		for (unsigned int i = 0; i < dim_x; ++i) {
 			for (unsigned int j = 0; j < b.dim_y; ++j) {
-				unsigned int sum = 0;
+				double sum = 0;
 				for (unsigned int k = 0; k < dim_y; ++k) {
 					sum += (*this)(i, k) * b(k, j);
 				}

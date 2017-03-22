@@ -508,7 +508,13 @@ namespace cb {
                 break;
             case GDK_KEY_p:
                 log_print("Add test_polygon\n");
-                ctrl.add_polygon("test_polygon", {150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true);
+                bool success = ctrl.add_polygon("test_polygon", {150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true);
+
+                if (!success) {
+                    log_print("   Error: Object name repetition\n");
+                    return false;
+                }
+
                 GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
                 GtkTreeIter obj_store_iter;
                 gtk_list_store_append(obj_store, &obj_store_iter);

@@ -19,7 +19,7 @@ class World {
     void delete_obj(string);
     void move_obj(string, utils::Matrix&);
     void scale_obj(string, utils::Matrix&);
-    void rotate_obj(string, utils::Matrix&, const Coordinate&, bool);
+    void rotate_obj(string, utils::Matrix&, Coordinate&, bool);
     void clear();    
     void redraw();
     const Object& obj(const string&);

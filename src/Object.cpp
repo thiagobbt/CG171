@@ -22,12 +22,13 @@ void Object::transform(utils::Matrix& b) {
 		Coordinate c(result(0,0), result(0,1));
 
 		p = c;
-		std::cout << " =>" << p.get_x() << std::endl;
+		std::cout << " => " << p.get_x() << std::endl;
 	}
 }
 
 Coordinate Object::center() {
-	double xc, yc;
+	double xc = 0;
+	double yc = 0;
 
 	for (auto coord : *location) {
 		xc += coord.get_x();

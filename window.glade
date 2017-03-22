@@ -1868,7 +1868,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="radio__rotate_obj_center">
+                      <object class="GtkRadioButton" id="radio_rotate_obj_center">
                         <property name="label" translatable="yes">Around the object's center</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
