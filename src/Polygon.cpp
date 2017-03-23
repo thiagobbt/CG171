@@ -3,8 +3,8 @@
 
 Polygon::Polygon(const std::vector<Coordinate>& coordinates, utils::Color color, bool fill)
 		: color(color), fill(fill) {
-	location = new std::vector<Coordinate>(coordinates);
-	drawable_obj = new PolygonGTK(location, color, fill);
+	location = std::vector<Coordinate>(coordinates);
+	drawable_obj = new PolygonGTK(&location, color, fill);
 }
 
 Polygon::~Polygon() {

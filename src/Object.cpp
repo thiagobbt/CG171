@@ -8,7 +8,7 @@
 // THIS HAVE TO BE TESTED: use of not of reference on P
 void Object::transform(utils::Matrix& b) {
 	std::cout << "obj::transform" << std::endl;
-	for (auto& p : *location) {
+	for (auto& p : location) {
 		std::cout << "p.x: " << p.get_x();
 
 		utils::Matrix a(1,3);
@@ -30,13 +30,13 @@ Coordinate Object::center() {
 	double xc = 0;
 	double yc = 0;
 
-	for (auto coord : *location) {
+	for (auto coord : location) {
 		xc += coord.get_x();
 		yc += coord.get_y();
 	}
 
-	xc /= location->size();
-	yc /= location->size();
+	xc /= location.size();
+	yc /= location.size();
 
 	return Coordinate(xc, yc);
 }

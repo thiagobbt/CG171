@@ -4,8 +4,8 @@
 
 Line::Line(const std::vector<Coordinate>& coordinates, utils::Color c) 
 		: color(c) {
-	location = new std::vector<Coordinate>(coordinates);
-	drawable_obj = new LineGTK(location, c, false); 
+	location = std::vector<Coordinate>(coordinates);
+	drawable_obj = new LineGTK(&location, c, false);
 }
 
 Line::~Line() {
