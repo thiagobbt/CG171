@@ -13,14 +13,16 @@
 class Object {
  protected:
  	Drawable* drawable_obj;
- 	std::vector<Coordinate> *location;
+ 	std::vector<Coordinate> *world_loc;
+ 	std::vector<Coordinate> *win_loc;
 
  public:
   	//Object(std::vector<Coordinate>&) {}
-  	virtual ~Object() {}
+  	~Object();
  	virtual void draw() = 0;
   	void transform(utils::Matrix&); // Translação (0,1), Escalonamento (2,5), Rotação (6)
   	Coordinate center();
+  	void update(const utils::Matrix& m);
 };
 
 #endif /* _OBJECT_H_ */

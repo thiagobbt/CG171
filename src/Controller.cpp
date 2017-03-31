@@ -3,14 +3,15 @@
 #include "Point.h"
 #include "Line.h"
 #include "Polygon.h"
+#include "utils.h"
 #include <cmath>
 #include <cassert>
 
-#define PI 3.14159265
-
 bool Controller::add_point(const string& id, double x, double y, utils::Color c) {
 	Coordinate coord(x,y);
-	return World::instance().add_obj(id, new Point({coord}, c));
+	bool res = World::instance().add_obj(id, new Point({coord}, c));
+	if (res) World::instance().update_obj(id, Window::instance().normalizerMatrix());
+	return res;
 }
 
 bool Controller::add_line(const string& id, double x1, double y1,
@@ -19,7 +20,9 @@ bool Controller::add_line(const string& id, double x1, double y1,
 	Coordinate c1(x1,y1);
 	Coordinate c2(x2,y2);
 
-	return World::instance().add_obj(id, new Line({c1,c2},c));
+	bool res = World::instance().add_obj(id, new Line({c1,c2},c));
+	if (res) World::instance().update_obj(id, Window::instance().normalizerMatrix());
+	return res;
 }
 
 bool Controller::add_polygon(const string& id, const std::vector<double>& locs,
@@ -32,11 +35,12 @@ bool Controller::add_polygon(const string& id, const std::vector<double>& locs,
 		coords.push_back(Coordinate(locs[i], locs[i+1]));
 	}
 
-	return World::instance().add_obj(id, new Polygon(coords, c, fill));
+	bool res = World::instance().add_obj(id, new Polygon(coords, c, fill));
+	if (res) World::instance().update_obj(id, Window::instance().normalizerMatrix());
+	return res;
 }
 
 void Controller::delete_obj(const string& key) {
-
 	World::instance().delete_obj(key);
 }
 
@@ -45,49 +49,39 @@ void Controller::clear_world() {
 }
 
 void Controller::zoom_in(double zoom) {
-	win.zoom(zoom);
+	Window::instance().zoom(zoom);
+	World::instance().update_all(Window::instance().normalizerMatrix());
 }
 
 
 void Controller::zoom_out(double zoom) {
-	win.zoom(1/zoom);
+	Window::instance().zoom(1/zoom);
+	World::instance().update_all(Window::instance().normalizerMatrix());
 }
 
 void Controller::pan_x(double x) {
-
-	win.move(x,0,0);
+	Window::instance().move(x,0,0);
+	World::instance().update_all(Window::instance().normalizerMatrix());
 }
 
 void Controller::pan_y(double y) {
-	win.move(0,y,0);
+	Window::instance().move(0,y,0);
+	World::instance().update_all(Window::instance().normalizerMatrix());
 }
 
 void Controller::move_obj(const string& id, double dx, double dy) {
-	utils::Matrix a(3,3);
-	a(0, 0) = 1;
-	a(1, 1) = 1;
-	a(2, 2) = 1;
-	a(2, 0) = dx;
-	a(2, 1) = dy;
+	auto a = utils::Transformation2D::translation_matrix(dx, dy);
 	World::instance().move_obj(id, a);
 }
 
-void Controller::rotate_obj(const string& id, double teta, double x, double y, bool use_cord) {
-	utils::Matrix a(3,3);
-	auto angle = teta*PI/180;
-	a(0, 0) = cos(angle);
-	a(0, 1) = - sin(angle);
-	a(1, 0) = sin(angle);
-	a(1, 1) = cos(angle);
-	a(2, 2) = 1;
+void Controller::rotate_obj(const string& id, double theta, double x, double y, bool use_cord) {
+	auto a = utils::Transformation2D::rotation_matrix(theta);
 	Coordinate loc(x, y);
 	World::instance().rotate_obj(id, a, loc, use_cord);
 } 
 
 void Controller::scale_obj(const string& id, double sx, double sy) {
- 	utils::Matrix a(3,3);
-	a(0, 0) = sx;
-	a(1, 1) = sy;
-	a(2, 2) = 1;
+ 	auto a = utils::Transformation2D::scaling_matrix(sx, sy);
 	World::instance().scale_obj(id, a);
+	World::instance().update_obj(id, Window::instance().normalizerMatrix());
 }

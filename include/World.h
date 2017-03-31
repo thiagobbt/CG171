@@ -23,6 +23,8 @@ class World {
     void clear();    
     void redraw();
     const Object& obj(const string&);
+    void update_obj(string, const utils::Matrix&);
+    void update_all(const utils::Matrix&);
 
  protected:
     World() {}

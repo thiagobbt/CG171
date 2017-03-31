@@ -11,7 +11,6 @@ class Line : public Object {
     utils::Color color;
  public:
     Line(const std::vector<Coordinate>&, utils::Color);
-    ~Line();
     void draw();
 };
 

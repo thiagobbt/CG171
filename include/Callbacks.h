@@ -502,6 +502,10 @@ namespace cb {
             case GDK_KEY_plus: btn_zoom_in_cb(); break;
             case GDK_KEY_minus: btn_zoom_out_cb(); break;
             case GDK_KEY_q: gtk_main_quit(); break;
+            case GDK_KEY_r:
+                ctrl.rotate_obj("test_polygon", 15, 0, 0, false);
+                gtk_widget_queue_draw(window_widget);
+                break;
             case GDK_KEY_t:
                 ctrl.move_obj("test_polygon", 100, 100);
                 gtk_widget_queue_draw(window_widget);

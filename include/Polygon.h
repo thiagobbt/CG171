@@ -12,7 +12,6 @@ class Polygon : public Object {
     bool fill;
  public:
     Polygon(const std::vector<Coordinate>&, utils::Color, bool);
-    ~Polygon();
     void draw();
 };
 

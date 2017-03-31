@@ -11,9 +11,6 @@
 using std::string;
 
 class Controller {
- private:
- 	Window win;
-
  public:
 	Controller() {}
 	bool add_point(const string&, double, double, utils::Color);

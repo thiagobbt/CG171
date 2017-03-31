@@ -10,10 +10,9 @@ World& World::instance() {
 }
 
 bool World::add_obj(string id, Object* obj) {
-
 	if (!display_file.count(id)) {
 		display_file[id] = obj;
-		obj->draw();
+		// obj->draw();
 		return true;
 	} else {
 		return false;
@@ -38,26 +37,19 @@ void World::redraw() {
 }
 
 void World::move_obj(string id, utils::Matrix& m) {
+	if (display_file.count(id) == 0) return;
+
 	std::cout << "world::move_obj id=" << id << std::endl;
 	display_file[id]->transform(m);
 }
 
 void World::scale_obj(string id, utils::Matrix& m) {
+	if (display_file.count(id) == 0) return;
+
 	Coordinate obj_center = display_file[id]->center();
 
-	utils::Matrix translate(3, 3);
-	translate(0, 0) = 1;
-	translate(1, 1) = 1;
-	translate(2, 2) = 1;
-	translate(2, 0) = -obj_center.get_x();
-	translate(2, 1) = -obj_center.get_y();
-
-	utils::Matrix translate_back(3, 3);
-	translate_back(0, 0) = 1;
-	translate_back(1, 1) = 1;
-	translate_back(2, 2) = 1;
-	translate_back(2, 0) = obj_center.get_x();
-	translate_back(2, 1) = obj_center.get_y();
+	auto translate = utils::Transformation2D::translation_matrix(-obj_center.get_x(), -obj_center.get_y());
+	auto translate_back = utils::Transformation2D::translation_matrix(obj_center.get_x(), obj_center.get_y());
 
 	utils::Matrix scale = (translate * m) * translate_back;
 
@@ -65,32 +57,35 @@ void World::scale_obj(string id, utils::Matrix& m) {
 }
 
 void World::rotate_obj(string id, utils::Matrix& m, Coordinate& coord, bool use_coord) {
+	if (display_file.count(id) == 0) return;
+
 	utils::Matrix translate(3, 3);
 	utils::Matrix translate_back(3, 3);
-
-	translate(0, 0) = 1;
-	translate_back(0, 0) = 1;
-	translate(1, 1) = 1;
-	translate_back(1, 1) = 1;
-	translate(2, 2) = 1;
-	translate_back(2, 2) = 1;
 
 	std::cout << "world::rotate_obj use_coord=" << use_coord << std::endl;
 
 	if (use_coord) {
-		translate(2, 0) = -coord.get_x();
-		translate_back(2, 0) = coord.get_x();
-		translate(2, 1) = -coord.get_y();
-		translate_back(2, 1) = coord.get_y();
+		translate = utils::Transformation2D::translation_matrix(-coord.get_x(), -coord.get_y());
+		translate_back = utils::Transformation2D::translation_matrix(coord.get_x(), coord.get_y());
 	} else {
 		Coordinate obj_center = display_file[id]->center();
-		translate(2, 0) = -obj_center.get_x();
-		translate_back(2, 0) = obj_center.get_x();
-		translate(2, 1) = -obj_center.get_y();
-		translate_back(2, 1) = obj_center.get_y();
+		translate = utils::Transformation2D::translation_matrix(-obj_center.get_x(), -obj_center.get_y());
+		translate_back = utils::Transformation2D::translation_matrix(obj_center.get_x(), obj_center.get_y());
 	}
 
 	utils::Matrix rotate = (translate * m) * translate_back;
 
-	display_file[id]->transform(rotate);
+	display_file.at(id)->transform(rotate);
+}
+
+void World::update_obj(string id, const utils::Matrix& m) {
+	if (display_file.count(id) == 0) return;
+
+	display_file[id]->update(m);
+}
+
+void World::update_all(const utils::Matrix& m) {
+	for (auto obj : display_file) {
+		obj.second->update(m);
+	}
 }
