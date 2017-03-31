@@ -1,5 +1,5 @@
-#ifndef _POINT_GTK_H_
-#define _POINT_GTK_H_
+#ifndef POINT_GTK_H
+#define POINT_GTK_H
 
 #include <vector>
 #include <gtk/gtk.h>
@@ -10,12 +10,12 @@
 
 class PointGTK : public Drawable {
  private:
- 	std::vector<Coordinate> *coords;
- 	const utils::Color color;
+    std::vector<Coordinate> *coords;
+    const utils::Color color;
 
  public:
     PointGTK(std::vector<Coordinate>*, utils::Color, bool);
     void draw(cairo_surface_t&, Window&);
 };
 
-#endif /* _POINT_GTK_H_ */
+#endif /* POINT_GTK_H */

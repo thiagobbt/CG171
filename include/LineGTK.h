@@ -1,5 +1,5 @@
-#ifndef _LINE_GTK_H_
-#define _LINE_GTK_H_
+#ifndef LINE_GTK_H
+#define LINE_GTK_H
 
 #include <vector>
 #include <gtk/gtk.h>
@@ -10,12 +10,12 @@
 
 class LineGTK : public Drawable {
  private:
- 	std::vector<Coordinate> *coords;
- 	const utils::Color color;
+    std::vector<Coordinate> *coords;
+    const utils::Color color;
 
  public:
     LineGTK(std::vector<Coordinate>*, utils::Color, bool);
     void draw(cairo_surface_t&, Window&);
 };
 
-#endif /* _LINE_GTK_H_ */
+#endif /* LINE_GTK_H */

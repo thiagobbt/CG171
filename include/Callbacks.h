@@ -1,5 +1,5 @@
-#ifndef _CALLBACKS_H_
-#define _CALLBACKS_H_
+#ifndef CALLBACKS_H
+#define CALLBACKS_H
 
 #include <iostream>
 #include <cstring>
@@ -182,13 +182,13 @@ namespace cb {
 
     static void btn_rotate_r_cb() {
         log_print("Rotate right\n");
-        ctrl.rotate(15);
+        ctrl.rotate(-15);
         gtk_widget_queue_draw(window_widget);
     }
 
     static void btn_rotate_l_cb() {
         log_print("Rotate left\n");
-        ctrl.rotate(-15);
+        ctrl.rotate(15);
         gtk_widget_queue_draw(window_widget);
     }
 
@@ -681,4 +681,4 @@ namespace cb {
     }
 }
 
-#endif /* _CALLBACKS_H_ */
+#endif /* CALLBACKS_H */

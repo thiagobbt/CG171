@@ -1,12 +1,10 @@
-/* copyright vfreitas & thiagobbt */
-
 #include "PointGTK.h"
 
 PointGTK::PointGTK(std::vector<Coordinate>* coords, utils::Color color, bool fill) 
         : coords(coords), color(color) {}
 
 void PointGTK::draw(cairo_surface_t& surface, Window& win) {
-	Coordinate a = win.to_viewport((*coords)[0]);
+    Coordinate a = win.to_viewport((*coords)[0]);
     cairo_t *cr = cairo_create(&surface);
     cairo_set_source_rgb(cr, color.r, color.g, color.b);
 

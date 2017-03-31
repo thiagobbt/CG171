@@ -1,5 +1,5 @@
-#ifndef _COORD_H_
-#define _COORD_H_
+#ifndef COORD_H
+#define COORD_H
 
 #include <iostream>
 
@@ -58,4 +58,4 @@ inline std::ostream& operator<<(std::ostream& out, const Coordinate& c) {
     return out;
 }
 
-#endif /* _COORD_H_ */
+#endif /* COORD_H */

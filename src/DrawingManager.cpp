@@ -1,18 +1,19 @@
 #include "DrawingManager.h"
+#include "World.h"
 
 DrawingManager& DrawingManager::instance() {
-	static DrawingManager instance;
-	return instance;
+    static DrawingManager instance;
+    return instance;
 }
 
 void DrawingManager::draw(Drawable& drawable) {
-	drawable.draw(*surface, window());
+    drawable.draw(*surface, window());
 }
 
 void DrawingManager::setSurface(cairo_surface_t* s) {
-	surface = s;
+    surface = s;
 }
 
 void DrawingManager::redraw() {
-	World::instance().redraw();
+    World::instance().redraw();
 }

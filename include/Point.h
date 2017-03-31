@@ -1,5 +1,5 @@
-#ifndef _POINT_H_
-#define _POINT_H_
+#ifndef POINT_H
+#define POINT_H
 
 #include "Object.h"
 #include "utils.h"

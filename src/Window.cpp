@@ -1,7 +1,7 @@
+#include <cmath>
 #include "Window.h"
 #include "DrawingManager.h"
 #include "utils.h"
-#include <cmath>
 
 Window& Window::instance() {
     static Window instance;
@@ -43,9 +43,7 @@ void Window::zoom(double zoom) {
 }
 
 void Window::rotate(double theta) {
-    std::cout << "angle " << angle << " => ";
     angle = std::fmod(angle + theta, 360);
-    std::cout << angle << std::endl;
 }
 
 Coordinate Window::to_viewport(const Coordinate& coord) {

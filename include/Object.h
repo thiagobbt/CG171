@@ -1,5 +1,5 @@
-#ifndef _OBJECT_H_
-#define _OBJECT_H_
+#ifndef OBJECT_H
+#define OBJECT_H
 
 #include <vector>
 #include "utils.h"
@@ -20,4 +20,4 @@ class Object {
     void update();
 };
 
-#endif /* _OBJECT_H_ */
+#endif /* OBJECT_H */

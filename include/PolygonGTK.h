@@ -1,5 +1,5 @@
-#ifndef _POLYGON_GTK_H_
-#define _POLYGON_GTK_H_
+#ifndef POLYGON_GTK_H
+#define POLYGON_GTK_H
 
 #include <vector>
 #include <gtk/gtk.h>
@@ -9,13 +9,13 @@
 
 class PolygonGTK : public Drawable {
  private:
- 	std::vector<Coordinate> *coords;
- 	const utils::Color color;
- 	bool fill;
+    std::vector<Coordinate> *coords;
+    const utils::Color color;
+    bool fill;
 
  public:
     PolygonGTK(std::vector<Coordinate>*, utils::Color, bool);
     void draw(cairo_surface_t&, Window&);
 };
 
-#endif /* _POLYGON_GTK_H_ */
+#endif /* POLYGON_GTK_H */

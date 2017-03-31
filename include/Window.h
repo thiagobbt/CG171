@@ -1,8 +1,6 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "Object.h"
-#include "World.h"
 #include "utils.h"
 
 class Window {

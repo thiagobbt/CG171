@@ -26,7 +26,6 @@ class World {
 
  protected:
     World() {}
-
 };
 
 #endif /* WORLD_H */
