@@ -1,11 +1,7 @@
-/* copyright vfreitas & thiagobbt */
-
 #ifndef _DRAWABLE_H_
 #define _DRAWABLE_H_
 
-#include <vector>
 #include <gtk/gtk.h>
-#include "Coordinate.h"
 
 class Window;
 

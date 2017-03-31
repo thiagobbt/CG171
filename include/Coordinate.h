@@ -1,5 +1,3 @@
-/* copyright vfreitas & thiagobbt */
-
 #ifndef _COORD_H_
 #define _COORD_H_
 
@@ -11,36 +9,42 @@ class Coordinate {
 
  public:
     Coordinate(const Coordinate&) = default;
-    Coordinate(double x = 0, double y = 0, double z = 0, double w = 0)
+    Coordinate(double x = 0, double y = 0, double z = 1, double w = 1)
         : x(x), y(y), z(z), w(w) {}
 
-    void sum_coords(double a = 0, double b = 0, double c = 0, double d = 0) {
-        x += a;
-        y += b;
-        z += c;
-        w += d;
+    Coordinate operator+(const Coordinate& rhs) {
+        return Coordinate(x + rhs.get_x(), y + rhs.get_y(), z + rhs.get_z(), w + rhs.get_w());
     }
 
-    Coordinate operator+(const Coordinate& rhs) {
-        return Coordinate(x + rhs.get_x(), y + rhs.get_y(), z + rhs.get_z());
+    Coordinate operator-(const Coordinate& rhs) {
+        return Coordinate(x - rhs.get_x(), y - rhs.get_y(), z - rhs.get_z(), w - rhs.get_w());
     }
 
     Coordinate operator/(const Coordinate& rhs) {
-        return Coordinate(x / rhs.get_x(), y / rhs.get_y(), z / rhs.get_z());
+        return Coordinate(x / rhs.get_x(), y / rhs.get_y(), z / rhs.get_z(), w / rhs.get_w());
     }
 
-     Coordinate operator*(const Coordinate& rhs) {
-        return Coordinate(x * rhs.get_x(), y * rhs.get_y(), z * rhs.get_z());
+    Coordinate operator*(const Coordinate& rhs) {
+        return Coordinate(x * rhs.get_x(), y * rhs.get_y(), z * rhs.get_z(), w * rhs.get_w());
     }
 
     Coordinate operator/(const double& rhs) {
-        return Coordinate(x / rhs, y / rhs, z / rhs);
+        return Coordinate(x / rhs, y / rhs, z / rhs, w / rhs);
     }
 
     Coordinate& operator*=(const Coordinate& rhs) {
+    	x += rhs.get_x();
+        y += rhs.get_y();
+        z += rhs.get_z();
+        w += rhs.get_w();
+        return *this;
+    }
+
+    Coordinate& operator+=(const Coordinate& rhs) {
         x *= rhs.get_x();
         y *= rhs.get_y();
         z *= rhs.get_z();
+        w *= rhs.get_w();
         return *this;
     }
 
@@ -51,7 +55,6 @@ class Coordinate {
 };
 
 inline std::ostream& operator<<(std::ostream& out, const Coordinate& c) {
-    out << "v " << c.get_x() << " " << c.get_y() << " " << c.get_z();
     return out;
 }
 

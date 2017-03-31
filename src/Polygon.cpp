@@ -1,5 +1,6 @@
 #include "Polygon.h"
 #include "PolygonGTK.h"
+#include "DrawingManager.h"
 
 Polygon::Polygon(const std::vector<Coordinate>& coordinates, utils::Color color, bool fill)
 		: color(color), fill(fill) {
@@ -9,9 +10,5 @@ Polygon::Polygon(const std::vector<Coordinate>& coordinates, utils::Color color,
 }
 
 void Polygon::draw() {
-	std::cout << "win_loc: " << std::endl;
-	for (auto c : *win_loc) {
-		std::cout << c << std::endl;
-	}
 	DrawingManager::instance().draw(*drawable_obj);
 }

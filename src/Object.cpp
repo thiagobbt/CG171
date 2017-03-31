@@ -31,20 +31,16 @@ Coordinate Object::center() {
 	return utils::Transformation2D::center(*world_loc);
 }
 
-void Object::update(const utils::Matrix& m) {
+void Object::update() {
 	std::cout << "obj::update" << std::endl;
-	if (win_loc == nullptr) {
-		std::cout << "obj::update: new vector" << std::endl;
-		win_loc = new std::vector<Coordinate>();
-	} else {
-		std::cout << "obj::update: vector clear" << std::endl;
-		win_loc->clear();
-	}
+	win_loc->clear();
 
 	auto normalizer = Window::instance().normalizerMatrix();
 	
 	for (auto c : *world_loc) {
+		std::cout << "converting " << c;
 		auto tmp = utils::Matrix(c) * normalizer;
 		win_loc->push_back(tmp.to_coord());
+		std::cout << " to " << tmp.to_coord() << std::endl;
 	}
 }

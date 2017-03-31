@@ -1,12 +1,9 @@
-/* copyright vfreitas & thiagobbt */
-
 #ifndef _CONTROLLER_H_
 #define _CONTROLLER_H_
 
 #include <vector>
 #include <string>
-#include "DrawingManager.h"
-#include "Window.h"
+#include "utils.h"
 
 using std::string;
 
@@ -25,6 +22,7 @@ class Controller {
 	void pan_x(double);
 	void pan_y(double);
 	//pan_z(double);
+	void rotate(double);
 
 	void move_obj(const string&, double, double);
 	void rotate_obj(const string&, double, double, double, bool);

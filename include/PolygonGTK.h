@@ -1,5 +1,3 @@
-/* copyright vfreitas & thiagobbt */
-
 #ifndef _POLYGON_GTK_H_
 #define _POLYGON_GTK_H_
 

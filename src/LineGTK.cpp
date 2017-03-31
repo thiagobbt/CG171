@@ -1,7 +1,6 @@
 /* copyright vfreitas & thiagobbt */
 
 #include "LineGTK.h"
-#include "Window.h"
 
 LineGTK::LineGTK(std::vector<Coordinate>* coords, utils::Color c, bool fill) 
 		: coords(coords), color(c) {}

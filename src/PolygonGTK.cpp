@@ -6,13 +6,6 @@ PolygonGTK::PolygonGTK(std::vector<Coordinate>* coords, utils::Color color, bool
         : coords(coords), color(color), fill(fill) {}
 
 void PolygonGTK::draw(cairo_surface_t& surface, Window& win) {
-    if (coords == nullptr) {
-        std::cout << "PolygonGTK::draw coords are null, skipping" << std::endl;
-        return;
-    } else {
-        std::cout << "PolygonGTK::draw drawing" << std::endl;
-    }
-
     cairo_t *cr = cairo_create(&surface);
     cairo_set_source_rgb(cr, color.r, color.g, color.b);
 

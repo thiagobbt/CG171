@@ -1,10 +1,8 @@
-/* copyright vfreitas & thiagobbt */
-
 #ifndef WORLD_H
 #define WORLD_H
 
-#include "Object.h"
 #include <unordered_map>
+#include "Object.h"
 
 using std::string;
 
@@ -23,8 +21,8 @@ class World {
     void clear();    
     void redraw();
     const Object& obj(const string&);
-    void update_obj(string, const utils::Matrix&);
-    void update_all(const utils::Matrix&);
+    void update_obj(string);
+    void update_all();
 
  protected:
     World() {}

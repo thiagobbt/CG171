@@ -1,5 +1,3 @@
-/* copyright vfreitas & thiagobbt */
-
 #ifndef _DRAWING_MANAGER_H_
 #define _DRAWING_MANAGER_H_
 
@@ -21,6 +19,5 @@ class DrawingManager {
  	void setSurface(cairo_surface_t*);
  	void redraw();
 };
-
 
 #endif /* _DRAWING_MANAGER_H_ */

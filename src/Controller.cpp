@@ -10,7 +10,7 @@
 bool Controller::add_point(const string& id, double x, double y, utils::Color c) {
 	Coordinate coord(x,y);
 	bool res = World::instance().add_obj(id, new Point({coord}, c));
-	if (res) World::instance().update_obj(id, Window::instance().normalizerMatrix());
+	if (res) World::instance().update_obj(id);
 	return res;
 }
 
@@ -21,7 +21,7 @@ bool Controller::add_line(const string& id, double x1, double y1,
 	Coordinate c2(x2,y2);
 
 	bool res = World::instance().add_obj(id, new Line({c1,c2},c));
-	if (res) World::instance().update_obj(id, Window::instance().normalizerMatrix());
+	if (res) World::instance().update_obj(id);
 	return res;
 }
 
@@ -36,7 +36,7 @@ bool Controller::add_polygon(const string& id, const std::vector<double>& locs,
 	}
 
 	bool res = World::instance().add_obj(id, new Polygon(coords, c, fill));
-	if (res) World::instance().update_obj(id, Window::instance().normalizerMatrix());
+	if (res) World::instance().update_obj(id);
 	return res;
 }
 
@@ -50,23 +50,28 @@ void Controller::clear_world() {
 
 void Controller::zoom_in(double zoom) {
 	Window::instance().zoom(zoom);
-	World::instance().update_all(Window::instance().normalizerMatrix());
+	World::instance().update_all();
 }
 
 
 void Controller::zoom_out(double zoom) {
 	Window::instance().zoom(1/zoom);
-	World::instance().update_all(Window::instance().normalizerMatrix());
+	World::instance().update_all();
 }
 
 void Controller::pan_x(double x) {
 	Window::instance().move(x,0,0);
-	World::instance().update_all(Window::instance().normalizerMatrix());
+	World::instance().update_all();
 }
 
 void Controller::pan_y(double y) {
 	Window::instance().move(0,y,0);
-	World::instance().update_all(Window::instance().normalizerMatrix());
+	World::instance().update_all();
+}
+
+void Controller::rotate(double theta) {
+	Window::instance().rotate(theta);
+	World::instance().update_all();
 }
 
 void Controller::move_obj(const string& id, double dx, double dy) {
@@ -83,5 +88,5 @@ void Controller::rotate_obj(const string& id, double theta, double x, double y, 
 void Controller::scale_obj(const string& id, double sx, double sy) {
  	auto a = utils::Transformation2D::scaling_matrix(sx, sy);
 	World::instance().scale_obj(id, a);
-	World::instance().update_obj(id, Window::instance().normalizerMatrix());
+	World::instance().update_obj(id);
 }

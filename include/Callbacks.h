@@ -4,7 +4,6 @@
 #include <iostream>
 #include <cstring>
 #include <gtk/gtk.h>
-
 #include "Controller.h"
 #include "DrawingManager.h"
 
@@ -178,6 +177,18 @@ namespace cb {
     static void btn_down_cb() {
         log_print("Down\n");
         ctrl.pan_y(-20);
+        gtk_widget_queue_draw(window_widget);
+    }
+
+    static void btn_rotate_r_cb() {
+        log_print("Rotate right\n");
+        ctrl.rotate(15);
+        gtk_widget_queue_draw(window_widget);
+    }
+
+    static void btn_rotate_l_cb() {
+        log_print("Rotate left\n");
+        ctrl.rotate(-15);
         gtk_widget_queue_draw(window_widget);
     }
 
@@ -506,25 +517,41 @@ namespace cb {
                 ctrl.rotate_obj("test_polygon", 15, 0, 0, false);
                 gtk_widget_queue_draw(window_widget);
                 break;
+            case GDK_KEY_R:
+                ctrl.rotate_obj("test_polygon", -15, 0, 0, false);
+                gtk_widget_queue_draw(window_widget);
+                break;
             case GDK_KEY_t:
-                ctrl.move_obj("test_polygon", 100, 100);
+                ctrl.move_obj("test_polygon", 30, 30);
+                gtk_widget_queue_draw(window_widget);
+                break;
+            case GDK_KEY_T:
+                ctrl.move_obj("test_polygon", -30, -30);
                 gtk_widget_queue_draw(window_widget);
                 break;
             case GDK_KEY_p:
-                log_print("Add test_polygon\n");
-                bool success = ctrl.add_polygon("test_polygon", {150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true);
+                log_print("Add test objects\n");
+                bool success1 = ctrl.add_polygon("test_polygon", {150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true);
+                bool success2 = ctrl.add_line("test_line", 0, 0, 400, 400, utils::Color{0, 1, 0});
 
-                if (!success) {
+                if (!success1 | !success2) {
                     log_print("   Error: Object name repetition\n");
                     return false;
                 }
 
                 GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
                 GtkTreeIter obj_store_iter;
+
                 gtk_list_store_append(obj_store, &obj_store_iter);
                 gtk_list_store_set (obj_store, &obj_store_iter,
                                   0, "test_polygon",
                                   1, "Polygon",
+                                  -1);
+
+                gtk_list_store_append(obj_store, &obj_store_iter);
+                gtk_list_store_set (obj_store, &obj_store_iter,
+                                  0, "test_line",
+                                  1, "Line",
                                   -1);
                 gtk_widget_queue_draw (window_widget);
                 break;
@@ -631,6 +658,12 @@ namespace cb {
 
         GtkWidget *btn_zoom_out = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_zoom_out"));
         g_signal_connect(btn_zoom_out, "button_press_event", G_CALLBACK(btn_zoom_out_cb), NULL);
+
+        GtkWidget *btn_rotate_r = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_r"));
+        g_signal_connect(btn_rotate_r, "button_press_event", G_CALLBACK(btn_rotate_r_cb), NULL);
+
+        GtkWidget *btn_rotate_l = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_l"));
+        g_signal_connect(btn_rotate_l, "button_press_event", G_CALLBACK(btn_rotate_l_cb), NULL);
 
         GtkWidget *btn_translate_ok = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_translate_ok"));
         g_signal_connect(btn_translate_ok, "button_press_event", G_CALLBACK(btn_translate_obj_cb), NULL);

@@ -1,5 +1,3 @@
-/* copyright vfreitas & thiagobbt */
-
 #ifndef _POINT_GTK_H_
 #define _POINT_GTK_H_
 
@@ -7,7 +5,8 @@
 #include <gtk/gtk.h>
 #include "Drawable.h"
 #include "Coordinate.h"
-#include "DrawingManager.h"
+#include "Window.h"
+#include "utils.h"
 
 class PointGTK : public Drawable {
  private:

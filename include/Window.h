@@ -1,12 +1,9 @@
-/* copyright vfreitas & thiagobbt */
-
 #ifndef WINDOW_H
 #define WINDOW_H
 
 #include "Object.h"
 #include "World.h"
 #include "utils.h"
-
 
 class Window {
  private:
@@ -17,15 +14,15 @@ class Window {
     double current_zoom = 1;
     double zoom_factor = 0.1;
     double angle = 0;
-    Coordinate delta;
 
  protected:
     Window();
 
  public:
     static Window& instance();
-    void move(double, double, double); // x,y,z
+    void move(double, double, double);
     void zoom(double);
+    void rotate(double);
     Coordinate to_viewport(const Coordinate&);
     Coordinate to_window(const Coordinate&);
     utils::Matrix normalizerMatrix();
