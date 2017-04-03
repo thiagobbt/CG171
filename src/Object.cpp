@@ -2,10 +2,6 @@
 #include "utils.h"
 #include "Window.h"
 
-Object::~Object() {
-    delete drawable_obj;
-}
-
 void Object::transform(utils::Matrix& b) {
     for (auto& p : world_loc) {
 
