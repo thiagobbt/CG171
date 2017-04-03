@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstring>
 #include <gtk/gtk.h>
+#include <fstream>
 #include "Controller.h"
 #include "DrawingManager.h"
 
@@ -59,6 +60,16 @@ namespace cb {
         gtk_text_buffer_insert(log_buffer, &log_iter, text, -1);
         GtkTextView* log_box = GTK_TEXT_VIEW(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "log_box"));
         gtk_text_view_scroll_to_mark(log_box, log_mark, 0, false, 0, 0);
+    }
+
+    void add_to_obj_list(std::string name, std::string type) {
+        GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
+        GtkTreeIter obj_store_iter;
+        gtk_list_store_append(obj_store, &obj_store_iter);
+        gtk_list_store_set (obj_store, &obj_store_iter,
+                          0, name.c_str(),
+                          1, type.c_str(),
+                          -1);
     }
 
     static void btn_new_cb(){
@@ -229,13 +240,7 @@ namespace cb {
             return;
         }
 
-        GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
-        GtkTreeIter obj_store_iter;
-        gtk_list_store_append(obj_store, &obj_store_iter);
-        gtk_list_store_set (obj_store, &obj_store_iter,
-                          0, name,
-                          1, "Point",
-                          -1);
+        add_to_obj_list(name, "Point");
 
         GtkWidget *new_object_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "new_object_window"));
         gtk_widget_hide(new_object_widget);
@@ -287,13 +292,7 @@ namespace cb {
             return;
         }
 
-        GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
-        GtkTreeIter obj_store_iter;
-        gtk_list_store_append(obj_store, &obj_store_iter);
-        gtk_list_store_set (obj_store, &obj_store_iter,
-                          0, name,
-                          1, "Line",
-                          -1);
+        add_to_obj_list(name, "Line");
 
         gtk_widget_queue_draw (window_widget);
 
@@ -357,13 +356,7 @@ namespace cb {
             return;
         }
 
-        GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
-        GtkTreeIter obj_store_iter;
-        gtk_list_store_append(obj_store, &obj_store_iter);
-        gtk_list_store_set (obj_store, &obj_store_iter,
-                          0, name,
-                          1, "Polygon",
-                          -1);
+        add_to_obj_list(name, "Polygon");
 
         gtk_widget_queue_draw(window_widget);
 
@@ -504,6 +497,64 @@ namespace cb {
         gtk_widget_hide(transform_widget);
     }
 
+    static void export_obj() {
+        log_print("Export Waveform .obj\n");
+
+        GtkWidget *dialog;
+        gint res;
+
+        dialog = gtk_file_chooser_dialog_new("Open File",
+            GTK_WINDOW(window_widget), GTK_FILE_CHOOSER_ACTION_SAVE,
+            "_Cancel", GTK_RESPONSE_CANCEL,
+            "_Open", GTK_RESPONSE_ACCEPT,
+            NULL);
+
+        res = gtk_dialog_run (GTK_DIALOG (dialog));
+        if (res == GTK_RESPONSE_ACCEPT) {
+            char *filename;
+            GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
+            filename = gtk_file_chooser_get_filename (chooser);
+
+            std::ofstream outfile(filename, std::ofstream::trunc);
+            ctrl.export_obj(outfile);
+            outfile.close();
+
+            g_free (filename);
+        }
+
+        gtk_widget_destroy (dialog);
+    }
+
+    static void import_obj() {
+        log_print("Import Waveform .obj\n");
+
+        GtkWidget *dialog;
+        gint res;
+
+        dialog = gtk_file_chooser_dialog_new("Open File",
+            GTK_WINDOW(window_widget), GTK_FILE_CHOOSER_ACTION_OPEN,
+            "_Cancel", GTK_RESPONSE_CANCEL,
+            "_Open", GTK_RESPONSE_ACCEPT,
+            NULL);
+
+        res = gtk_dialog_run (GTK_DIALOG (dialog));
+        if (res == GTK_RESPONSE_ACCEPT) {
+            char *filename;
+            GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
+            filename = gtk_file_chooser_get_filename (chooser);
+
+            std::ifstream infile(filename, std::ifstream::binary);
+            ctrl.import_obj(infile);
+            infile.close();
+
+            g_free (filename);
+        }
+
+        gtk_widget_destroy (dialog);
+
+        gtk_widget_queue_draw(window_widget);
+    }
+
     static bool key_handler(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
         switch (event->keyval) {
             case GDK_KEY_Up: btn_up_cb(); break;
@@ -529,9 +580,12 @@ namespace cb {
                 ctrl.move_obj("test_polygon", -30, -30);
                 gtk_widget_queue_draw(window_widget);
                 break;
+            case GDK_KEY_z:
+                export_obj();
+                break;
             case GDK_KEY_p:
                 log_print("Add test objects\n");
-                bool success1 = ctrl.add_polygon("test_polygon", {150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true);
+                bool success1 = ctrl.add_polygon("test_polygon", (std::vector<double>){150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true);
                 bool success2 = ctrl.add_line("test_line", 0, 0, 400, 400, utils::Color{0, 1, 0});
 
                 if (!success1 | !success2) {
@@ -539,20 +593,9 @@ namespace cb {
                     return false;
                 }
 
-                GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
-                GtkTreeIter obj_store_iter;
+                add_to_obj_list("test_polygon", "Polygon");
+                add_to_obj_list("test_line", "Line");
 
-                gtk_list_store_append(obj_store, &obj_store_iter);
-                gtk_list_store_set (obj_store, &obj_store_iter,
-                                  0, "test_polygon",
-                                  1, "Polygon",
-                                  -1);
-
-                gtk_list_store_append(obj_store, &obj_store_iter);
-                gtk_list_store_set (obj_store, &obj_store_iter,
-                                  0, "test_line",
-                                  1, "Line",
-                                  -1);
                 gtk_widget_queue_draw (window_widget);
                 break;
         }
@@ -676,6 +719,12 @@ namespace cb {
 
         GtkWidget *menuitem_transform = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "menuitem_transform"));
         g_signal_connect(menuitem_transform, "activate", G_CALLBACK(btn_transform_cb), NULL);
+
+        GtkWidget *btn_import_obj = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_import_obj"));
+        g_signal_connect(btn_import_obj, "button_press_event", G_CALLBACK(import_obj), NULL);
+
+        GtkWidget *btn_export_obj = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_export_obj"));
+        g_signal_connect(btn_export_obj, "button_press_event", G_CALLBACK(export_obj), NULL);
 
         gtk_widget_show_all(window_widget);
     }

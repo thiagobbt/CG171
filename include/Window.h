@@ -9,8 +9,6 @@ class Window {
     Coordinate end_point;
     std::pair<Coordinate, Coordinate> viewport;
     double default_width, default_height;
-    double current_zoom = 1;
-    double zoom_factor = 0.1;
     double angle = 0;
 
  protected:
@@ -24,6 +22,8 @@ class Window {
     Coordinate to_viewport(const Coordinate&);
     Coordinate to_window(const Coordinate&);
     utils::Matrix normalizerMatrix();
+    void print_coords(std::ostream&);
+    void set_coords(Coordinate&, Coordinate&);
 };
 
 #endif /* WINDOW_H */

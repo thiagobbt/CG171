@@ -89,3 +89,14 @@ void World::update_all() {
         obj.second->update();
     }
 }
+
+void World::print_coords(std::ostream& out) {
+    for (auto obj : display_file) {
+        out << "# " << obj.first << std::endl;
+        out << *(obj.second);
+    }
+}
+
+std::unordered_map<string, Object*> World::get_display_file() {
+    return display_file;
+}

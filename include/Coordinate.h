@@ -48,14 +48,15 @@ class Coordinate {
         return *this;
     }
 
+    friend std::ostream& operator<<(std::ostream& out, const Coordinate& c) {
+        out << "v " << c.x << " " << c.y << " " << c.z;
+        return out;
+    }
+
     const double get_x() const { return x; }
     const double get_y() const { return y; }
     const double get_z() const { return z; }
     const double get_w() const { return w; }
 };
-
-inline std::ostream& operator<<(std::ostream& out, const Coordinate& c) {
-    return out;
-}
 
 #endif /* COORD_H */

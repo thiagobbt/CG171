@@ -16,8 +16,10 @@ class Object {
  public:
     virtual void draw() = 0;
     void transform(utils::Matrix&);
-    Coordinate center();
+    const Coordinate center() const;
     void update();
+    const int num_coords() const;
+    friend std::ostream& operator<<(std::ostream& out, const Object& w);
 };
 
 #endif /* OBJECT_H */

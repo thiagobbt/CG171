@@ -1,5 +1,7 @@
 #include <cmath>
 #include <cassert>
+#include <string>
+#include <limits>
 #include "Controller.h"
 #include "Coordinate.h"
 #include "Point.h"
@@ -26,6 +28,12 @@ bool Controller::add_line(const string& id, double x1, double y1,
     return res;
 }
 
+bool Controller::add_line(const string& id, Coordinate& c1, Coordinate& c2, utils::Color c) {
+    bool res = World::instance().add_obj(id, new Line({c1,c2},c));
+    if (res) World::instance().update_obj(id);
+    return res;
+}
+
 bool Controller::add_polygon(const string& id, const std::vector<double>& locs,
                              utils::Color c, bool fill) {
     std::vector<Coordinate> coords;
@@ -36,6 +44,12 @@ bool Controller::add_polygon(const string& id, const std::vector<double>& locs,
         coords.push_back(Coordinate(locs[i], locs[i+1]));
     }
 
+    bool res = World::instance().add_obj(id, new Polygon(coords, c, fill));
+    if (res) World::instance().update_obj(id);
+    return res;
+}
+
+bool Controller::add_polygon(const string &id, const std::vector<Coordinate>& coords, utils::Color c, bool fill) {
     bool res = World::instance().add_obj(id, new Polygon(coords, c, fill));
     if (res) World::instance().update_obj(id);
     return res;
@@ -90,4 +104,115 @@ void Controller::scale_obj(const string& id, double sx, double sy) {
     auto a = utils::Transformation2D::scaling_matrix(sx, sy);
     World::instance().scale_obj(id, a);
     World::instance().update_obj(id);
+}
+
+void Controller::export_obj(std::ostream &out) {
+    auto display_file = World::instance().get_display_file();
+
+    int n_coords = 0;
+
+    for (auto obj : display_file) {
+        n_coords += obj.second->num_coords();
+        out << "# " << obj.first << std::endl;
+        out << *(obj.second);
+    }
+
+    out << "# window" << std::endl;
+    Window::instance().print_coords(out);
+
+    // out << "mtllib materials.mtl" << std::endl;
+    out << "o window" << std::endl;
+    out << "w " << n_coords + 1 << " " << n_coords + 2 << std::endl;
+
+    int coord_counter = 1;
+
+    for (auto obj : display_file) {
+        int obj_n_coords = obj.second->num_coords();
+        out << "o " << obj.first << std::endl;
+        out << (obj_n_coords == 1? "p" : "l");
+
+        for (int i = coord_counter; i < coord_counter + obj_n_coords; i++) {
+            out << " " << i;
+        }
+
+        if (obj_n_coords > 2) out << " " << coord_counter;
+
+        coord_counter += obj_n_coords;
+
+        out << std::endl;
+    }
+}
+
+void Controller::import_obj(std::istream &in) {
+    std::vector<Coordinate> coords;
+    std::vector<Coordinate> polygon_coords;
+    std::string object_name;
+
+    char line_type;
+    while (in >> line_type) {
+        switch (line_type) {
+            case 'w':
+                int start_point, end_point;
+                in >> start_point >> end_point;
+                in.ignore(std::numeric_limits<std::streamsize>::max(), in.widen('\n'));
+                Window::instance().set_coords(coords[start_point-1], coords[end_point-1]);
+                break;
+            case 'o':
+                in >> object_name;
+                in.ignore(std::numeric_limits<std::streamsize>::max(), in.widen('\n'));
+                break;
+            case 'p':
+                int a;
+                in >> a;
+                in.ignore(std::numeric_limits<std::streamsize>::max(), in.widen('\n'));
+                add_point(object_name, coords[a-1].get_x(), coords[a-1].get_y(), utils::Color{0, 1, 0});
+                cb::add_to_obj_list(object_name, "Point");
+                break;
+            case 'l':
+                int tmp_polygon_index;
+                polygon_coords.clear();
+                while ((in.peek() != '\n') && (in >> tmp_polygon_index)) {
+                    polygon_coords.push_back(coords[tmp_polygon_index-1]);
+                }
+                in.ignore(std::numeric_limits<std::streamsize>::max(), in.widen('\n'));
+                if (polygon_coords.size() == 2) {
+                    add_line(
+                        object_name,
+                        polygon_coords[0],
+                        polygon_coords[1],
+                        utils::Color{0, 1, 0}
+                    );
+                    cb::add_to_obj_list(object_name, "Line");
+                } else {
+                    polygon_coords.pop_back();
+                    add_polygon(
+                        object_name,
+                        polygon_coords,
+                        utils::Color{0, 1, 0},
+                        false
+                    );
+                    cb::add_to_obj_list(object_name, "Polygon");
+                }
+                break;
+            case 'v':
+                double x, y, z;
+                in >> x >> y >> z;
+                in.ignore(std::numeric_limits<std::streamsize>::max(), in.widen('\n'));
+                coords.emplace_back(x, y, z);
+                break;
+            default:
+                in.ignore(std::numeric_limits<std::streamsize>::max(), in.widen('\n'));
+                break;
+        }
+    }
+
+    // std::string line;
+    // while (std::getline(in, line)) {
+    //     switch (line[0]) {
+    //         case 'v':
+    //             int x, y, z;
+    //             std::cout << "got v" << std::endl;
+    //         default: break;
+    //     }
+    // }
 }

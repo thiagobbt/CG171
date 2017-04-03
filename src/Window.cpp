@@ -65,3 +65,13 @@ utils::Matrix Window::normalizerMatrix() {
     normalizer = normalizer * utils::Transformation2D::scaling_matrix(2 / width, 2 / height);
     return normalizer;
 }
+
+void Window::print_coords(std::ostream& out) {
+    out << start_point << std::endl;
+    out << end_point << std::endl;
+}
+
+void Window::set_coords(Coordinate& a, Coordinate& b) {
+    start_point = a;
+    end_point = b;
+}

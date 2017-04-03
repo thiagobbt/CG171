@@ -19,7 +19,7 @@ void Object::transform(utils::Matrix& b) {
     }
 }
 
-Coordinate Object::center() {
+const Coordinate Object::center() const {
     return utils::Transformation2D::center(world_loc);
 }
 
@@ -32,4 +32,15 @@ void Object::update() {
         auto tmp = utils::Matrix(c) * normalizer;
         win_loc.push_back(tmp.to_coord());
     }
+}
+
+const int Object::num_coords() const {
+    return world_loc.size();
+}
+
+std::ostream& operator<<(std::ostream& out, const Object& obj) {
+    for (auto c : obj.world_loc) {
+        out << c << std::endl;
+    }
+    return out;
 }
