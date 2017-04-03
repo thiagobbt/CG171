@@ -10,11 +10,11 @@
 
 class PointGTK : public Drawable {
  private:
-    std::vector<Coordinate> *coords;
+    std::vector<Coordinate> &coords;
     const utils::Color color;
 
  public:
-    PointGTK(std::vector<Coordinate>*, utils::Color, bool);
+    PointGTK(std::vector<Coordinate>&, utils::Color, bool);
     void draw(cairo_surface_t&, Window&);
 };
 

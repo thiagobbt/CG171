@@ -9,8 +9,8 @@
 class Object {
  protected:
     Drawable* drawable_obj;
-    std::vector<Coordinate> *world_loc;
-    std::vector<Coordinate> *win_loc;
+    std::vector<Coordinate> world_loc;
+    std::vector<Coordinate> win_loc;
 
  public:
     ~Object();

@@ -4,8 +4,7 @@
 
 Polygon::Polygon(const std::vector<Coordinate>& coordinates, utils::Color color, bool fill)
         : color(color), fill(fill) {
-    win_loc = new std::vector<Coordinate>();
-    world_loc = new std::vector<Coordinate>(coordinates);
+    world_loc = coordinates;
     drawable_obj = new PolygonGTK(win_loc, color, fill);
 }
 

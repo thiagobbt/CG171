@@ -4,12 +4,10 @@
 
 Object::~Object() {
     delete drawable_obj;
-    delete world_loc;
-    delete win_loc;
 }
 
 void Object::transform(utils::Matrix& b) {
-    for (auto& p : *world_loc) {
+    for (auto& p : world_loc) {
 
         utils::Matrix a(1,3);
 
@@ -26,16 +24,16 @@ void Object::transform(utils::Matrix& b) {
 }
 
 Coordinate Object::center() {
-    return utils::Transformation2D::center(*world_loc);
+    return utils::Transformation2D::center(world_loc);
 }
 
 void Object::update() {
-    win_loc->clear();
+    win_loc.clear();
 
     auto normalizer = Window::instance().normalizerMatrix();
     
-    for (auto c : *world_loc) {
+    for (auto c : world_loc) {
         auto tmp = utils::Matrix(c) * normalizer;
-        win_loc->push_back(tmp.to_coord());
+        win_loc.push_back(tmp.to_coord());
     }
 }
