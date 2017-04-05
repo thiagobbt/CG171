@@ -12,6 +12,7 @@ class Polygon : public Object {
  public:
     Polygon(const std::vector<Coordinate>&, utils::Color, bool);
     void draw();
+    void clip();
 };
 
 #endif /* POLYGON_H */

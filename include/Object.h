@@ -15,6 +15,7 @@ class Object {
 
  public:
     virtual void draw() = 0;
+    virtual void clip() = 0;
     void transform(utils::Matrix&);
     const Coordinate center() const;
     void update();

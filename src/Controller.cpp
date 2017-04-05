@@ -205,14 +205,12 @@ void Controller::import_obj(std::istream &in) {
                 break;
         }
     }
+}
 
-    // std::string line;
-    // while (std::getline(in, line)) {
-    //     switch (line[0]) {
-    //         case 'v':
-    //             int x, y, z;
-    //             std::cout << "got v" << std::endl;
-    //         default: break;
-    //     }
-    // }
+void Controller::set_clipping_cs() {
+    Window::instance().set_clipping_cs();
+}
+
+void Controller::set_clipping_lb() {
+    Window::instance().set_clipping_lb();
 }

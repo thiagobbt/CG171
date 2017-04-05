@@ -12,3 +12,7 @@ Line::Line(const std::vector<Coordinate>& coordinates, utils::Color c)
 void Line::draw() {
     DrawingManager::instance().draw(*drawable_obj);
 }
+
+void Line::clip() {
+	Window::instance().clipLine(win_loc);
+}

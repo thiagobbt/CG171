@@ -36,6 +36,9 @@ class Controller {
 
     void export_obj(std::ostream&);
     void import_obj(std::istream&);
+
+    void set_clipping_cs();
+    void set_clipping_lb();
 };
 
 #endif /* CONTROLLER_H */

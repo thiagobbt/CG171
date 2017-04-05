@@ -48,6 +48,15 @@ class Coordinate {
         return *this;
     }
 
+    double& operator[](int index) {
+        switch (index) {
+            case 0: return x;
+            case 1: return y;
+            case 2: return z;
+            default: return w;
+        }
+    }
+
     friend std::ostream& operator<<(std::ostream& out, const Coordinate& c) {
         out << "v " << c.x << " " << c.y << " " << c.z;
         return out;

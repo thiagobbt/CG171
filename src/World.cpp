@@ -1,4 +1,6 @@
 #include "World.h"
+#include "Window.h"
+#include "DrawingManager.h"
 
 World::~World() {
     clear();
@@ -30,9 +32,19 @@ void World::clear() {
 }
 
 void World::redraw() {
+    auto viewport = Window::instance().get_viewport_coords();
+    std::vector<Coordinate> viewport_coords;
+    viewport_coords.reserve(4);
+    viewport_coords.emplace_back(viewport.first.get_x(), viewport.first.get_y());
+    viewport_coords.emplace_back(viewport.first.get_x(), viewport.second.get_y());
+    viewport_coords.emplace_back(viewport.second.get_x(), viewport.second.get_y());
+    viewport_coords.emplace_back(viewport.second.get_x(), viewport.first.get_y());
+
     for (auto obj : display_file) {
         obj.second->draw();
     }
+
+    DrawingManager::instance().draw_viewport(viewport_coords);
 }
 
 void World::move_obj(string id, utils::Matrix& m) {
@@ -81,12 +93,14 @@ void World::update_obj(string id) {
     if (display_file.count(id) == 0) return;
 
     display_file[id]->update();
+    display_file[id]->clip();
     display_file.at(id)->draw();
 }
 
 void World::update_all() {
     for (auto obj : display_file) {
         obj.second->update();
+        obj.second->clip();
     }
 }
 

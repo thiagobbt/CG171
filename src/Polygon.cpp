@@ -12,3 +12,7 @@ Polygon::Polygon(const std::vector<Coordinate>& coordinates, utils::Color color,
 void Polygon::draw() {
     DrawingManager::instance().draw(*drawable_obj);
 }
+
+void Polygon::clip() {
+	Window::instance().clipPolygon(win_loc);
+}

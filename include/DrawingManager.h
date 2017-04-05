@@ -18,6 +18,7 @@ class DrawingManager {
     Window& window() { return *my_window; }
     void setSurface(cairo_surface_t*);
     void redraw();
+    void draw_viewport(std::vector<Coordinate>&);
 };
 
 #endif /* DRAWING_MANAGER_H */

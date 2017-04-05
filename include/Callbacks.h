@@ -555,12 +555,24 @@ namespace cb {
         gtk_widget_queue_draw(window_widget);
     }
 
+    static bool set_clipping_cs() {
+        log_print("Set line clipping to Cohen-Sutherland\n");
+        ctrl.set_clipping_cs();
+        return false;
+    }
+
+    static bool set_clipping_lb() {
+        log_print("Set line clipping to Liang-Barsky\n");
+        ctrl.set_clipping_lb();
+        return false;
+    }
+
     static bool key_handler(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
         switch (event->keyval) {
-            case GDK_KEY_Up: btn_up_cb(); break;
-            case GDK_KEY_Down: btn_down_cb(); break;
-            case GDK_KEY_Left: btn_left_cb(); break;
-            case GDK_KEY_Right: btn_right_cb(); break;
+            case GDK_KEY_Up: btn_up_cb(); return true;
+            case GDK_KEY_Down: btn_down_cb(); return true;
+            case GDK_KEY_Left: btn_left_cb(); return true;
+            case GDK_KEY_Right: btn_right_cb(); return true;
             case GDK_KEY_plus: btn_zoom_in_cb(); break;
             case GDK_KEY_minus: btn_zoom_out_cb(); break;
             case GDK_KEY_q: gtk_main_quit(); break;
@@ -583,12 +595,23 @@ namespace cb {
             case GDK_KEY_z:
                 export_obj();
                 break;
+            case GDK_KEY_d:
+                log_print("Add test objects\n");
+
+                if (!ctrl.add_point("test_point", 20, 20, utils::Color{1, 0, 0})) {
+                    log_print("   Error: Object name repetition\n");
+                    return false;
+                }
+
+                add_to_obj_list("test_point", "Point");
+
+                gtk_widget_queue_draw (window_widget);
+                break;
             case GDK_KEY_p:
                 log_print("Add test objects\n");
-                bool success1 = ctrl.add_polygon("test_polygon", (std::vector<double>){150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true);
-                bool success2 = ctrl.add_line("test_line", 0, 0, 400, 400, utils::Color{0, 1, 0});
 
-                if (!success1 | !success2) {
+                if (!ctrl.add_polygon("test_polygon", (std::vector<double>){150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true) ||
+                 !ctrl.add_line("test_line", 0, 0, 400, 400, utils::Color{0, 1, 0})) {
                     log_print("   Error: Object name repetition\n");
                     return false;
                 }
@@ -725,6 +748,12 @@ namespace cb {
 
         GtkWidget *btn_export_obj = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_export_obj"));
         g_signal_connect(btn_export_obj, "button_press_event", G_CALLBACK(export_obj), NULL);
+
+        GtkToggleButton *radiobutton_cs = GTK_TOGGLE_BUTTON(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "radiobutton_cs"));
+        g_signal_connect(radiobutton_cs, "button_press_event", G_CALLBACK(set_clipping_cs), NULL);
+
+        GtkToggleButton *radiobutton_lb = GTK_TOGGLE_BUTTON(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "radiobutton_lb"));
+        g_signal_connect(radiobutton_lb, "button_press_event", G_CALLBACK(set_clipping_lb), NULL);
 
         gtk_widget_show_all(window_widget);
     }

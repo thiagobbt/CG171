@@ -11,6 +11,7 @@ class Point : public Object {
  public:
     Point(const std::vector<Coordinate>&, utils::Color);
     void draw();
+    void clip();
 };
 
 #endif /* POINT_H */

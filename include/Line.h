@@ -11,6 +11,7 @@ class Line : public Object {
  public:
     Line(const std::vector<Coordinate>&, utils::Color);
     void draw();
+    void clip();
 };
 
 #endif /* LINE_H */
