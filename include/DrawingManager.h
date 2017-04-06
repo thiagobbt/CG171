@@ -1,7 +1,5 @@
-/* copyright vfreitas & thiagobbt */
-
-#ifndef _DRAWING_MANAGER_H_
-#define _DRAWING_MANAGER_H_
+#ifndef DRAWING_MANAGER_H
+#define DRAWING_MANAGER_H
 
 #include <cairo/cairo.h>
 #include "Drawable.h"
@@ -9,18 +7,18 @@
 
 class DrawingManager {
  private:
- 	cairo_surface_t* surface;
- 	Window* my_window;
+    cairo_surface_t* surface;
+    Window* my_window;
  protected:
- 	DrawingManager() = default;
+    DrawingManager() = default;
  public:
- 	static DrawingManager& instance();
- 	void draw(Drawable&);
- 	void set_window(Window* w) { my_window = w; }
- 	Window& window() { return *my_window; }
- 	void setSurface(cairo_surface_t*);
- 	void redraw();
+    static DrawingManager& instance();
+    void draw(Drawable&);
+    void set_window(Window* w) { my_window = w; }
+    Window& window() { return *my_window; }
+    void setSurface(cairo_surface_t*);
+    void redraw();
+    void draw_viewport(std::vector<Coordinate>&);
 };
 
-
-#endif /* _DRAWING_MANAGER_H_ */
+#endif /* DRAWING_MANAGER_H */

@@ -1,29 +1,71 @@
-/* copyright vfreitas & thiagobbt */
-
-#ifndef _COORD_H_
-#define _COORD_H_
+#ifndef COORD_H
+#define COORD_H
 
 #include <iostream>
 
 class Coordinate {
  private:
- 	double x, y, z, w;
+    double x, y, z, w;
+
  public:
- 	Coordinate(const Coordinate&) = default;
- 	Coordinate(double x = 0, double y = 0, double z = 0, double w = 0)
- 		: x(x), y(y), z(z), w(w) {}
+    Coordinate(const Coordinate&) = default;
+    Coordinate(double x = 0, double y = 0, double z = 1, double w = 1)
+        : x(x), y(y), z(z), w(w) {}
 
- 	void sum_coords(double a = 0, double b = 0, double c = 0, double d = 0) {
- 		x += a;
- 		y += b;
- 		z += c;
- 		w += d;
- 	}
+    Coordinate operator+(const Coordinate& rhs) {
+        return Coordinate(x + rhs.get_x(), y + rhs.get_y(), z + rhs.get_z(), w + rhs.get_w());
+    }
 
- 	double get_x() { return x; }
- 	double get_y() { return y; }
- 	double get_z() { return z; }
- 	double get_w() { return w; }
+    Coordinate operator-(const Coordinate& rhs) {
+        return Coordinate(x - rhs.get_x(), y - rhs.get_y(), z - rhs.get_z(), w - rhs.get_w());
+    }
+
+    Coordinate operator/(const Coordinate& rhs) {
+        return Coordinate(x / rhs.get_x(), y / rhs.get_y(), z / rhs.get_z(), w / rhs.get_w());
+    }
+
+    Coordinate operator*(const Coordinate& rhs) {
+        return Coordinate(x * rhs.get_x(), y * rhs.get_y(), z * rhs.get_z(), w * rhs.get_w());
+    }
+
+    Coordinate operator/(const double& rhs) {
+        return Coordinate(x / rhs, y / rhs, z / rhs, w / rhs);
+    }
+
+    Coordinate& operator*=(const Coordinate& rhs) {
+    	x += rhs.get_x();
+        y += rhs.get_y();
+        z += rhs.get_z();
+        w += rhs.get_w();
+        return *this;
+    }
+
+    Coordinate& operator+=(const Coordinate& rhs) {
+        x *= rhs.get_x();
+        y *= rhs.get_y();
+        z *= rhs.get_z();
+        w *= rhs.get_w();
+        return *this;
+    }
+
+    double& operator[](int index) {
+        switch (index) {
+            case 0: return x;
+            case 1: return y;
+            case 2: return z;
+            default: return w;
+        }
+    }
+
+    friend std::ostream& operator<<(std::ostream& out, const Coordinate& c) {
+        out << "v " << c.x << " " << c.y << " " << c.z;
+        return out;
+    }
+
+    const double get_x() const { return x; }
+    const double get_y() const { return y; }
+    const double get_z() const { return z; }
+    const double get_w() const { return w; }
 };
 
-#endif /* _COORD_H_ */
+#endif /* COORD_H */

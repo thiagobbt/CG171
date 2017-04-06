@@ -1,10 +1,10 @@
-#ifndef _CALLBACKS_H_
-#define _CALLBACKS_H_
+#ifndef CALLBACKS_H
+#define CALLBACKS_H
 
 #include <iostream>
 #include <cstring>
 #include <gtk/gtk.h>
-
+#include <fstream>
 #include "Controller.h"
 #include "DrawingManager.h"
 
@@ -60,6 +60,16 @@ namespace cb {
         gtk_text_buffer_insert(log_buffer, &log_iter, text, -1);
         GtkTextView* log_box = GTK_TEXT_VIEW(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "log_box"));
         gtk_text_view_scroll_to_mark(log_box, log_mark, 0, false, 0, 0);
+    }
+
+    void add_to_obj_list(std::string name, std::string type) {
+        GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
+        GtkTreeIter obj_store_iter;
+        gtk_list_store_append(obj_store, &obj_store_iter);
+        gtk_list_store_set (obj_store, &obj_store_iter,
+                          0, name.c_str(),
+                          1, type.c_str(),
+                          -1);
     }
 
     static void btn_new_cb(){
@@ -181,6 +191,18 @@ namespace cb {
         gtk_widget_queue_draw(window_widget);
     }
 
+    static void btn_rotate_r_cb() {
+        log_print("Rotate right\n");
+        ctrl.rotate(-15);
+        gtk_widget_queue_draw(window_widget);
+    }
+
+    static void btn_rotate_l_cb() {
+        log_print("Rotate left\n");
+        ctrl.rotate(15);
+        gtk_widget_queue_draw(window_widget);
+    }
+
     static void btn_add_point_cb() {
         log_print("Add point\n");
 
@@ -218,13 +240,7 @@ namespace cb {
             return;
         }
 
-        GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
-        GtkTreeIter obj_store_iter;
-        gtk_list_store_append(obj_store, &obj_store_iter);
-        gtk_list_store_set (obj_store, &obj_store_iter,
-                          0, name,
-                          1, "Point",
-                          -1);
+        add_to_obj_list(name, "Point");
 
         GtkWidget *new_object_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "new_object_window"));
         gtk_widget_hide(new_object_widget);
@@ -276,13 +292,7 @@ namespace cb {
             return;
         }
 
-        GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
-        GtkTreeIter obj_store_iter;
-        gtk_list_store_append(obj_store, &obj_store_iter);
-        gtk_list_store_set (obj_store, &obj_store_iter,
-                          0, name,
-                          1, "Line",
-                          -1);
+        add_to_obj_list(name, "Line");
 
         gtk_widget_queue_draw (window_widget);
 
@@ -346,13 +356,7 @@ namespace cb {
             return;
         }
 
-        GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
-        GtkTreeIter obj_store_iter;
-        gtk_list_store_append(obj_store, &obj_store_iter);
-        gtk_list_store_set (obj_store, &obj_store_iter,
-                          0, name,
-                          1, "Polygon",
-                          -1);
+        add_to_obj_list(name, "Polygon");
 
         gtk_widget_queue_draw(window_widget);
 
@@ -493,35 +497,128 @@ namespace cb {
         gtk_widget_hide(transform_widget);
     }
 
+    static void export_obj() {
+        log_print("Export Waveform .obj\n");
+
+        GtkWidget *dialog;
+        gint res;
+
+        dialog = gtk_file_chooser_dialog_new("Open File",
+            GTK_WINDOW(window_widget), GTK_FILE_CHOOSER_ACTION_SAVE,
+            "_Cancel", GTK_RESPONSE_CANCEL,
+            "_Open", GTK_RESPONSE_ACCEPT,
+            NULL);
+
+        res = gtk_dialog_run (GTK_DIALOG (dialog));
+        if (res == GTK_RESPONSE_ACCEPT) {
+            char *filename;
+            GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
+            filename = gtk_file_chooser_get_filename (chooser);
+
+            std::ofstream outfile(filename, std::ofstream::trunc);
+            ctrl.export_obj(outfile);
+            outfile.close();
+
+            g_free (filename);
+        }
+
+        gtk_widget_destroy (dialog);
+    }
+
+    static void import_obj() {
+        log_print("Import Waveform .obj\n");
+
+        GtkWidget *dialog;
+        gint res;
+
+        dialog = gtk_file_chooser_dialog_new("Open File",
+            GTK_WINDOW(window_widget), GTK_FILE_CHOOSER_ACTION_OPEN,
+            "_Cancel", GTK_RESPONSE_CANCEL,
+            "_Open", GTK_RESPONSE_ACCEPT,
+            NULL);
+
+        res = gtk_dialog_run (GTK_DIALOG (dialog));
+        if (res == GTK_RESPONSE_ACCEPT) {
+            char *filename;
+            GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
+            filename = gtk_file_chooser_get_filename (chooser);
+
+            std::ifstream infile(filename, std::ifstream::binary);
+            ctrl.import_obj(infile);
+            infile.close();
+
+            g_free (filename);
+        }
+
+        gtk_widget_destroy (dialog);
+
+        gtk_widget_queue_draw(window_widget);
+    }
+
+    static bool set_clipping_cs() {
+        log_print("Set line clipping to Cohen-Sutherland\n");
+        ctrl.set_clipping_cs();
+        return false;
+    }
+
+    static bool set_clipping_lb() {
+        log_print("Set line clipping to Liang-Barsky\n");
+        ctrl.set_clipping_lb();
+        return false;
+    }
+
     static bool key_handler(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
         switch (event->keyval) {
-            case GDK_KEY_Up: btn_up_cb(); break;
-            case GDK_KEY_Down: btn_down_cb(); break;
-            case GDK_KEY_Left: btn_left_cb(); break;
-            case GDK_KEY_Right: btn_right_cb(); break;
+            case GDK_KEY_Up: btn_up_cb(); return true;
+            case GDK_KEY_Down: btn_down_cb(); return true;
+            case GDK_KEY_Left: btn_left_cb(); return true;
+            case GDK_KEY_Right: btn_right_cb(); return true;
             case GDK_KEY_plus: btn_zoom_in_cb(); break;
             case GDK_KEY_minus: btn_zoom_out_cb(); break;
             case GDK_KEY_q: gtk_main_quit(); break;
-            case GDK_KEY_t:
-                ctrl.move_obj("test_polygon", 100, 100);
+            case GDK_KEY_r:
+                ctrl.rotate_obj("test_polygon", 15, 0, 0, false);
                 gtk_widget_queue_draw(window_widget);
                 break;
-            case GDK_KEY_p:
-                log_print("Add test_polygon\n");
-                bool success = ctrl.add_polygon("test_polygon", {150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true);
+            case GDK_KEY_R:
+                ctrl.rotate_obj("test_polygon", -15, 0, 0, false);
+                gtk_widget_queue_draw(window_widget);
+                break;
+            case GDK_KEY_t:
+                ctrl.move_obj("test_polygon", 30, 30);
+                gtk_widget_queue_draw(window_widget);
+                break;
+            case GDK_KEY_T:
+                ctrl.move_obj("test_polygon", -30, -30);
+                gtk_widget_queue_draw(window_widget);
+                break;
+            case GDK_KEY_z:
+                export_obj();
+                break;
+            case GDK_KEY_d:
+                log_print("Add test objects\n");
 
-                if (!success) {
+                if (!ctrl.add_point("test_point", 20, 20, utils::Color{1, 0, 0})) {
                     log_print("   Error: Object name repetition\n");
                     return false;
                 }
 
-                GtkListStore *obj_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
-                GtkTreeIter obj_store_iter;
-                gtk_list_store_append(obj_store, &obj_store_iter);
-                gtk_list_store_set (obj_store, &obj_store_iter,
-                                  0, "test_polygon",
-                                  1, "Polygon",
-                                  -1);
+                add_to_obj_list("test_point", "Point");
+
+                gtk_widget_queue_draw (window_widget);
+                break;
+            case GDK_KEY_p:
+                log_print("Add test objects\n");
+
+                if (!ctrl.add_polygon("test_polygon", (std::vector<double>){150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true) ||
+                 !ctrl.add_line("test_line", 0, 0, 400, 400, utils::Color{0, 1, 0})) {
+                    log_print("   Error: Object name repetition\n");
+                    return false;
+                }
+
+                add_to_obj_list("test_polygon", "Polygon");
+                add_to_obj_list("test_line", "Line");
+
                 gtk_widget_queue_draw (window_widget);
                 break;
         }
@@ -628,6 +725,12 @@ namespace cb {
         GtkWidget *btn_zoom_out = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_zoom_out"));
         g_signal_connect(btn_zoom_out, "button_press_event", G_CALLBACK(btn_zoom_out_cb), NULL);
 
+        GtkWidget *btn_rotate_r = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_r"));
+        g_signal_connect(btn_rotate_r, "button_press_event", G_CALLBACK(btn_rotate_r_cb), NULL);
+
+        GtkWidget *btn_rotate_l = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_l"));
+        g_signal_connect(btn_rotate_l, "button_press_event", G_CALLBACK(btn_rotate_l_cb), NULL);
+
         GtkWidget *btn_translate_ok = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_translate_ok"));
         g_signal_connect(btn_translate_ok, "button_press_event", G_CALLBACK(btn_translate_obj_cb), NULL);
 
@@ -640,8 +743,20 @@ namespace cb {
         GtkWidget *menuitem_transform = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "menuitem_transform"));
         g_signal_connect(menuitem_transform, "activate", G_CALLBACK(btn_transform_cb), NULL);
 
+        GtkWidget *btn_import_obj = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_import_obj"));
+        g_signal_connect(btn_import_obj, "button_press_event", G_CALLBACK(import_obj), NULL);
+
+        GtkWidget *btn_export_obj = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_export_obj"));
+        g_signal_connect(btn_export_obj, "button_press_event", G_CALLBACK(export_obj), NULL);
+
+        GtkToggleButton *radiobutton_cs = GTK_TOGGLE_BUTTON(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "radiobutton_cs"));
+        g_signal_connect(radiobutton_cs, "button_press_event", G_CALLBACK(set_clipping_cs), NULL);
+
+        GtkToggleButton *radiobutton_lb = GTK_TOGGLE_BUTTON(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "radiobutton_lb"));
+        g_signal_connect(radiobutton_lb, "button_press_event", G_CALLBACK(set_clipping_lb), NULL);
+
         gtk_widget_show_all(window_widget);
     }
 }
 
-#endif /* _CALLBACKS_H_ */
+#endif /* CALLBACKS_H */

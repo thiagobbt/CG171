@@ -1,10 +1,8 @@
-/* copyright vfreitas & thiagobbt */
-
 #ifndef WORLD_H
 #define WORLD_H
 
-#include "Object.h"
 #include <unordered_map>
+#include "Object.h"
 
 using std::string;
 
@@ -23,10 +21,13 @@ class World {
     void clear();    
     void redraw();
     const Object& obj(const string&);
+    void update_obj(string);
+    void update_all();
+    void print_coords(std::ostream&);
+    std::unordered_map<string, Object*> get_display_file();
 
  protected:
     World() {}
-
 };
 
 #endif /* WORLD_H */

@@ -1,27 +1,41 @@
-/* copyright vfreitas & thiagobbt */
-
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "Object.h"
-#include "World.h"
-
+#include "utils.h"
 
 class Window {
  private:
-    Coordinate starting_point;
+    Coordinate start_point;
     Coordinate end_point;
     std::pair<Coordinate, Coordinate> viewport;
     double default_width, default_height;
-    double current_zoom = 1;
-    double zoom_factor = 0.1;
+    double angle = 0;
+    void clipCS(std::vector<Coordinate>&);
+    void clipLB(std::vector<Coordinate>&);
+    int get_region_code(Coordinate&);
+    bool line_clipping_algorithm = true;
+
+ protected:
+    Window();
 
  public:
- 	Window();
-    Window(const Coordinate&, const Coordinate&);
-    void move(double, double, double); // x,y,z
+    static Window& instance();
+    void move(double, double, double);
     void zoom(double);
-    Coordinate to_viewport(Coordinate&);
+    void rotate(double);
+    Coordinate to_viewport(const Coordinate&);
+    Coordinate to_window(const Coordinate&);
+    utils::Matrix normalizerMatrix();
+    void print_coords(std::ostream&);
+    void set_coords(Coordinate&, Coordinate&);
+    std::pair<Coordinate, Coordinate> get_viewport_coords();
+
+    void clipPoint(std::vector<Coordinate>&);
+    void clipLine(std::vector<Coordinate>&);
+    void clipPolygon(std::vector<Coordinate>&);
+
+    void set_clipping_cs();
+    void set_clipping_lb();
 };
 
 #endif /* WINDOW_H */

@@ -1,42 +1,45 @@
-/* copyright vfreitas & thiagobbt */
-
 #include "Object.h"
 #include "utils.h"
-#include <iostream>
+#include "Window.h"
 
-
-// THIS HAVE TO BE TESTED: use of not of reference on P
 void Object::transform(utils::Matrix& b) {
-	std::cout << "obj::transform" << std::endl;
-	for (auto& p : location) {
-		std::cout << "p.x: " << p.get_x();
+    for (auto& p : world_loc) {
+        utils::Matrix a(1,3);
 
-		utils::Matrix a(1,3);
+        a(0, 0) = p.get_x();
+        a(0, 1) = p.get_y();
+        a(0, 2) = 1;
 
-		a(0, 0) = p.get_x();
-		a(0, 1) = p.get_y();
-		a(0, 2) = 1;
+        utils::Matrix result = a * b;
+        
+        Coordinate c(result(0,0), result(0,1));
 
-		utils::Matrix result = a * b;
-		
-		Coordinate c(result(0,0), result(0,1));
-
-		p = c;
-		std::cout << " => " << p.get_x() << std::endl;
-	}
+        p = c;
+    }
 }
 
-Coordinate Object::center() {
-	double xc = 0;
-	double yc = 0;
+const Coordinate Object::center() const {
+    return utils::Transformation2D::center(world_loc);
+}
 
-	for (auto coord : location) {
-		xc += coord.get_x();
-		yc += coord.get_y();
-	}
+void Object::update() {
+    win_loc.clear();
 
-	xc /= location.size();
-	yc /= location.size();
+    auto normalizer = Window::instance().normalizerMatrix();
+    
+    for (auto c : world_loc) {
+        auto tmp = utils::Matrix(c) * normalizer;
+        win_loc.push_back(tmp.to_coord());
+    }
+}
 
-	return Coordinate(xc, yc);
+const int Object::num_coords() const {
+    return world_loc.size();
+}
+
+std::ostream& operator<<(std::ostream& out, const Object& obj) {
+    for (auto c : obj.world_loc) {
+        out << c << std::endl;
+    }
+    return out;
 }

@@ -1,5 +1,3 @@
-/* copyright vfreitas & thiagobbt */
-
 #ifndef POLYGON_H
 #define POLYGON_H
 
@@ -10,10 +8,11 @@ class Polygon : public Object {
  private:
     utils::Color color;
     bool fill;
+
  public:
     Polygon(const std::vector<Coordinate>&, utils::Color, bool);
-    ~Polygon();
     void draw();
+    void clip();
 };
 
 #endif /* POLYGON_H */
