@@ -51,7 +51,7 @@ void World::move_obj(string id, utils::Matrix& m) {
     if (display_file.count(id) == 0) return;
 
     display_file[id]->transform(m);
-    display_file[id]->update();
+    update_obj(id);
 }
 
 void World::scale_obj(string id, utils::Matrix& m) {
@@ -65,7 +65,7 @@ void World::scale_obj(string id, utils::Matrix& m) {
     utils::Matrix scale = (translate * m) * translate_back;
 
     display_file[id]->transform(scale);
-    display_file[id]->update();
+    update_obj(id);
 }
 
 void World::rotate_obj(string id, utils::Matrix& m, Coordinate& coord, bool use_coord) {
@@ -86,7 +86,7 @@ void World::rotate_obj(string id, utils::Matrix& m, Coordinate& coord, bool use_
     utils::Matrix rotate = (translate * m) * translate_back;
 
     display_file.at(id)->transform(rotate);
-    display_file[id]->update();
+    update_obj(id);
 }
 
 void World::update_obj(string id) {

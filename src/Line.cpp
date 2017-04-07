@@ -14,5 +14,5 @@ void Line::draw() {
 }
 
 void Line::clip() {
-	Window::instance().clipLine(win_loc);
+    Window::instance().clipLine(win_loc);
 }

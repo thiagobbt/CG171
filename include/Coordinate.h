@@ -33,11 +33,21 @@ class Coordinate {
     }
 
     Coordinate& operator*=(const Coordinate& rhs) {
-    	x += rhs.get_x();
+        x += rhs.get_x();
         y += rhs.get_y();
         z += rhs.get_z();
         w += rhs.get_w();
         return *this;
+    }
+
+    bool operator!=(const Coordinate& rhs) {
+        if (x != rhs.get_x() ||
+            y != rhs.get_y() ||
+            z != rhs.get_z() ||
+            w != rhs.get_w()) {
+            return true;
+        }
+        return false;
     }
 
     Coordinate& operator+=(const Coordinate& rhs) {

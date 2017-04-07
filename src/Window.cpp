@@ -81,9 +81,16 @@ std::pair<Coordinate, Coordinate> Window::get_viewport_coords() {
     return viewport;
 }
 
+bool isPointDrawable(Coordinate& coord) {
+    if (coord.get_x() < -1 || coord.get_x() > 1 ||
+        coord.get_y() < -1 || coord.get_y() > 1) {
+        return false;
+    }
+    return true;
+}
+
 void Window::clipPoint(std::vector<Coordinate>& coords) {
-    if (coords[0].get_x() < -1 || coords[0].get_x() > 1 ||
-        coords[0].get_y() < -1 || coords[0].get_y() > 1) {
+    if (!isPointDrawable(coords[0])) {
         coords.clear();
     }
 }
@@ -195,8 +202,88 @@ void Window::clipLine(std::vector<Coordinate>& coords) {
     }
 }
 
-void Window::clipPolygon(std::vector<Coordinate>& coords) {
+Coordinate lineIntersection(std::pair<Coordinate, Coordinate> a, std::pair<Coordinate, Coordinate> b) {
+    Coordinate result(0, 0);
+    auto& p1 = a.first;
+    auto& p2 = a.second;
+    auto& p3 = b.first;
+    auto& p4 = b.second;
 
+    double d = (p1[0] - p2[0])*(p3[1] - p4[1]) - (p1[1] - p2[1])*(p3[0] - p4[0]);
+
+    if (d == 0) return result;
+
+    double common1 = (p1[0]*p2[1] - p1[1]*p2[0]);
+    double common2 = (p3[0]*p4[1] - p3[1]*p4[0]);
+
+    result[0] = ((common1*(p3[0]-p4[0])) - ((p1[0]-p2[0])*common2)) / d;
+    result[1] = ((common1*(p3[1]-p4[1])) - ((p1[1]-p2[1])*common2)) / d;
+
+    return result;
+}
+
+void clampPoint(Coordinate& c) {
+    if (c[0] < -1) {
+        c[0] = -1;
+    }
+
+    if (c[0] > 1) {
+        c[0] = 1;
+    }
+
+    if (c[1] < -1) {
+        c[1] = -1;
+    }
+
+    if (c[1] > 1) {
+        c[1] = 1;
+    }
+}
+
+void Window::clipPolygon(std::vector<Coordinate>& coords) {
+    std::vector<Coordinate> output;
+    Coordinate s = coords.back();
+
+    bool addedPoints = false;
+
+    for (int i = 0; i < coords.size(); i++) {
+        std::vector<Coordinate> currentLine = {s, coords[i]};
+        std::vector<Coordinate> realLine = {s, coords[i]};
+        Coordinate middlePoint;
+        middlePoint[0] = (currentLine[0][0] + currentLine[1][0]);
+        middlePoint[1] = (currentLine[0][1] + currentLine[1][1]);
+
+        clipLine(currentLine);
+
+        bool clipped = false;
+
+        if (currentLine[0] != realLine[0] || currentLine[1] != realLine[1])
+            clipped = true;
+
+        if (currentLine.size() > 1) {
+            if (clipped || !addedPoints || output.empty() || currentLine[0] != output.back()) {
+                output.push_back(currentLine[0]);
+                clipped = false;
+            }
+            output.push_back(currentLine[1]);
+            clampPoint(realLine[1]);
+            output.push_back(realLine[1]);
+            addedPoints = true;
+        } else {
+            Coordinate clipPoint(coords[i]);
+            clampPoint(clipPoint);
+            clampPoint(middlePoint);
+            output.push_back(middlePoint);
+            output.push_back(clipPoint);
+
+
+            addedPoints = false;
+        }
+
+        s = coords[i];
+    }
+
+    coords = output;
 }
 
 void Window::set_clipping_cs() {
