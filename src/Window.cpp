@@ -180,7 +180,7 @@ void Window::clipLB(std::vector<Coordinate>& coords) {
         }
     }
 
-    if (zetta1 > zetta2) {
+    if (zetta1 >= zetta2) {
         coords.clear();
         return;
     }
@@ -246,7 +246,7 @@ void Window::clipPolygon(std::vector<Coordinate>& coords) {
 
     bool addedPoints = false;
 
-    for (int i = 0; i < coords.size(); i++) {
+    for (size_t i = 0; i < coords.size(); i++) {
         std::vector<Coordinate> currentLine = {s, coords[i]};
         std::vector<Coordinate> realLine = {s, coords[i]};
         Coordinate middlePoint;
