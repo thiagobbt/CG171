@@ -28,6 +28,7 @@ void Window::move(double x, double y, double z) {
 }
 
 void Window::zoom(double zoom) {
+    current_zoom *= zoom;
     double center_x = (start_point.get_x() + end_point.get_x()) / 2;
     double center_y = (start_point.get_y() + end_point.get_y()) / 2;
 
@@ -41,6 +42,10 @@ void Window::zoom(double zoom) {
 
     start_point = Coordinate(new_start_x, new_start_y);
     end_point = Coordinate(new_end_x, new_end_y);
+}
+
+double Window::get_current_zoom() {
+    return current_zoom;
 }
 
 void Window::rotate(double theta) {

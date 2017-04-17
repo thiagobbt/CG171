@@ -14,6 +14,7 @@ class Window {
     void clipLB(std::vector<Coordinate>&);
     int get_region_code(Coordinate&);
     bool line_clipping_algorithm = true;
+    double current_zoom = 1;
 
  protected:
     Window();
@@ -22,6 +23,7 @@ class Window {
     static Window& instance();
     void move(double, double, double);
     void zoom(double);
+    double get_current_zoom();
     void rotate(double);
     Coordinate to_viewport(const Coordinate&);
     Coordinate to_window(const Coordinate&);
