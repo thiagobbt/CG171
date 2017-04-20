@@ -622,9 +622,9 @@ namespace cb {
                 gtk_widget_queue_draw (window_widget);
                 break;
             case GDK_KEY_c:
-                log_print("Add test curve\n");
+                log_print("Add test bezier curve\n");
 
-                if (!ctrl.add_bspline_curve("test_curve", 
+                if (!ctrl.add_bezier_curve("test_curve", 
                         {
                             Coordinate(0, 200),
                             Coordinate(100, 300),
@@ -640,7 +640,27 @@ namespace cb {
                     return false;
                 }
 
-                add_to_obj_list("test_curve", "Bezier Curve");
+                add_to_obj_list("test_bezier", "Bezier Curve");
+
+                gtk_widget_queue_draw (window_widget);
+                break;
+            case GDK_KEY_C:
+                log_print("Add test bspline curve\n");
+
+                if (!ctrl.add_bspline_curve("test_spline", 
+                        {
+                            Coordinate(  0, 200),
+                            Coordinate(150, 200),
+                            Coordinate(250, 200),
+                            Coordinate(400, 200),
+
+                        }
+                    , utils::Color{1, 0, 0})) {
+                    log_print("   Error: Object name repetition\n");
+                    return false;
+                }
+
+                add_to_obj_list("test_curve", "B-Spline Curve");
 
                 gtk_widget_queue_draw (window_widget);
                 break;

@@ -15,40 +15,65 @@ BSplineCurve::BSplineCurve(const std::vector<Coordinate>& coordinates, utils::Co
 void BSplineCurve::update_coords() {
 	std::cout << "BSplineCurve::update_coords" << std::endl;
 	double current_zoom = Window::instance().get_current_zoom();
-	size_t n = std::ceil(current_zoom * 100);
+	size_t n = std::ceil(current_zoom * 10);
 	double delta = 1.0 / n;
+	double delta2 = delta * delta;
+	double delta3 = delta2 * delta;
 
 	world_loc.clear();
 
-	int num_curves = ((original_loc.size()-4)/3) + 1;
+	for (size_t i = 3; i < original_loc.size(); i++) {
+		const utils::Matrix gbs_x = {
+			{original_loc[i-3][0]}, 
+			{original_loc[i-2][0]}, 
+			{original_loc[i-1][0]}, 
+			{original_loc[i][0]}
+		};
 
-	for (int i = 0; i < num_curves; i++) {
+		const utils::Matrix gbs_y = {
+			{original_loc[i-3][1]}, 
+			{original_loc[i-2][1]}, 
+			{original_loc[i-1][1]}, 
+			{original_loc[i][1]}
+		};
+
+		utils::Matrix abcd_x = mbs * gbs_x;
+		utils::Matrix abcd_y = mbs * gbs_y;
+
+		utils::Matrix fd_helper = {
+			{0, 0, 0, 1},
+			{delta3, delta2, delta, 0},
+			{6*delta3, 2*delta2, 0, 0},
+			{6*delta3, 0, 0, 0},
+		};
+
+		utils::Matrix fd_x = fd_helper * abcd_x;
+		utils::Matrix fd_y = fd_helper * abcd_y;
+
+		double vx = fd_x(0, 0);
+		double vy = fd_y(0, 0);
+
+		world_loc.emplace_back(vx, vy);
+
 		for (double t = 0; t < 1; t += delta) {
-			double t2 = t * t;
-			double t3 = t2 * t;
+			double x = vx, y = vy;
 
-			utils::Matrix t_m = {{t3, t2, t, 1}};
+			x += fd_x(0, 0);
+			fd_x(0, 0) += fd_x(0, 1);
+			fd_x(0, 1) += fd_x(0, 2);
 
-			utils::Matrix gb_x = {
-				{original_loc[i*3][0]},
-				{original_loc[i*3+1][0]}, 
-				{original_loc[i*3+2][0]},
-				{original_loc[i*3+3][0]},
-			};
+			y += fd_y(0, 0);
+			fd_y(0, 0) += fd_y(0, 1);
+			fd_y(0, 1) += fd_y(0, 2);
 
-			utils::Matrix gb_y = {
-				{original_loc[i*3][1]},
-				{original_loc[i*3+1][1]}, 
-				{original_loc[i*3+2][1]},
-				{original_loc[i*3+3][1]},
-			};
-
-			auto tmp = t_m * mb;
-			auto x_m = tmp * gb_x;
-			auto y_m = tmp * gb_y;
-
-			world_loc.emplace_back(x_m(0, 0), y_m(0, 0));
+			world_loc.emplace_back(x, y);
+			vx = x;
+			vy = y;
 		}
+	}
+
+	for (auto c : world_loc) {
+		std::cout << c << std::endl;
 	}
 }
 
