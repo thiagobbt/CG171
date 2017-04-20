@@ -258,7 +258,7 @@ void Window::clipPolygon(std::vector<Coordinate>& coords) {
         middlePoint[0] = (currentLine[0][0] + currentLine[1][0]);
         middlePoint[1] = (currentLine[0][1] + currentLine[1][1]);
 
-        clipLine(currentLine);
+        clipCS(currentLine);
 
         bool clipped = false;
 
