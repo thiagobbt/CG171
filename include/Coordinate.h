@@ -32,6 +32,10 @@ class Coordinate {
         return Coordinate(x / rhs, y / rhs, z / rhs, w / rhs);
     }
 
+    Coordinate operator*(const double& rhs) {
+        return Coordinate(x * rhs, y * rhs, z * rhs, w * rhs);
+    }
+
     Coordinate& operator*=(const Coordinate& rhs) {
         x += rhs.get_x();
         y += rhs.get_y();

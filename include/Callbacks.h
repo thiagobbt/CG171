@@ -621,6 +621,29 @@ namespace cb {
 
                 gtk_widget_queue_draw (window_widget);
                 break;
+            case GDK_KEY_c:
+                log_print("Add test curve\n");
+
+                if (!ctrl.add_bspline_curve("test_curve", 
+                        {
+                            Coordinate(0, 200),
+                            Coordinate(100, 300),
+                            Coordinate(300, 100),
+                            Coordinate(400, 200),
+                            Coordinate(350, 150),
+                            Coordinate(150, 350),
+                            Coordinate(0, 200),
+
+                        }
+                    , utils::Color{1, 0, 0})) {
+                    log_print("   Error: Object name repetition\n");
+                    return false;
+                }
+
+                add_to_obj_list("test_curve", "Bezier Curve");
+
+                gtk_widget_queue_draw (window_widget);
+                break;
         }
 
         return false;

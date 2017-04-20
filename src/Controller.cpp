@@ -7,6 +7,8 @@
 #include "Point.h"
 #include "Line.h"
 #include "Polygon.h"
+#include "BezierCurve.h"
+#include "BSplineCurve.h"
 #include "World.h"
 #include "utils.h"
 
@@ -51,6 +53,18 @@ bool Controller::add_polygon(const string& id, const std::vector<double>& locs,
 
 bool Controller::add_polygon(const string &id, const std::vector<Coordinate>& coords, utils::Color c, bool fill) {
     bool res = World::instance().add_obj(id, new Polygon(coords, c, fill));
+    if (res) World::instance().update_obj(id);
+    return res;
+}
+
+bool Controller::add_bezier_curve(const string& id, const std::vector<Coordinate>& coords, utils::Color c) {
+    bool res = World::instance().add_obj(id, new BezierCurve(coords, c));
+    if (res) World::instance().update_obj(id);
+    return res;
+}
+
+bool Controller::add_bspline_curve(const string& id, const std::vector<Coordinate>& coords, utils::Color c) {
+    bool res = World::instance().add_obj(id, new BSplineCurve(coords, c));
     if (res) World::instance().update_obj(id);
     return res;
 }

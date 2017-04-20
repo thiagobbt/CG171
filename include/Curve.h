@@ -8,8 +8,7 @@ class Curve : public Object {
  protected:
     utils::Color color;
  public:
-    Curve(const std::vector<Coordinate>&, utils::Color);
-    virtual void draw();
+    virtual void draw() = 0;
     void clip();
 };
 

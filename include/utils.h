@@ -19,7 +19,6 @@ namespace utils {
         unsigned int dim_x;
         unsigned int dim_y;
 
-        // linhas, colunas
         Matrix(unsigned int x, unsigned int y) : dim_x(x), dim_y(y) {
             fill();
         }
@@ -29,6 +28,16 @@ namespace utils {
             data.push_back(c.get_x());
             data.push_back(c.get_y());
             data.push_back(c.get_z());
+        }
+
+        Matrix(const std::initializer_list<std::initializer_list<double>>& matrix) {
+            dim_x = matrix.size();
+            dim_y = (*matrix.begin()).size();
+            for (auto row : matrix) {
+                for (auto value : row) {
+                    data.push_back(value);
+                }
+            }
         }
 
         void fill(double n = 0) {
@@ -62,6 +71,16 @@ namespace utils {
                     }
                     c(i,j) = sum;
                 }
+            }
+            return c;
+        }
+
+        Matrix operator/(const int& b) {
+            Matrix c(dim_x, dim_y);
+
+            for (auto d : data) {
+                c.data.clear();
+                c.data.push_back(d / b);
             }
             return c;
         }

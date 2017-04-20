@@ -1,10 +1,10 @@
-#include "BezierCurve.h"
+#include "BSplineCurve.h"
 #include "Window.h"
 #include "CurveGTK.h"
 #include "DrawingManager.h"
 #include <cmath>
 
-BezierCurve::BezierCurve(const std::vector<Coordinate>& coordinates, utils::Color c) {
+BSplineCurve::BSplineCurve(const std::vector<Coordinate>& coordinates, utils::Color c) {
 	color = c;
 	original_loc = coordinates;
 	world_loc = std::vector<Coordinate>();
@@ -12,8 +12,8 @@ BezierCurve::BezierCurve(const std::vector<Coordinate>& coordinates, utils::Colo
     update_coords();
 }
 
-void BezierCurve::update_coords() {
-	std::cout << "BezierCurve::update_coords" << std::endl;
+void BSplineCurve::update_coords() {
+	std::cout << "BSplineCurve::update_coords" << std::endl;
 	double current_zoom = Window::instance().get_current_zoom();
 	size_t n = std::ceil(current_zoom * 100);
 	double delta = 1.0 / n;
@@ -52,8 +52,8 @@ void BezierCurve::update_coords() {
 	}
 }
 
-void BezierCurve::draw() {
-	std::cout << "BezierCurve::draw" << std::endl;
+void BSplineCurve::draw() {
+	std::cout << "BSplineCurve::draw" << std::endl;
 	update_coords();
 	DrawingManager::instance().draw(*drawable_obj);
 }

@@ -19,6 +19,8 @@ class Controller {
     bool add_line(const string&, Coordinate&, Coordinate&, utils::Color);
     bool add_polygon(const string&, const std::vector<double>&, utils::Color, bool);
     bool add_polygon(const string&, const std::vector<Coordinate>&, utils::Color, bool);
+    bool add_bezier_curve(const string&, const std::vector<Coordinate>&, utils::Color);
+    bool add_bspline_curve(const string&, const std::vector<Coordinate>&, utils::Color);
     
     void delete_obj(const string&);
     void clear_world();
