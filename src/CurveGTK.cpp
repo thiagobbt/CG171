@@ -5,6 +5,7 @@ CurveGTK::CurveGTK(std::vector<Coordinate>& coords, utils::Color c)
 
 void CurveGTK::draw(cairo_surface_t& surface, Window& win) {
     std::cout << "Curve::draw" << std::endl;
+    if (coords.size() == 0) return;
     Coordinate a = win.to_viewport(coords[0]);
     cairo_t *cr = cairo_create(&surface);
     cairo_set_source_rgb(cr, color.r, color.g, color.b);

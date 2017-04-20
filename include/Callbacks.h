@@ -649,11 +649,15 @@ namespace cb {
 
                 if (!ctrl.add_bspline_curve("test_spline", 
                         {
-                            Coordinate(  0, 200),
-                            Coordinate(150, 200),
-                            Coordinate(250, 200),
-                            Coordinate(400, 200),
-
+                            Coordinate(250,113),
+                            Coordinate(150,113),
+                            Coordinate(100,200),
+                            Coordinate(150,287),
+                            Coordinate(250,287),
+                            Coordinate(300,200),
+                            Coordinate(250,113),
+                            Coordinate(150,113),
+                            Coordinate(100,200),
                         }
                     , utils::Color{1, 0, 0})) {
                     log_print("   Error: Object name repetition\n");

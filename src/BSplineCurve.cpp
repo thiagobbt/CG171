@@ -56,19 +56,15 @@ void BSplineCurve::update_coords() {
 		world_loc.emplace_back(vx, vy);
 
 		for (double t = 0; t < 1; t += delta) {
-			double x = vx, y = vy;
-
-			x += fd_x(0, 0);
 			fd_x(0, 0) += fd_x(0, 1);
 			fd_x(0, 1) += fd_x(0, 2);
+			fd_x(0, 2) += fd_x(0, 3);
 
-			y += fd_y(0, 0);
 			fd_y(0, 0) += fd_y(0, 1);
 			fd_y(0, 1) += fd_y(0, 2);
+			fd_y(0, 2) += fd_y(0, 3);
 
-			world_loc.emplace_back(x, y);
-			vx = x;
-			vy = y;
+			world_loc.emplace_back(fd_x(0, 0), fd_y(0, 0));
 		}
 	}
 
