@@ -20,7 +20,7 @@ class Object {
     const Coordinate center() const;
     void update();
     const int num_coords() const;
-    friend std::ostream& operator<<(std::ostream& out, const Object& w);
+    friend std::ostream& operator<<(std::ostream&, const Object&);
 };
 
 #endif /* OBJECT_H */

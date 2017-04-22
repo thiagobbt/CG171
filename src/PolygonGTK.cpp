@@ -4,7 +4,7 @@ PolygonGTK::PolygonGTK(std::vector<Coordinate>& coords, utils::Color color, bool
         : coords(coords), color(color), fill(fill) {}
 
 void PolygonGTK::draw(cairo_surface_t& surface, Window& win) {
-    if (coords.size() == 0) return;
+    if (coords.empty()) return;
     cairo_t *cr = cairo_create(&surface);
     cairo_set_source_rgb(cr, color.r, color.g, color.b);
 

@@ -1,12 +1,12 @@
-#include <memory>
 #include "Point.h"
-#include "PointGTK.h"
 #include "DrawingManager.h"
+#include "PointGTK.h"
+#include "utils.h"
 
 Point::Point(const std::vector<Coordinate>& coordinates, utils::Color c) 
         : color(c) {
     world_loc = coordinates;
-    drawable_obj = std::unique_ptr<PointGTK>(new PointGTK(win_loc, c, false));
+    drawable_obj = std::make_unique<PointGTK>(win_loc, c, false);
 }
 
 void Point::draw() {
@@ -14,5 +14,5 @@ void Point::draw() {
 }
 
 void Point::clip() {
-	Window::instance().clipPoint(win_loc);
+    Window::instance().clipPoint(win_loc);
 }

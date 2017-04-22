@@ -233,7 +233,7 @@ namespace cb {
 
         gtk_widget_queue_draw(window_widget);
 
-        bool success = ctrl.add_point(name, x, y, utils::Color{rgba.red, rgba.green, rgba.blue});
+        bool success = ctrl.add_point(name, {x, y}, utils::Color{rgba.red, rgba.green, rgba.blue});
 
         if (!success) {
             log_print("   Error: Object name repetition\n");
@@ -282,10 +282,7 @@ namespace cb {
         GdkRGBA rgba;
         gtk_color_chooser_get_rgba(btn_color, &rgba);
 
-
-
-
-        bool success = ctrl.add_line(name, x1, y1, x2, y2, utils::Color{rgba.red, rgba.green, rgba.blue});
+        bool success = ctrl.add_line(name, {x1, y1}, {x2, y2}, utils::Color{rgba.red, rgba.green, rgba.blue});
 
         if (!success) {
             log_print("   Error: Object name repetition\n");
@@ -300,7 +297,7 @@ namespace cb {
         gtk_widget_hide(new_object_widget);
     }
 
-    std::vector<double> pol_coord_vector;
+    std::vector<Coordinate> pol_coord_vector;
 
     int append_pol_coord_vector(GtkTreeModel *model,
                     GtkTreePath  *path,
@@ -315,10 +312,7 @@ namespace cb {
                             // 2, &z,
                             -1);
 
-
-
-        pol_coord_vector.push_back(x);
-        pol_coord_vector.push_back(y);
+        pol_coord_vector.emplace_back(x, y);
 
         return 0; // Continue calling
     }
@@ -598,7 +592,7 @@ namespace cb {
             case GDK_KEY_d:
                 log_print("Add test objects\n");
 
-                if (!ctrl.add_point("test_point", 20, 20, utils::Color{1, 0, 0})) {
+                if (!ctrl.add_point("test_point", {20, 20}, utils::Color{1, 0, 0})) {
                     log_print("   Error: Object name repetition\n");
                     return false;
                 }
@@ -610,8 +604,13 @@ namespace cb {
             case GDK_KEY_p:
                 log_print("Add test objects\n");
 
-                if (!ctrl.add_polygon("test_polygon", (std::vector<double>){150,150,150,250,250,250,250,150}, utils::Color{1, 0, 0}, true) ||
-                 !ctrl.add_line("test_line", 0, 0, 400, 400, utils::Color{0, 1, 0})) {
+                if (!ctrl.add_polygon("test_polygon", {
+                        {150, 150},
+                        {150, 250},
+                        {250, 250},
+                        {250, 150},
+                    }, {1, 0, 0}, true) ||
+                 !ctrl.add_line("test_line", {0, 0}, {400, 400}, utils::Color{0, 1, 0})) {
                     log_print("   Error: Object name repetition\n");
                     return false;
                 }
@@ -624,18 +623,15 @@ namespace cb {
             case GDK_KEY_c:
                 log_print("Add test bezier curve\n");
 
-                if (!ctrl.add_bezier_curve("test_curve", 
-                        {
-                            Coordinate(0, 200),
-                            Coordinate(100, 300),
-                            Coordinate(300, 100),
-                            Coordinate(400, 200),
-                            Coordinate(350, 150),
-                            Coordinate(150, 350),
-                            Coordinate(0, 200),
-
-                        }
-                    , utils::Color{1, 0, 0})) {
+                if (!ctrl.add_bezier_curve("test_curve", {
+                        {0, 200},
+                        {100, 300},
+                        {300, 100},
+                        {400, 200},
+                        {350, 150},
+                        {150, 350},
+                        {0, 200},
+                        }, {1, 0, 0})) {
                     log_print("   Error: Object name repetition\n");
                     return false;
                 }
@@ -649,17 +645,17 @@ namespace cb {
 
                 if (!ctrl.add_bspline_curve("test_spline", 
                         {
-                            Coordinate(250,113),
-                            Coordinate(150,113),
-                            Coordinate(100,200),
-                            Coordinate(150,287),
-                            Coordinate(250,287),
-                            Coordinate(300,200),
-                            Coordinate(250,113),
-                            Coordinate(150,113),
-                            Coordinate(100,200),
+                            {250,113},
+                            {150,113},
+                            {100,200},
+                            {150,287},
+                            {250,287},
+                            {300,200},
+                            {250,113},
+                            {150,113},
+                            {100,200},
                         }
-                    , utils::Color{1, 0, 0})) {
+                    , {1, 0, 0})) {
                     log_print("   Error: Object name repetition\n");
                     return false;
                 }

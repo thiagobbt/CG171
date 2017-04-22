@@ -13,15 +13,15 @@ class World {
  public:
  	static World& instance();
     ~World();
-    bool add_obj(string, Object*);
-    void delete_obj(string);
-    void move_obj(string, utils::Matrix&);
-    void scale_obj(string, utils::Matrix&);
-    void rotate_obj(string, utils::Matrix&, Coordinate&, bool);
+    bool add_obj(const string&, Object*);
+    void delete_obj(const string&);
+    void move_obj(const string&, utils::Matrix&);
+    void scale_obj(const string&, utils::Matrix&);
+    void rotate_obj(const string&, utils::Matrix&, Coordinate&, bool);
     void clear();    
     void redraw();
     const Object& obj(const string&);
-    void update_obj(string);
+    void update_obj(const string&);
     void update_all();
     void print_coords(std::ostream&);
     std::unordered_map<string, Object*> get_display_file();

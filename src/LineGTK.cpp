@@ -4,7 +4,8 @@ LineGTK::LineGTK(std::vector<Coordinate>& coords, utils::Color c, bool fill)
         : coords(coords), color(c) {}
 
 void LineGTK::draw(cairo_surface_t& surface, Window& win) {
-	if (coords.size() == 0) return;
+	if (coords.empty()) return;
+
     Coordinate a = win.to_viewport(coords[0]);
     Coordinate b = win.to_viewport(coords[1]);
     

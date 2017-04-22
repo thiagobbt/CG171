@@ -1,6 +1,6 @@
 #include "World.h"
-#include "Window.h"
 #include "DrawingManager.h"
+#include "Window.h"
 
 World::~World() {
     clear();
@@ -11,16 +11,16 @@ World& World::instance() {
     return instance;
 }
 
-bool World::add_obj(string id, Object* obj) {
-    if (!display_file.count(id)) {
+bool World::add_obj(const string& id, Object* obj) {
+    if (display_file.count(id) == 0) {
         display_file[id] = obj;
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
-void World::delete_obj(string id) {
+void World::delete_obj(const string& id) {
     display_file.erase(id);
 }
 
@@ -47,14 +47,14 @@ void World::redraw() {
     DrawingManager::instance().draw_viewport(viewport_coords);
 }
 
-void World::move_obj(string id, utils::Matrix& m) {
+void World::move_obj(const string& id, utils::Matrix& m) {
     if (display_file.count(id) == 0) return;
 
     display_file[id]->transform(m);
     update_obj(id);
 }
 
-void World::scale_obj(string id, utils::Matrix& m) {
+void World::scale_obj(const string& id, utils::Matrix& m) {
     if (display_file.count(id) == 0) return;
 
     Coordinate obj_center = display_file[id]->center();
@@ -68,7 +68,7 @@ void World::scale_obj(string id, utils::Matrix& m) {
     update_obj(id);
 }
 
-void World::rotate_obj(string id, utils::Matrix& m, Coordinate& coord, bool use_coord) {
+void World::rotate_obj(const string& id, utils::Matrix& m, Coordinate& coord, bool use_coord) {
     if (display_file.count(id) == 0) return;
 
     utils::Matrix translate(3, 3);
@@ -89,7 +89,7 @@ void World::rotate_obj(string id, utils::Matrix& m, Coordinate& coord, bool use_
     update_obj(id);
 }
 
-void World::update_obj(string id) {
+void World::update_obj(const string& id) {
     if (display_file.count(id) == 0) return;
 
     display_file[id]->update();

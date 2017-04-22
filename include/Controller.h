@@ -14,10 +14,8 @@ using std::string;
 class Controller {
  public:
     Controller() {}
-    bool add_point(const string&, double, double, utils::Color);
-    bool add_line(const string&, double, double, double, double, utils::Color);
-    bool add_line(const string&, Coordinate&, Coordinate&, utils::Color);
-    bool add_polygon(const string&, const std::vector<double>&, utils::Color, bool);
+    bool add_point(const string&, const Coordinate&, utils::Color);
+    bool add_line(const string&, const Coordinate&, const Coordinate&, utils::Color);
     bool add_polygon(const string&, const std::vector<Coordinate>&, utils::Color, bool);
     bool add_bezier_curve(const string&, const std::vector<Coordinate>&, utils::Color);
     bool add_bspline_curve(const string&, const std::vector<Coordinate>&, utils::Color);

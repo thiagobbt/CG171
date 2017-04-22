@@ -1,7 +1,7 @@
-#include <cmath>
 #include "Window.h"
 #include "DrawingManager.h"
 #include "utils.h"
+#include <cmath>
 #include <cstdint>
 
 Window& Window::instance() {
@@ -86,12 +86,8 @@ std::pair<Coordinate, Coordinate> Window::get_viewport_coords() {
     return viewport;
 }
 
-bool isPointDrawable(Coordinate& coord) {
-    if (coord.get_x() < -1 || coord.get_x() > 1 ||
-        coord.get_y() < -1 || coord.get_y() > 1) {
-        return false;
-    }
-    return true;
+bool isPointDrawable(const Coordinate& coord) {
+    return !(coord.get_x() < -1 || coord.get_x() > 1 || coord.get_y() < -1 || coord.get_y() > 1);
 }
 
 void Window::clipPoint(std::vector<Coordinate>& coords) {
@@ -103,10 +99,10 @@ void Window::clipPoint(std::vector<Coordinate>& coords) {
 int Window::get_region_code(Coordinate& coord) {
     int result = 0;
 
-    result |= (coord.get_y() > 1);
-    result |= (coord.get_y() < -1) << 1;
-    result |= (coord.get_x() > 1) << 2;
-    result |= (coord.get_x() < -1) << 3;
+    result |= static_cast<int>(coord.get_y() > 1);
+    result |= static_cast<int>(coord.get_y() < -1) << 1;
+    result |= static_cast<int>(coord.get_x() > 1) << 2;
+    result |= static_cast<int>(coord.get_x() < -1) << 3;
 
     return result;
 }
@@ -251,9 +247,9 @@ void Window::clipPolygon(std::vector<Coordinate>& coords) {
 
     bool addedPoints = false;
 
-    for (size_t i = 0; i < coords.size(); i++) {
-        std::vector<Coordinate> currentLine = {s, coords[i]};
-        std::vector<Coordinate> realLine = {s, coords[i]};
+    for (auto currentPoint : coords) {
+        std::vector<Coordinate> currentLine = {s, currentPoint};
+        std::vector<Coordinate> realLine = {s, currentPoint};
         Coordinate middlePoint;
         middlePoint[0] = (currentLine[0][0] + currentLine[1][0]);
         middlePoint[1] = (currentLine[0][1] + currentLine[1][1]);
@@ -274,7 +270,7 @@ void Window::clipPolygon(std::vector<Coordinate>& coords) {
             output.push_back(realLine[1]);
             addedPoints = true;
         } else {
-            Coordinate clipPoint(coords[i]);
+            Coordinate clipPoint(currentPoint);
             clampPoint(clipPoint);
             clampPoint(middlePoint);
             output.push_back(middlePoint);
@@ -284,7 +280,7 @@ void Window::clipPolygon(std::vector<Coordinate>& coords) {
             addedPoints = false;
         }
 
-        s = coords[i];
+        s = currentPoint;
     }
 
     coords = output;

@@ -1,14 +1,15 @@
 #include "BezierCurve.h"
-#include "Window.h"
 #include "CurveGTK.h"
 #include "DrawingManager.h"
+#include "Window.h"
+#include "utils.h"
 #include <cmath>
 
 BezierCurve::BezierCurve(const std::vector<Coordinate>& coordinates, utils::Color c) {
 	color = c;
 	original_loc = coordinates;
 	world_loc = std::vector<Coordinate>();
-    drawable_obj = std::unique_ptr<CurveGTK>(new CurveGTK(win_loc, c));
+    drawable_obj = std::make_unique<CurveGTK>(win_loc, c);
     update_coords();
 }
 
@@ -20,9 +21,9 @@ void BezierCurve::update_coords() {
 
 	world_loc.clear();
 
-	int num_curves = ((original_loc.size()-4)/3) + 1;
+	size_t num_curves = ((original_loc.size()-4)/3) + 1;
 
-	for (int i = 0; i < num_curves; i++) {
+	for (size_t i = 0; i < num_curves; i++) {
 		for (double t = 0; t < 1; t += delta) {
 			double t2 = t * t;
 			double t3 = t2 * t;
@@ -43,9 +44,9 @@ void BezierCurve::update_coords() {
 				{original_loc[i*3+3][1]},
 			};
 
-			auto tmp = t_m * mb;
-			auto x_m = tmp * gb_x;
-			auto y_m = tmp * gb_y;
+			utils::Matrix tmp = t_m * mb;
+			utils::Matrix x_m = tmp * gb_x;
+			utils::Matrix y_m = tmp * gb_y;
 
 			world_loc.emplace_back(x_m(0, 0), y_m(0, 0));
 		}

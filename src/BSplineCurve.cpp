@@ -1,15 +1,16 @@
 #include "BSplineCurve.h"
-#include "Window.h"
 #include "CurveGTK.h"
 #include "DrawingManager.h"
+#include "Window.h"
+#include "utils.h"
 #include <cmath>
 
 BSplineCurve::BSplineCurve(const std::vector<Coordinate>& coordinates, utils::Color c) {
 	color = c;
 	original_loc = coordinates;
 	world_loc = std::vector<Coordinate>();
-    drawable_obj = std::unique_ptr<CurveGTK>(new CurveGTK(win_loc, c));
-    update_coords();
+	drawable_obj = std::make_unique<CurveGTK>(win_loc, c);
+	update_coords();
 }
 
 void BSplineCurve::update_coords() {
