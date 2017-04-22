@@ -268,7 +268,6 @@ void Window::clipPolygon(std::vector<Coordinate>& coords) {
         if (currentLine.size() > 1) {
             if (clipped || !addedPoints || output.empty() || currentLine[0] != output.back()) {
                 output.push_back(currentLine[0]);
-                clipped = false;
             }
             output.push_back(currentLine[1]);
             clampPoint(realLine[1]);
