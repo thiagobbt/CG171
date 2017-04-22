@@ -4,7 +4,6 @@ CurveGTK::CurveGTK(std::vector<Coordinate>& coords, utils::Color c)
 	: coords(coords), color(c) {}
 
 void CurveGTK::draw(cairo_surface_t& surface, Window& win) {
-	std::cout << "Curve::draw" << std::endl;
 	if (coords.empty()) return;
 
 	for (size_t i = 0; i < coords.size() - 1; i += 2) {

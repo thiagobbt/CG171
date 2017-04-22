@@ -14,7 +14,6 @@ BSplineCurve::BSplineCurve(const std::vector<Coordinate>& coordinates, utils::Co
 }
 
 void BSplineCurve::update_coords() {
-	std::cout << "BSplineCurve::update_coords" << std::endl;
 	double current_zoom = Window::instance().get_current_zoom();
 	size_t n = std::ceil(current_zoom * 10);
 	double delta = 1.0 / n;
@@ -68,14 +67,9 @@ void BSplineCurve::update_coords() {
 			world_loc.emplace_back(fd_x(0, 0), fd_y(0, 0));
 		}
 	}
-
-	for (auto c : world_loc) {
-		std::cout << c << std::endl;
-	}
 }
 
 void BSplineCurve::draw() {
-	std::cout << "BSplineCurve::draw" << std::endl;
 	update_coords();
 	DrawingManager::instance().draw(*drawable_obj);
 }
