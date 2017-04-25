@@ -141,6 +141,29 @@ namespace cb {
                           -1);
     }
 
+    static void btn_add_curve_coord_cb(){
+        log_print("Add curve coordinates.\n");
+
+        GtkListStore *curve_coordinates = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "list_store_pol_coordinates"));
+
+        GtkEntry *entry_curve_x = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_curve_x"));
+        GtkEntry *entry_curve_y = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_curve_y"));
+        GtkEntry *entry_curve_z = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_curve_z"));
+
+        const char* x_c = (char*)gtk_entry_get_text(entry_curve_x);
+        const char* y_c = (char*)gtk_entry_get_text(entry_curve_y);
+        const char* z_c = (char*)gtk_entry_get_text(entry_curve_z);
+
+        GtkTreeIter curve_coordinates_iter;
+
+        gtk_list_store_append(curve_coordinates, &curve_coordinates_iter);
+        gtk_list_store_set (curve_coordinates, &curve_coordinates_iter,
+                          0, atof(x_c),
+                          1, atof(y_c),
+                          2, atof(z_c),
+                          -1);
+    }
+
     static void btn_delete_polygon_coord_cb(){
         log_print("Delete polygon coordinates.\n");
 
@@ -149,6 +172,20 @@ namespace cb {
         GtkTreeIter iter;
 
         if (!gtk_tree_selection_get_selected(polygon_tree_selection, NULL, &iter)) {
+            log_print("   Error: Could not get selection\n");
+            return;
+        }
+        gtk_list_store_remove(pol_coordinates, &iter);
+    }
+
+    static void btn_delete_curve_coord_cb(){
+        log_print("Delete curve coordinates.\n");
+
+        GtkTreeSelection *curve_tree_selection = GTK_TREE_SELECTION(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "curve_treeview_selection"));
+        GtkListStore *pol_coordinates = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "list_store_pol_coordinates"));
+        GtkTreeIter iter;
+
+        if (!gtk_tree_selection_get_selected(curve_tree_selection, NULL, &iter)) {
             log_print("   Error: Could not get selection\n");
             return;
         }
@@ -336,7 +373,7 @@ namespace cb {
             return;
         }
 
-        GtkColorChooser* btn_color = GTK_COLOR_CHOOSER(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "colorbutton_line"));
+        GtkColorChooser* btn_color = GTK_COLOR_CHOOSER(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "colorbutton_pol"));
         GdkRGBA rgba;
         gtk_color_chooser_get_rgba(btn_color, &rgba);
 
@@ -350,7 +387,61 @@ namespace cb {
             return;
         }
 
+        gtk_list_store_clear(GTK_LIST_STORE(pol_coordinates));
+
         add_to_obj_list(name, "Polygon");
+
+        gtk_widget_queue_draw(window_widget);
+
+        GtkWidget *new_object_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "new_object_window"));
+        gtk_widget_hide(new_object_widget);
+    }
+
+    static void btn_add_curve_cb() {
+        log_print("Add curve\n");
+
+        GtkTreeModel *curve_coordinates = GTK_TREE_MODEL(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "list_store_pol_coordinates"));
+
+        GtkTreeIter iter;
+        gtk_tree_model_get_iter_first(curve_coordinates, &iter);
+
+        pol_coord_vector.clear();
+        gtk_tree_model_foreach(curve_coordinates, append_pol_coord_vector, NULL);
+
+        GtkEntry *entry_line_name = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_curve_name"));
+        const char* name = (char*)gtk_entry_get_text(entry_line_name);
+
+        if (strcmp(name, "") == 0) {
+            log_print("   Error: Object name can't be empty\n");
+            return;
+        }
+
+        GtkColorChooser* btn_color = GTK_COLOR_CHOOSER(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "colorbutton_curve"));
+        GdkRGBA rgba;
+        gtk_color_chooser_get_rgba(btn_color, &rgba);
+
+        bool success;
+
+        GtkToggleButton *radio_bezier = GTK_TOGGLE_BUTTON(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "radiobutton_bezier"));
+
+        if (gtk_toggle_button_get_active(radio_bezier)) {
+            success = ctrl.add_bezier_curve(name, pol_coord_vector, utils::Color{rgba.red, rgba.green, rgba.blue});
+            if (success) {
+                add_to_obj_list(name, "Bezier Curve");
+            }
+        } else {
+            success = ctrl.add_bspline_curve(name, pol_coord_vector, utils::Color{rgba.red, rgba.green, rgba.blue});
+            if (success) {
+                add_to_obj_list(name, "B-Spline Curve");
+            }
+        }
+
+        if (!success) {
+            log_print("   Error: Object name repetition\n");
+            return;
+        }
+
+        gtk_list_store_clear(GTK_LIST_STORE(curve_coordinates));
 
         gtk_widget_queue_draw(window_widget);
 
@@ -735,6 +826,9 @@ namespace cb {
         GtkWidget *btn_polygon_cancel = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_polygon_cancel"));
         g_signal_connect(btn_polygon_cancel, "button_press_event", G_CALLBACK(btn_cancel_obj_cb), NULL);
 
+        GtkWidget *btn_curve_cancel = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_curve_cancel"));
+        g_signal_connect(btn_curve_cancel, "button_press_event", G_CALLBACK(btn_cancel_obj_cb), NULL);
+
         GtkWidget *btn_point_ok = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_point_ok"));
         g_signal_connect(btn_point_ok, "button_press_event", G_CALLBACK(btn_add_point_cb), NULL);
 
@@ -744,11 +838,20 @@ namespace cb {
         GtkWidget *btn_polygon_ok = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_polygon_ok"));
         g_signal_connect(btn_polygon_ok, "button_press_event", G_CALLBACK(btn_add_polygon_cb), NULL);
 
+        GtkWidget *btn_curve_ok = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_curve_ok"));
+        g_signal_connect(btn_curve_ok, "button_press_event", G_CALLBACK(btn_add_curve_cb), NULL);
+
         GtkWidget *btn_polygon_add_coord = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_polygon_add_coord"));
         g_signal_connect(btn_polygon_add_coord, "button_press_event", G_CALLBACK(btn_add_polygon_coord_cb), NULL);
 
+        GtkWidget *btn_curve_add_coord = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_curve_add_coord"));
+        g_signal_connect(btn_curve_add_coord, "button_press_event", G_CALLBACK(btn_add_curve_coord_cb), NULL);
+
         GtkWidget *btn_polygon_delete_coord = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_polygon_delete_coord"));
         g_signal_connect(btn_polygon_delete_coord, "button_press_event", G_CALLBACK(btn_delete_polygon_coord_cb), NULL);
+
+        GtkWidget *btn_curve_delete_coord = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_curve_delete_coord"));
+        g_signal_connect(btn_curve_delete_coord, "button_press_event", G_CALLBACK(btn_delete_curve_coord_cb), NULL);
 
         GtkWidget *btn_pan_up = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_pan_up"));
         g_signal_connect(btn_pan_up, "button_press_event", G_CALLBACK(btn_up_cb), NULL);
