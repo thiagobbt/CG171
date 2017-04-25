@@ -719,7 +719,7 @@ namespace cb {
             case GDK_KEY_c:
                 log_print("Add test bezier curve\n");
 
-                if (!ctrl.add_bezier_curve("test_curve", {
+                if (!ctrl.add_bezier_curve("test_bezier", {
                         {0, 200},
                         {100, 300},
                         {300, 100},
@@ -739,7 +739,7 @@ namespace cb {
             case GDK_KEY_C:
                 log_print("Add test bspline curve\n");
 
-                if (!ctrl.add_bspline_curve("test_spline", 
+                if (!ctrl.add_bspline_curve("test_bspline", 
                         {
                             {250,113},
                             {150,113},
@@ -756,7 +756,7 @@ namespace cb {
                     return false;
                 }
 
-                add_to_obj_list("test_curve", "B-Spline Curve");
+                add_to_obj_list("test_bspline", "B-Spline Curve");
 
                 gtk_widget_queue_draw (window_widget);
                 break;
