@@ -408,6 +408,11 @@ namespace cb {
         pol_coord_vector.clear();
         gtk_tree_model_foreach(curve_coordinates, append_pol_coord_vector, NULL);
 
+        if (pol_coord_vector.size() < 4) {
+            log_print("   Error: At least 4 points are required\n");
+            return;
+        }
+
         GtkEntry *entry_line_name = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_curve_name"));
         const char* name = (char*)gtk_entry_get_text(entry_line_name);
 
