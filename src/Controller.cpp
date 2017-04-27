@@ -62,33 +62,39 @@ void Controller::zoom_out(double zoom) {
 }
 
 void Controller::pan_x(double x) {
-    Window::instance().move(x,0,0);
+    Window::instance().move(x, 0, 0);
     World::instance().update_all();
 }
 
 void Controller::pan_y(double y) {
-    Window::instance().move(0,y,0);
+    Window::instance().move(0, y, 0);
     World::instance().update_all();
 }
 
-void Controller::rotate(double theta) {
-    Window::instance().rotate(theta);
+void Controller::pan_z(double z) {
+    Window::instance().move(0, 0, z);
     World::instance().update_all();
 }
 
-void Controller::move_obj(const string& id, double dx, double dy) {
-    auto a = utils::Transformation2D::translation_matrix(dx, dy);
+void Controller::rotate(double theta_x, double theta_y, double theta_z) {
+    Window::instance().rotate(theta_x, theta_y, theta_z);
+    World::instance().update_all();
+}
+
+void Controller::move_obj(const string& id, double dx, double dy, double dz = 0) {
+    auto a = utils::Transformation3D::translation_matrix(dx, dy, dz);
     World::instance().move_obj(id, a);
 }
 
-void Controller::rotate_obj(const string& id, double theta, double x, double y, bool use_cord) {
-    auto a = utils::Transformation2D::rotation_matrix(theta);
-    Coordinate loc(x, y);
+void Controller::rotate_obj(const string& id, double theta_x, double theta_y, double theta_z, Coordinate loc, bool use_cord) {
+    auto a = utils::Transformation3D::rotation_matrix_x(theta_x);
+    a = a * utils::Transformation3D::rotation_matrix_y(theta_y);
+    a = a * utils::Transformation3D::rotation_matrix_z(theta_z);
     World::instance().rotate_obj(id, a, loc, use_cord);
 } 
 
-void Controller::scale_obj(const string& id, double sx, double sy) {
-    auto a = utils::Transformation2D::scaling_matrix(sx, sy);
+void Controller::scale_obj(const string& id, double sx, double sy, double sz) {
+    auto a = utils::Transformation3D::scaling_matrix(sx, sy, sz);
     World::instance().scale_obj(id, a);
     World::instance().update_obj(id);
 }

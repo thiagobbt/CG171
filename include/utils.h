@@ -52,15 +52,15 @@ namespace utils {
         std::vector<double> data;
 
      public:
-        unsigned int dim_x;
-        unsigned int dim_y;
+        size_t dim_x;
+        size_t dim_y;
 
-        Matrix(unsigned int x, unsigned int y) : dim_x(x), dim_y(y) {
+        Matrix(size_t x, size_t y) : dim_x(x), dim_y(y) {
             fill();
         }
 
-        Matrix(const Coordinate& c) : dim_x(1), dim_y(4) {
-            data.reserve(4);
+        Matrix(const Coordinate& c, size_t d = 3) : dim_x(1), dim_y(d) {
+            data.reserve(d);
             data.push_back(c.get_x());
             data.push_back(c.get_y());
             data.push_back(c.get_z());
@@ -128,6 +128,7 @@ namespace utils {
         }
     };
 
+#warning "Code should be using Transformation3D namespace"
     namespace Transformation2D {
         inline Matrix rotation_matrix(double angle) {
             utils::Matrix a(3,3);
@@ -214,16 +215,22 @@ namespace utils {
             return r;
         }
 
-        inline Matrix scaling_matrix(const std::vector<double>& scale) {
-            Matrix a(4, 4);
+        inline Matrix translation_matrix(double dx, double dy, double dz) {
+            return {
+                {1,   0,  0, 0},
+                {0,   1,  0, 0},
+                {0,   0,  1, 0},
+                {dx, dy, dz, 1}
+            };
+        }
 
-            for (size_t i = 0; i < 4; ++i) {
-                a(i,i) = scale[i];
-            }
-
-            a(3,3) = 1;
-
-            return a;
+        inline Matrix scaling_matrix(double dx, double dy, double dz) {
+            return {
+                {dx, 0, 0, 0},
+                {0, dy, 0, 0},
+                {0, 0, dz, 0},
+                {0, 0, 0,  1}
+            };
         }
 
         inline Coordinate center(const std::vector<Coordinate>& coords) {

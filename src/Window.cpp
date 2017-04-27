@@ -19,9 +19,13 @@ Window::Window() {
 }
 
 void Window::move(double x, double y, double z) {
-    auto m = utils::Transformation2D::rotation_matrix(-angle);
-    m = m * utils::Transformation2D::translation_matrix(x, y);
-    m = m * utils::Transformation2D::rotation_matrix(angle);
+    auto m = utils::Transformation3D::rotation_matrix_x(-angle_x);
+    m = m * utils::Transformation3D::rotation_matrix_y(-angle_y);
+    m = m * utils::Transformation3D::rotation_matrix_z(-angle_z);
+    m = m * utils::Transformation3D::translation_matrix(x, y, z);
+    m = m * utils::Transformation3D::rotation_matrix_x(angle_x);
+    m = m * utils::Transformation3D::rotation_matrix_y(angle_y);
+    m = m * utils::Transformation3D::rotation_matrix_z(angle_z);
 
     start_point = (utils::Matrix(start_point) * m).to_coord();
     end_point = (utils::Matrix(end_point) * m).to_coord();
@@ -48,8 +52,10 @@ double Window::get_current_zoom() {
     return current_zoom;
 }
 
-void Window::rotate(double theta) {
-    angle = std::fmod(angle + theta, 360);
+void Window::rotate(double theta_x, double theta_y, double theta_z) {
+    angle_x = std::fmod(angle_x + theta_x, 360);
+    angle_y = std::fmod(angle_y + theta_y, 360);
+    angle_z = std::fmod(angle_z + theta_z, 360);
 }
 
 Coordinate Window::to_viewport(const Coordinate& coord) {
@@ -65,10 +71,13 @@ utils::Matrix Window::normalizerMatrix() {
     Coordinate center = (start_point + end_point) / 2.0;
     double width = std::abs(end_point.get_x() - start_point.get_x());
     double height = std::abs(end_point.get_y() - start_point.get_y());
+    // double depth = std::abs(end_point.get_z() - start_point.get_z());
 
-    utils::Matrix normalizer = utils::Transformation2D::translation_matrix(-center.get_x(), -center.get_y());
-    normalizer = normalizer * utils::Transformation2D::rotation_matrix(-angle);
-    normalizer = normalizer * utils::Transformation2D::scaling_matrix(2 / width, 2 / height);
+    utils::Matrix normalizer = utils::Transformation3D::translation_matrix(-center.get_x(), -center.get_y(), -center.get_z());
+    normalizer = normalizer * utils::Transformation3D::rotation_matrix_x(-angle_x);
+    normalizer = normalizer * utils::Transformation3D::rotation_matrix_y(-angle_y);
+    normalizer = normalizer * utils::Transformation3D::rotation_matrix_z(-angle_z);
+    normalizer = normalizer * utils::Transformation3D::scaling_matrix(2 / width, 2 / height, 1);
     return normalizer;
 }
 

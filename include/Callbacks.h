@@ -230,13 +230,13 @@ namespace cb {
 
     static void btn_rotate_r_cb() {
         log_print("Rotate right\n");
-        ctrl.rotate(-15);
+        ctrl.rotate(0, 0, -15);
         gtk_widget_queue_draw(window_widget);
     }
 
     static void btn_rotate_l_cb() {
         log_print("Rotate left\n");
-        ctrl.rotate(15);
+        ctrl.rotate(0, 0, 15);
         gtk_widget_queue_draw(window_widget);
     }
 
@@ -473,15 +473,15 @@ namespace cb {
 
         GtkEntry *entry_translate_dx = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_translate_dx"));
         GtkEntry *entry_translate_dy = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_translate_dy"));
-        // GtkEntry *entry_translate_dz = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_translate_dz"));
+        GtkEntry *entry_translate_dz = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_translate_dz"));
 
         const char* dx_c = (char*)gtk_entry_get_text(entry_translate_dx);
         const char* dy_c = (char*)gtk_entry_get_text(entry_translate_dy);
-        // const char* dz_c = (char*)gtk_entry_get_text(entry_translate_dz);
+        const char* dz_c = (char*)gtk_entry_get_text(entry_translate_dz);
 
         double dx = atof(dx_c);
         double dy = atof(dy_c);
-        // double dz = atof(dz_c);
+        double dz = atof(dz_c);
 
         GtkTreeSelection *objects_treeview_selection = GTK_TREE_SELECTION(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "objects_treeview_selection"));
         GtkListStore *object_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
@@ -495,7 +495,7 @@ namespace cb {
         char* name;
         gtk_tree_model_get(GTK_TREE_MODEL(object_store), &iter, 0, &name, -1);
 
-        ctrl.move_obj(string(name), dx, dy);
+        ctrl.move_obj(string(name), dx, dy, dz);
 
         gtk_widget_queue_draw(window_widget);
 
@@ -508,15 +508,15 @@ namespace cb {
 
         GtkEntry *entry_scale_sx = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_scale_sx"));
         GtkEntry *entry_scale_sy = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_scale_sy"));
-        // GtkEntry *entry_scale_sz = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_scale_sz"));
+        GtkEntry *entry_scale_sz = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_scale_sz"));
 
         const char* sx_c = (char*)gtk_entry_get_text(entry_scale_sx);
         const char* sy_c = (char*)gtk_entry_get_text(entry_scale_sy);
-        // const char* sz_c = (char*)gtk_entry_get_text(entry_scale_sz);
+        const char* sz_c = (char*)gtk_entry_get_text(entry_scale_sz);
 
         double sx = atof(sx_c);
         double sy = atof(sy_c);
-        // double sz = atof(sz_c);
+        double sz = atof(sz_c);
 
         GtkTreeSelection *objects_treeview_selection = GTK_TREE_SELECTION(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "objects_treeview_selection"));
         GtkListStore *object_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
@@ -530,7 +530,7 @@ namespace cb {
         char* name;
         gtk_tree_model_get(GTK_TREE_MODEL(object_store), &iter, 0, &name, -1);
 
-        ctrl.scale_obj(string(name), sx, sy);
+        ctrl.scale_obj(string(name), sx, sy, sz);
 
         gtk_widget_queue_draw(window_widget);
 
@@ -541,9 +541,17 @@ namespace cb {
     static void btn_rotate_obj_cb() {
         log_print("Rotate object.\n");
 
-        GtkEntry *entry_rotate_angle = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_rotate_angle"));
-        const char* rotate_angle_c = (char*)gtk_entry_get_text(entry_rotate_angle);
-        double rotate_angle = atof(rotate_angle_c);
+        GtkEntry *entry_rotate_angle_x = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_rotate_angle_x"));
+        GtkEntry *entry_rotate_angle_y = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_rotate_angle_y"));
+        GtkEntry *entry_rotate_angle_z = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_rotate_angle_z"));
+        
+        const char* rotate_angle_x_c = (char*)gtk_entry_get_text(entry_rotate_angle_x);
+        const char* rotate_angle_y_c = (char*)gtk_entry_get_text(entry_rotate_angle_y);
+        const char* rotate_angle_z_c = (char*)gtk_entry_get_text(entry_rotate_angle_z);
+        
+        double rotate_angle_x = atof(rotate_angle_x_c);
+        double rotate_angle_y = atof(rotate_angle_y_c);
+        double rotate_angle_z = atof(rotate_angle_z_c);
 
         GtkTreeSelection *objects_treeview_selection = GTK_TREE_SELECTION(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "objects_treeview_selection"));
         GtkListStore *object_store = GTK_LIST_STORE(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "object_store"));
@@ -562,23 +570,23 @@ namespace cb {
         // GtkToggleButton *radio_rotate_point = GTK_TOGGLE_BUTTON(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "radio_rotate_point"));
 
         if (gtk_toggle_button_get_active(radio_rotate_obj_center)) {
-            ctrl.rotate_obj(string(name), rotate_angle, 0, 0, false);
+            ctrl.rotate_obj(string(name), rotate_angle_x, rotate_angle_y, rotate_angle_z, {0, 0, 0}, false);
         } else if (gtk_toggle_button_get_active(radio_rotate_world_center)) {
-            ctrl.rotate_obj(string(name), rotate_angle, 0, 0, true);
+            ctrl.rotate_obj(string(name), rotate_angle_x, rotate_angle_y, rotate_angle_z, {0, 0, 0}, true);
         } else {
             GtkEntry *entry_rotate_x = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_rotate_x"));
             GtkEntry *entry_rotate_y = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_rotate_y"));
-            // GtkEntry *entry_rotate_z = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_rotate_z"));
+            GtkEntry *entry_rotate_z = GTK_ENTRY(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "entry_rotate_z"));
 
             const char* x_c = (char*)gtk_entry_get_text(entry_rotate_x);
             const char* y_c = (char*)gtk_entry_get_text(entry_rotate_y);
-            // const char* z_c = (char*)gtk_entry_get_text(entry_rotate_z);
+            const char* z_c = (char*)gtk_entry_get_text(entry_rotate_z);
 
             double x = atof(x_c);
             double y = atof(y_c);
-            // double z = atof(z_c);
+            double z = atof(z_c);
             
-            ctrl.rotate_obj(string(name), rotate_angle, x, y, true);
+            ctrl.rotate_obj(string(name), rotate_angle_x, rotate_angle_y, rotate_angle_z, {x, y, z}, true);
         }
 
         gtk_widget_queue_draw(window_widget);
@@ -667,19 +675,19 @@ namespace cb {
             case GDK_KEY_minus: btn_zoom_out_cb(); break;
             case GDK_KEY_q: gtk_main_quit(); break;
             case GDK_KEY_r:
-                ctrl.rotate_obj("test_polygon", 15, 0, 0, false);
+                ctrl.rotate_obj("test_polygon", 0, 0, 15, {0, 0, 0}, false);
                 gtk_widget_queue_draw(window_widget);
                 break;
             case GDK_KEY_R:
-                ctrl.rotate_obj("test_polygon", -15, 0, 0, false);
+                ctrl.rotate_obj("test_polygon", 0, 0, -15, {0, 0, 0}, false);
                 gtk_widget_queue_draw(window_widget);
                 break;
             case GDK_KEY_t:
-                ctrl.move_obj("test_polygon", 30, 30);
+                ctrl.move_obj("test_polygon", 30, 30, 0);
                 gtk_widget_queue_draw(window_widget);
                 break;
             case GDK_KEY_T:
-                ctrl.move_obj("test_polygon", -30, -30);
+                ctrl.move_obj("test_polygon", -30, -30, 0);
                 gtk_widget_queue_draw(window_widget);
                 break;
             case GDK_KEY_z:

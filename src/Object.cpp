@@ -4,22 +4,17 @@
 
 void Object::transform(utils::Matrix& b) {
 	for (auto& p : world_loc) {
-		utils::Matrix a(1,3);
-
-		a(0, 0) = p.get_x();
-		a(0, 1) = p.get_y();
-		a(0, 2) = 1;
-
+		utils::Matrix a(p, 4);
 		utils::Matrix result = a * b;
 
-		Coordinate c(result(0,0), result(0,1));
+		Coordinate c(result(0, 0), result(0, 1), result(0, 2), result(0, 3));
 
 		p = c;
 	}
 }
 
 const Coordinate Object::center() const {
-	return utils::Transformation2D::center(world_loc);
+	return utils::Transformation3D::center(world_loc);
 }
 
 void Object::update() {
@@ -28,7 +23,7 @@ void Object::update() {
 	auto normalizer = Window::instance().normalizerMatrix();
 
 	for (auto c : world_loc) {
-		auto tmp = utils::Matrix(c) * normalizer;
+		auto tmp = utils::Matrix(c, 4) * normalizer;
 		win_loc.push_back(tmp.to_coord());
 	}
 }

@@ -9,6 +9,7 @@ class Coordinate {
 
  public:
     Coordinate(const Coordinate&) = default;
+
     Coordinate(double x = 0, double y = 0, double z = 1, double w = 1)
         : x(x), y(y), z(z), w(w) {}
 

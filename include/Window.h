@@ -9,7 +9,9 @@ class Window {
     Coordinate end_point;
     std::pair<Coordinate, Coordinate> viewport;
     double default_width, default_height;
-    double angle = 0;
+    double angle_x = 0;
+    double angle_y = 0;
+    double angle_z = 0;
     void clipCS(std::vector<Coordinate>&);
     void clipLB(std::vector<Coordinate>&);
     int get_region_code(Coordinate&);
@@ -24,7 +26,7 @@ class Window {
     void move(double, double, double);
     void zoom(double);
     double get_current_zoom();
-    void rotate(double);
+    void rotate(double, double, double);
     Coordinate to_viewport(const Coordinate&);
     Coordinate to_window(const Coordinate&);
     utils::Matrix normalizerMatrix();

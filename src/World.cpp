@@ -59,8 +59,8 @@ void World::scale_obj(const string& id, utils::Matrix& m) {
 
     Coordinate obj_center = display_file[id]->center();
 
-    auto translate = utils::Transformation2D::translation_matrix(-obj_center.get_x(), -obj_center.get_y());
-    auto translate_back = utils::Transformation2D::translation_matrix(obj_center.get_x(), obj_center.get_y());
+    auto translate = utils::Transformation3D::translation_matrix(-obj_center.get_x(), -obj_center.get_y(), -obj_center.get_z());
+    auto translate_back = utils::Transformation3D::translation_matrix(obj_center.get_x(), obj_center.get_y(), obj_center.get_z());
 
     utils::Matrix scale = (translate * m) * translate_back;
 
@@ -71,16 +71,16 @@ void World::scale_obj(const string& id, utils::Matrix& m) {
 void World::rotate_obj(const string& id, utils::Matrix& m, Coordinate& coord, bool use_coord) {
     if (display_file.count(id) == 0) return;
 
-    utils::Matrix translate(3, 3);
-    utils::Matrix translate_back(3, 3);
+    utils::Matrix translate(4, 4);
+    utils::Matrix translate_back(4, 4);
 
     if (use_coord) {
-        translate = utils::Transformation2D::translation_matrix(-coord.get_x(), -coord.get_y());
-        translate_back = utils::Transformation2D::translation_matrix(coord.get_x(), coord.get_y());
+        translate = utils::Transformation3D::translation_matrix(-coord.get_x(), -coord.get_y(), -coord.get_z());
+        translate_back = utils::Transformation3D::translation_matrix(coord.get_x(), coord.get_y(), coord.get_z());
     } else {
         Coordinate obj_center = display_file[id]->center();
-        translate = utils::Transformation2D::translation_matrix(-obj_center.get_x(), -obj_center.get_y());
-        translate_back = utils::Transformation2D::translation_matrix(obj_center.get_x(), obj_center.get_y());
+        translate = utils::Transformation3D::translation_matrix(-obj_center.get_x(), -obj_center.get_y(), -obj_center.get_z());
+        translate_back = utils::Transformation3D::translation_matrix(obj_center.get_x(), obj_center.get_y(), obj_center.get_z());
     }
 
     utils::Matrix rotate = (translate * m) * translate_back;

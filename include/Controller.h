@@ -27,12 +27,12 @@ class Controller {
     void zoom_out(double);
     void pan_x(double);
     void pan_y(double);
-    //pan_z(double);
-    void rotate(double);
+    void pan_z(double);
+    void rotate(double, double, double);
 
-    void move_obj(const string&, double, double);
-    void rotate_obj(const string&, double, double, double, bool);
-    void scale_obj(const string&, double, double);
+    void move_obj(const string&, double, double, double);
+    void rotate_obj(const string&, double, double, double, Coordinate, bool);
+    void scale_obj(const string&, double, double, double);
 
     void export_obj(std::ostream&);
     void import_obj(std::istream&);
