@@ -59,11 +59,12 @@ namespace utils {
             fill();
         }
 
-        Matrix(const Coordinate& c) : dim_x(1), dim_y(3) {
-            data.reserve(3);
+        Matrix(const Coordinate& c) : dim_x(1), dim_y(4) {
+            data.reserve(4);
             data.push_back(c.get_x());
             data.push_back(c.get_y());
             data.push_back(c.get_z());
+            data.push_back(c.get_w());
         }
 
         Matrix(const std::initializer_list<std::initializer_list<double>>& matrix) {
@@ -84,7 +85,7 @@ namespace utils {
         }
 
         Coordinate to_coord() {
-            return Coordinate((*this)(0, 0), (*this)(0, 1), (*this)(0, 2));
+            return Coordinate((*this)(0, 0), (*this)(0, 1), (*this)(0, 2), (*this)(0, 3));
         }
 
         double& operator()(unsigned int j, unsigned int i) {
@@ -152,7 +153,7 @@ namespace utils {
         }
 
         inline Matrix scaling_matrix(double dx, double dy) {
-            utils::Matrix a(3,3);
+            Matrix a(3,3);
             a(0, 0) = dx;
             a(1, 1) = dy;
             a(2, 2) = 1;
@@ -173,6 +174,74 @@ namespace utils {
             yc /= coords.size();
 
             return Coordinate(xc, yc);
+        }
+    }
+
+    namespace Transformation3D {
+        inline Matrix rotation_matrix_x(double angle) {
+            auto real_angle = angle * M_PI / 180;
+            Matrix r = {
+                {1, 0,                0,               0},
+                {0, cos(real_angle),  sin(real_angle), 0},
+                {0, -sin(real_angle), cos(real_angle), 0},
+                {0, 0,                0,               1}
+            };
+
+            return r;
+        }
+
+        inline Matrix rotation_matrix_y(double angle) {
+            auto real_angle = angle * M_PI / 180;
+            Matrix r = {
+                {cos(real_angle), 0, -sin(real_angle), 0},
+                {0,               1, 0,                0},
+                {sin(real_angle), 0, cos(real_angle),  0},
+                {0,               0, 0,                1}
+            };
+
+            return r;
+        }
+
+        inline Matrix rotation_matrix_z(double angle) {
+            auto real_angle = angle * M_PI / 180;
+            Matrix r = {
+                {cos(real_angle),  sin(real_angle), 0, 0},
+                {-sin(real_angle), cos(real_angle), 0, 0},
+                {0,                0,               1, 0},
+                {0,                0,               0, 1}
+            };
+
+            return r;
+        }
+
+        inline Matrix scaling_matrix(const std::vector<double>& scale) {
+            Matrix a(4, 4);
+
+            for (size_t i = 0; i < 4; ++i) {
+                a(i,i) = scale[i];
+            }
+
+            a(3,3) = 1;
+
+            return a;
+        }
+
+        inline Coordinate center(const std::vector<Coordinate>& coords) {
+            double xc = 0;
+            double yc = 0;
+            double zc = 0;
+
+            for (auto coord : coords) {
+                xc += coord.get_x();
+                yc += coord.get_y();
+                zc += coord.get_z();
+            }
+
+            xc /= coords.size();
+            yc /= coords.size();
+            zc /= coords.size();
+
+            return Coordinate(xc, yc, zc);
         }
     }
 }
