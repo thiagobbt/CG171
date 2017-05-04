@@ -8,7 +8,7 @@ class BSplineCurve : public Curve {
  private:
     std::vector<Coordinate> original_loc;
     void update_coords();
-    utils::Matrix mbs = {
+    const utils::Matrix mbs = {
         {-1.0/6, 1.0/2, -1.0/2, 1.0/6},
         {1.0/2, -1, 1.0/2, 0},
         {-1.0/2, 0, 1.0/2, 0},

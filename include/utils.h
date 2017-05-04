@@ -84,7 +84,7 @@ namespace utils {
             }
         }
 
-        Coordinate to_coord() {
+        const Coordinate to_coord() const {
             return Coordinate((*this)(0, 0), (*this)(0, 1), (*this)(0, 2), (*this)(0, 3));
         }
 
@@ -96,7 +96,7 @@ namespace utils {
             return data[j*dim_y + i];
         }
 
-        Matrix operator*(const Matrix& b) {
+        const Matrix operator*(const Matrix& b) const {
             assert(dim_y == b.dim_x);
 
             Matrix c(dim_x, b.dim_y);
@@ -112,110 +112,55 @@ namespace utils {
             return c;
         }
 
-        Matrix operator/(const int& b) {
+        const Matrix operator/(const int& b) const {
             Matrix c(dim_x, dim_y);
 
             for (auto d : data) {
                 c.data.clear();
                 c.data.push_back(d / b);
             }
+
             return c;
         }
 
-        Matrix operator*(const Coordinate& rhs) {
+        const Matrix operator*(const Coordinate& rhs) const {
             Matrix b(rhs);
             return (*this) * b;
         }
     };
 
-#warning "Code should be using Transformation3D namespace"
-    namespace Transformation2D {
-        inline Matrix rotation_matrix(double angle) {
-            utils::Matrix a(3,3);
-            auto real_angle = angle * M_PI / 180;
-            a(0, 0) = cos(real_angle);
-            a(0, 1) = - sin(real_angle);
-            a(1, 0) = sin(real_angle);
-            a(1, 1) = cos(real_angle);
-            a(2, 2) = 1;
-
-            return a;
-        }
-
-        inline Matrix translation_matrix(double dx, double dy) {
-            utils::Matrix a(3,3);
-            a(0, 0) = 1;
-            a(1, 1) = 1;
-            a(2, 2) = 1;
-            a(2, 0) = dx;
-            a(2, 1) = dy;
-
-            return a;
-        }
-
-        inline Matrix scaling_matrix(double dx, double dy) {
-            Matrix a(3,3);
-            a(0, 0) = dx;
-            a(1, 1) = dy;
-            a(2, 2) = 1;
-
-            return a;
-        }
-
-        inline Coordinate center(const std::vector<Coordinate>& coords) {
-            double xc = 0;
-            double yc = 0;
-
-            for (auto coord : coords) {
-                xc += coord.get_x();
-                yc += coord.get_y();
-            }
-
-            xc /= coords.size();
-            yc /= coords.size();
-
-            return Coordinate(xc, yc);
-        }
-    }
-
     namespace Transformation3D {
-        inline Matrix rotation_matrix_x(double angle) {
-            auto real_angle = angle * M_PI / 180;
-            Matrix r = {
+        inline const Matrix rotation_matrix_x(double angle) {
+            const double real_angle = angle * M_PI / 180;
+            return {
                 {1, 0,                0,               0},
                 {0, cos(real_angle),  sin(real_angle), 0},
                 {0, -sin(real_angle), cos(real_angle), 0},
                 {0, 0,                0,               1}
             };
-
-            return r;
         }
 
-        inline Matrix rotation_matrix_y(double angle) {
-            auto real_angle = angle * M_PI / 180;
-            Matrix r = {
+        inline const Matrix rotation_matrix_y(double angle) {
+            const double real_angle = angle * M_PI / 180;
+            return {
                 {cos(real_angle), 0, -sin(real_angle), 0},
                 {0,               1, 0,                0},
                 {sin(real_angle), 0, cos(real_angle),  0},
                 {0,               0, 0,                1}
             };
-
-            return r;
         }
 
-        inline Matrix rotation_matrix_z(double angle) {
-            auto real_angle = angle * M_PI / 180;
-            Matrix r = {
+        inline const Matrix rotation_matrix_z(double angle) {
+            const double real_angle = angle * M_PI / 180;
+            return {
                 {cos(real_angle),  sin(real_angle), 0, 0},
                 {-sin(real_angle), cos(real_angle), 0, 0},
                 {0,                0,               1, 0},
                 {0,                0,               0, 1}
             };
-
-            return r;
         }
 
-        inline Matrix translation_matrix(double dx, double dy, double dz) {
+        inline const Matrix translation_matrix(double dx, double dy, double dz) {
             return {
                 {1,   0,  0, 0},
                 {0,   1,  0, 0},
@@ -224,7 +169,7 @@ namespace utils {
             };
         }
 
-        inline Matrix scaling_matrix(double dx, double dy, double dz) {
+        inline const Matrix scaling_matrix(double dx, double dy, double dz) {
             return {
                 {dx, 0, 0, 0},
                 {0, dy, 0, 0},
@@ -233,7 +178,7 @@ namespace utils {
             };
         }
 
-        inline Coordinate center(const std::vector<Coordinate>& coords) {
+        inline const Coordinate center(const std::vector<Coordinate>& coords) {
             double xc = 0;
             double yc = 0;
             double zc = 0;

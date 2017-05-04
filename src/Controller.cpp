@@ -99,7 +99,7 @@ void Controller::scale_obj(const string& id, double sx, double sy, double sz) {
     World::instance().update_obj(id);
 }
 
-void Controller::export_obj(std::ostream &out) {
+void Controller::export_obj(std::ostream &out) const {
     auto display_file = World::instance().get_display_file();
 
     int n_coords = 0;

@@ -23,7 +23,7 @@ class World {
     const Object& obj(const string&);
     void update_obj(const string&);
     void update_all();
-    void print_coords(std::ostream&);
+    void print_coords(std::ostream&) const;
     std::unordered_map<string, Object*> get_display_file();
 
  protected:

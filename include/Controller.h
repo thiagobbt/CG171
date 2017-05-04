@@ -34,7 +34,7 @@ class Controller {
     void rotate_obj(const string&, double, double, double, Coordinate, bool);
     void scale_obj(const string&, double, double, double);
 
-    void export_obj(std::ostream&);
+    void export_obj(std::ostream&) const;
     void import_obj(std::istream&);
 
     void set_clipping_cs();

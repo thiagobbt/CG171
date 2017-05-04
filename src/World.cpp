@@ -104,7 +104,7 @@ void World::update_all() {
     }
 }
 
-void World::print_coords(std::ostream& out) {
+void World::print_coords(std::ostream& out) const {
     for (auto obj : display_file) {
         out << "# " << obj.first << std::endl;
         out << *(obj.second);

@@ -724,6 +724,54 @@ namespace cb {
 
                 gtk_widget_queue_draw (window_widget);
                 break;
+            case GDK_KEY_P:
+                log_print("Add pyramid\n");
+
+                if (!ctrl.add_polygon("test_pyramid", {
+                        {400/3, 400/3, 400/3},
+                        {800/3, 400/3, 400/3},
+                        {800/3, 400/3, 800/3},
+                        {400/3, 400/3, 800/3},
+                        {400/3, 400/3, 400/3},
+                        {200, 800/3, 200},
+                        {800/3, 400/3, 400/3},
+                        {200, 800/3, 200},
+                        {800/3, 400/3, 800/3},
+                        {200, 800/3, 200},
+                        {400/3, 400/3, 800/3},
+                    }, {0, 0, 1}, false)) {
+                    log_print("   Error: Object name repetition\n");
+                    return false;
+                }
+
+                add_to_obj_list("test_pyramid", "Polygon");
+
+                gtk_widget_queue_draw (window_widget);
+                break;
+            case GDK_KEY_KP_4:
+                ctrl.rotate_obj("test_pyramid", 0, -15, 0, {0, 0, 0}, false);
+                gtk_widget_queue_draw (window_widget);
+                break;
+            case GDK_KEY_KP_6:
+                ctrl.rotate_obj("test_pyramid", 0, 15, 0, {0, 0, 0}, false);
+                gtk_widget_queue_draw (window_widget);
+                break;
+            case GDK_KEY_KP_2:
+                ctrl.rotate_obj("test_pyramid", -15, 0, 0, {0, 0, 0}, false);
+                gtk_widget_queue_draw (window_widget);
+                break;
+            case GDK_KEY_KP_8:
+                ctrl.rotate_obj("test_pyramid", 15, 0, 0, {0, 0, 0}, false);
+                gtk_widget_queue_draw (window_widget);
+                break;
+            case GDK_KEY_KP_7:
+                ctrl.rotate_obj("test_pyramid", 0, 0, -15, {0, 0, 0}, false);
+                gtk_widget_queue_draw (window_widget);
+                break;
+            case GDK_KEY_KP_9:
+                ctrl.rotate_obj("test_pyramid", 0, 0, 15, {0, 0, 0}, false);
+                gtk_widget_queue_draw (window_widget);
+                break;
             case GDK_KEY_c:
                 log_print("Add test bezier curve\n");
 

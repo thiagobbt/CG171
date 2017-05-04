@@ -13,27 +13,27 @@ class Coordinate {
     Coordinate(double x = 0, double y = 0, double z = 1, double w = 1)
         : x(x), y(y), z(z), w(w) {}
 
-    Coordinate operator+(const Coordinate& rhs) {
+    const Coordinate operator+(const Coordinate& rhs) const {
         return Coordinate(x + rhs.get_x(), y + rhs.get_y(), z + rhs.get_z(), w + rhs.get_w());
     }
 
-    Coordinate operator-(const Coordinate& rhs) {
+    const Coordinate operator-(const Coordinate& rhs) const {
         return Coordinate(x - rhs.get_x(), y - rhs.get_y(), z - rhs.get_z(), w - rhs.get_w());
     }
 
-    Coordinate operator/(const Coordinate& rhs) {
+    const Coordinate operator/(const Coordinate& rhs) const {
         return Coordinate(x / rhs.get_x(), y / rhs.get_y(), z / rhs.get_z(), w / rhs.get_w());
     }
 
-    Coordinate operator*(const Coordinate& rhs) {
+    const Coordinate operator*(const Coordinate& rhs) const {
         return Coordinate(x * rhs.get_x(), y * rhs.get_y(), z * rhs.get_z(), w * rhs.get_w());
     }
 
-    Coordinate operator/(const double& rhs) {
+    const Coordinate operator/(const double& rhs) const {
         return Coordinate(x / rhs, y / rhs, z / rhs, w / rhs);
     }
 
-    Coordinate operator*(const double& rhs) {
+    const Coordinate operator*(const double& rhs) const {
         return Coordinate(x * rhs, y * rhs, z * rhs, w * rhs);
     }
 
@@ -45,7 +45,7 @@ class Coordinate {
         return *this;
     }
 
-    bool operator!=(const Coordinate& rhs) {
+    bool operator!=(const Coordinate& rhs) const {
         if (x != rhs.get_x() ||
             y != rhs.get_y() ||
             z != rhs.get_z() ||
@@ -64,6 +64,15 @@ class Coordinate {
     }
 
     double& operator[](int index) {
+        switch (index) {
+            case 0: return x;
+            case 1: return y;
+            case 2: return z;
+            default: return w;
+        }
+    }
+
+    const double operator[](int index) const {
         switch (index) {
             case 0: return x;
             case 1: return y;

@@ -27,8 +27,8 @@ void Window::move(double x, double y, double z) {
     m = m * utils::Transformation3D::rotation_matrix_y(angle_y);
     m = m * utils::Transformation3D::rotation_matrix_z(angle_z);
 
-    start_point = (utils::Matrix(start_point) * m).to_coord();
-    end_point = (utils::Matrix(end_point) * m).to_coord();
+    start_point = (utils::Matrix(start_point, 4) * m).to_coord();
+    end_point = (utils::Matrix(end_point, 4) * m).to_coord();
 }
 
 void Window::zoom(double zoom) {
@@ -48,7 +48,7 @@ void Window::zoom(double zoom) {
     end_point = Coordinate(new_end_x, new_end_y);
 }
 
-double Window::get_current_zoom() {
+double Window::get_current_zoom() const {
     return current_zoom;
 }
 
@@ -58,7 +58,7 @@ void Window::rotate(double theta_x, double theta_y, double theta_z) {
     angle_z = std::fmod(angle_z + theta_z, 360);
 }
 
-Coordinate Window::to_viewport(const Coordinate& coord) {
+const Coordinate Window::to_viewport(const Coordinate& coord) const {
     double width  = viewport.second.get_x() - viewport.first.get_x();
     double height = viewport.second.get_y() - viewport.first.get_y();
     double x = (coord.get_x() + 1) / 2 * width + viewport.first.get_x();
@@ -67,7 +67,7 @@ Coordinate Window::to_viewport(const Coordinate& coord) {
     return Coordinate(x, y);
 }
 
-utils::Matrix Window::normalizerMatrix() {
+const utils::Matrix Window::normalizerMatrix() const {
     Coordinate center = (start_point + end_point) / 2.0;
     double width = std::abs(end_point.get_x() - start_point.get_x());
     double height = std::abs(end_point.get_y() - start_point.get_y());
@@ -81,7 +81,7 @@ utils::Matrix Window::normalizerMatrix() {
     return normalizer;
 }
 
-void Window::print_coords(std::ostream& out) {
+void Window::print_coords(std::ostream& out) const {
     out << start_point << std::endl;
     out << end_point << std::endl;
 }
@@ -91,21 +91,21 @@ void Window::set_coords(Coordinate& a, Coordinate& b) {
     end_point = b;
 }
 
-std::pair<Coordinate, Coordinate> Window::get_viewport_coords() {
+const std::pair<Coordinate, Coordinate> Window::get_viewport_coords() const {
     return viewport;
 }
 
-bool isPointDrawable(const Coordinate& coord) {
+bool Window::isPointDrawable(const Coordinate& coord) const {
     return !(coord.get_x() < -1 || coord.get_x() > 1 || coord.get_y() < -1 || coord.get_y() > 1);
 }
 
-void Window::clipPoint(std::vector<Coordinate>& coords) {
+void Window::clipPoint(std::vector<Coordinate>& coords) const {
     if (!isPointDrawable(coords[0])) {
         coords.clear();
     }
 }
 
-int Window::get_region_code(Coordinate& coord) {
+int Window::get_region_code(const Coordinate& coord) const {
     int result = 0;
 
     result |= static_cast<int>(coord.get_y() > 1);
@@ -116,7 +116,7 @@ int Window::get_region_code(Coordinate& coord) {
     return result;
 }
 
-void Window::clipCS(std::vector<Coordinate>& coords) {
+void Window::clipCS(std::vector<Coordinate>& coords) const {
     auto rc0 = get_region_code(coords[0]);
     auto rc1 = get_region_code(coords[1]);
 
@@ -158,7 +158,7 @@ void Window::clipCS(std::vector<Coordinate>& coords) {
     clipCS(coords);
 }
 
-void Window::clipLB(std::vector<Coordinate>& coords) {
+void Window::clipLB(std::vector<Coordinate>& coords) const {
     double dx = coords[1].get_x() - coords[0].get_x();
     double dy = coords[1].get_y() - coords[0].get_y();
 
@@ -204,7 +204,7 @@ void Window::clipLB(std::vector<Coordinate>& coords) {
     }
 }
 
-void Window::clipLine(std::vector<Coordinate>& coords) {
+void Window::clipLine(std::vector<Coordinate>& coords) const {
     if (line_clipping_algorithm) {
         clipCS(coords);
     } else {
@@ -212,7 +212,7 @@ void Window::clipLine(std::vector<Coordinate>& coords) {
     }
 }
 
-Coordinate lineIntersection(std::pair<Coordinate, Coordinate> a, std::pair<Coordinate, Coordinate> b) {
+const Coordinate Window::lineIntersection(const std::pair<Coordinate, Coordinate> a, const std::pair<Coordinate, Coordinate> b) const {
     Coordinate result(0, 0);
     auto& p1 = a.first;
     auto& p2 = a.second;
@@ -232,7 +232,7 @@ Coordinate lineIntersection(std::pair<Coordinate, Coordinate> a, std::pair<Coord
     return result;
 }
 
-void clampPoint(Coordinate& c) {
+void Window::clampPoint(Coordinate& c) const {
     if (c[0] < -1) {
         c[0] = -1;
     }
@@ -250,7 +250,7 @@ void clampPoint(Coordinate& c) {
     }
 }
 
-void Window::clipPolygon(std::vector<Coordinate>& coords) {
+void Window::clipPolygon(std::vector<Coordinate>& coords) const {
     std::vector<Coordinate> output;
     Coordinate s = coords.back();
 
