@@ -23,7 +23,8 @@ void Object::update() {
 	auto normalizer = Window::instance().normalizerMatrix();
 
 	for (auto c : world_loc) {
-		auto tmp = utils::Matrix(c, 4) * normalizer;
+		auto c1 = Window::instance().perspective(c);
+		auto tmp = utils::Matrix(c1, 4) * normalizer;
 		win_loc.push_back(tmp.to_coord());
 	}
 }

@@ -127,6 +127,10 @@ namespace utils {
             Matrix b(rhs);
             return (*this) * b;
         }
+
+        Matrix operator*=(const Matrix& rhs) {
+            return *this = (*this) * rhs;
+        }
     };
 
     namespace Transformation3D {

@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[]){
     gtk_init(&argc, &argv);
-    cb::init();
+    cb::init(&argc, &argv);
     gtk_main();
 
     return 0;

@@ -8,6 +8,8 @@ class Window {
     Coordinate start_point;
     Coordinate end_point;
     std::pair<Coordinate, Coordinate> viewport;
+    Coordinate cop;
+    std::pair<Coordinate, Coordinate> vpn;
     double default_width, default_height;
     double angle_x = 0;
     double angle_y = 0;
@@ -30,6 +32,7 @@ class Window {
     void zoom(double);
     double get_current_zoom() const;
     void rotate(double, double, double);
+    const Coordinate perspective(const Coordinate& coord) const;
     const Coordinate to_viewport(const Coordinate&) const;
     const Coordinate to_window(const Coordinate&) const;
     const utils::Matrix normalizerMatrix() const;

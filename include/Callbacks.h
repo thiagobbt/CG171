@@ -5,6 +5,7 @@
 #include <cstring>
 #include <gtk/gtk.h>
 #include <fstream>
+#include <string>
 #include "Controller.h"
 #include "DrawingManager.h"
 
@@ -216,6 +217,18 @@ namespace cb {
         gtk_widget_queue_draw(window_widget);
     }
 
+    static void btn_in_cb() {
+        log_print("In\n");
+        ctrl.pan_z(20);
+        gtk_widget_queue_draw(window_widget);
+    }
+
+    static void btn_out_cb() {
+        log_print("Out\n");
+        ctrl.pan_z(-20);
+        gtk_widget_queue_draw(window_widget);
+    }
+
     static void btn_up_cb() {
         log_print("Up\n");
         ctrl.pan_y(20);
@@ -228,14 +241,38 @@ namespace cb {
         gtk_widget_queue_draw(window_widget);
     }
 
-    static void btn_rotate_r_cb() {
-        log_print("Rotate right\n");
+    static void btn_rotate_rx_cb() {
+        log_print("Rotate x right\n");
+        ctrl.rotate(-15, 0, 0);
+        gtk_widget_queue_draw(window_widget);
+    }
+
+    static void btn_rotate_lx_cb() {
+        log_print("Rotate x left\n");
+        ctrl.rotate(15, 0, 0);
+        gtk_widget_queue_draw(window_widget);
+    }
+
+    static void btn_rotate_ry_cb() {
+        log_print("Rotate y right\n");
+        ctrl.rotate(0, -15, 0);
+        gtk_widget_queue_draw(window_widget);
+    }
+
+    static void btn_rotate_ly_cb() {
+        log_print("Rotate y left\n");
+        ctrl.rotate(0, 15, 0);
+        gtk_widget_queue_draw(window_widget);
+    }
+
+    static void btn_rotate_rz_cb() {
+        log_print("Rotate z right\n");
         ctrl.rotate(0, 0, -15);
         gtk_widget_queue_draw(window_widget);
     }
 
-    static void btn_rotate_l_cb() {
-        log_print("Rotate left\n");
+    static void btn_rotate_lz_cb() {
+        log_print("Rotate z left\n");
         ctrl.rotate(0, 0, 15);
         gtk_widget_queue_draw(window_widget);
     }
@@ -276,8 +313,6 @@ namespace cb {
             log_print("   Error: Object name repetition\n");
             return;
         }
-
-        add_to_obj_list(name, "Point");
 
         GtkWidget *new_object_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "new_object_window"));
         gtk_widget_hide(new_object_widget);
@@ -325,8 +360,6 @@ namespace cb {
             log_print("   Error: Object name repetition\n");
             return;
         }
-
-        add_to_obj_list(name, "Line");
 
         gtk_widget_queue_draw (window_widget);
 
@@ -389,8 +422,6 @@ namespace cb {
 
         gtk_list_store_clear(GTK_LIST_STORE(pol_coordinates));
 
-        add_to_obj_list(name, "Polygon");
-
         gtk_widget_queue_draw(window_widget);
 
         GtkWidget *new_object_widget = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "new_object_window"));
@@ -431,14 +462,8 @@ namespace cb {
 
         if (gtk_toggle_button_get_active(radio_bezier)) {
             success = ctrl.add_bezier_curve(name, pol_coord_vector, utils::Color{rgba.red, rgba.green, rgba.blue});
-            if (success) {
-                add_to_obj_list(name, "Bezier Curve");
-            }
         } else {
             success = ctrl.add_bspline_curve(name, pol_coord_vector, utils::Color{rgba.red, rgba.green, rgba.blue});
-            if (success) {
-                add_to_obj_list(name, "B-Spline Curve");
-            }
         }
 
         if (!success) {
@@ -613,11 +638,9 @@ namespace cb {
             GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
             filename = gtk_file_chooser_get_filename (chooser);
 
-            std::ofstream outfile(filename, std::ofstream::trunc);
-            ctrl.export_obj(outfile);
-            outfile.close();
+            ctrl.export_obj(filename);
 
-            g_free (filename);
+            g_free(filename);
         }
 
         gtk_widget_destroy (dialog);
@@ -641,11 +664,9 @@ namespace cb {
             GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
             filename = gtk_file_chooser_get_filename (chooser);
 
-            std::ifstream infile(filename, std::ifstream::binary);
-            ctrl.import_obj(infile);
-            infile.close();
+            ctrl.import_obj(std::string(filename));
 
-            g_free (filename);
+            g_free(filename);
         }
 
         gtk_widget_destroy (dialog);
@@ -701,8 +722,6 @@ namespace cb {
                     return false;
                 }
 
-                add_to_obj_list("test_point", "Point");
-
                 gtk_widget_queue_draw (window_widget);
                 break;
             case GDK_KEY_p:
@@ -718,9 +737,6 @@ namespace cb {
                     log_print("   Error: Object name repetition\n");
                     return false;
                 }
-
-                add_to_obj_list("test_polygon", "Polygon");
-                add_to_obj_list("test_line", "Line");
 
                 gtk_widget_queue_draw (window_widget);
                 break;
@@ -744,7 +760,32 @@ namespace cb {
                     return false;
                 }
 
-                add_to_obj_list("test_pyramid", "Polygon");
+                gtk_widget_queue_draw (window_widget);
+                break;
+            case GDK_KEY_b:
+                log_print("Add brick\n");
+
+                if (!ctrl.add_polygon("test_pyramid", {
+                        {100, 100, 0},
+                        {100, 200, 0},
+                        {200, 200, 0},
+                        {200, 100, 0},
+                        {100, 100, 0},
+                        {100, 100, 300},
+                        {100, 200, 300},
+                        {200, 200, 300},
+                        {200, 100, 300},
+                        {100, 100, 300},
+                        {100, 200, 300},
+                        {100, 200, 0},
+                        {200, 200, 0},
+                        {200, 200, 300},
+                        {200, 100, 300},
+                        {200, 100, 0},
+                    }, {0, 0, 1}, false)) {
+                    log_print("   Error: Object name repetition\n");
+                    return false;
+                }
 
                 gtk_widget_queue_draw (window_widget);
                 break;
@@ -788,8 +829,6 @@ namespace cb {
                     return false;
                 }
 
-                add_to_obj_list("test_bezier", "Bezier Curve");
-
                 gtk_widget_queue_draw (window_widget);
                 break;
             case GDK_KEY_C:
@@ -811,8 +850,6 @@ namespace cb {
                     log_print("   Error: Object name repetition\n");
                     return false;
                 }
-
-                add_to_obj_list("test_bspline", "B-Spline Curve");
 
                 gtk_widget_queue_draw (window_widget);
                 break;
@@ -839,7 +876,7 @@ namespace cb {
         return false;
     }
 
-    void init() {
+    void init(int* argc, char*** argv) {
         gtkBuilder = gtk_builder_new();
         gtk_builder_add_from_file(gtkBuilder, "window.glade", NULL);
 
@@ -926,17 +963,35 @@ namespace cb {
         GtkWidget *btn_pan_right = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_pan_right"));
         g_signal_connect(btn_pan_right, "button_press_event", G_CALLBACK(btn_right_cb), NULL);
 
+        GtkWidget *btn_pan_in = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_pan_in"));
+        g_signal_connect(btn_pan_in, "button_press_event", G_CALLBACK(btn_in_cb), NULL);
+
+        GtkWidget *btn_pan_out = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_pan_out"));
+        g_signal_connect(btn_pan_out, "button_press_event", G_CALLBACK(btn_out_cb), NULL);
+
         GtkWidget *btn_zoom_in = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_zoom_in"));
         g_signal_connect(btn_zoom_in, "button_press_event", G_CALLBACK(btn_zoom_in_cb), NULL);
 
         GtkWidget *btn_zoom_out = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_zoom_out"));
         g_signal_connect(btn_zoom_out, "button_press_event", G_CALLBACK(btn_zoom_out_cb), NULL);
 
-        GtkWidget *btn_rotate_r = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_r"));
-        g_signal_connect(btn_rotate_r, "button_press_event", G_CALLBACK(btn_rotate_r_cb), NULL);
+        GtkWidget *btn_rotate_rx = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_rx"));
+        g_signal_connect(btn_rotate_rx, "button_press_event", G_CALLBACK(btn_rotate_rx_cb), NULL);
 
-        GtkWidget *btn_rotate_l = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_l"));
-        g_signal_connect(btn_rotate_l, "button_press_event", G_CALLBACK(btn_rotate_l_cb), NULL);
+        GtkWidget *btn_rotate_lx = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_lx"));
+        g_signal_connect(btn_rotate_lx, "button_press_event", G_CALLBACK(btn_rotate_lx_cb), NULL);
+
+        GtkWidget *btn_rotate_ry = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_ry"));
+        g_signal_connect(btn_rotate_ry, "button_press_event", G_CALLBACK(btn_rotate_ry_cb), NULL);
+
+        GtkWidget *btn_rotate_ly = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_ly"));
+        g_signal_connect(btn_rotate_ly, "button_press_event", G_CALLBACK(btn_rotate_ly_cb), NULL);
+
+        GtkWidget *btn_rotate_rz = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_rz"));
+        g_signal_connect(btn_rotate_rz, "button_press_event", G_CALLBACK(btn_rotate_rz_cb), NULL);
+
+        GtkWidget *btn_rotate_lz = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_lz"));
+        g_signal_connect(btn_rotate_lz, "button_press_event", G_CALLBACK(btn_rotate_lz_cb), NULL);
 
         GtkWidget *btn_translate_ok = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_translate_ok"));
         g_signal_connect(btn_translate_ok, "button_press_event", G_CALLBACK(btn_translate_obj_cb), NULL);
@@ -963,6 +1018,10 @@ namespace cb {
         g_signal_connect(radiobutton_lb, "button_press_event", G_CALLBACK(set_clipping_lb), NULL);
 
         gtk_widget_show_all(window_widget);
+
+        if (*argc > 1) {
+            ctrl.import_obj((*argv)[1]);
+        }
     }
 }
 
