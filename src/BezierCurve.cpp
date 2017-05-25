@@ -43,13 +43,23 @@ void BezierCurve::update_coords() {
 				{original_loc[i*3+3][1]},
 			};
 
+			utils::Matrix gb_z = {
+				{original_loc[i*3][2]},
+				{original_loc[i*3+1][2]}, 
+				{original_loc[i*3+2][2]},
+				{original_loc[i*3+3][2]},
+			};
+
 			utils::Matrix tmp = t_m * mb;
 			utils::Matrix x_m = tmp * gb_x;
 			utils::Matrix y_m = tmp * gb_y;
+			utils::Matrix z_m = tmp * gb_z;
 
-			world_loc.emplace_back(x_m(0, 0), y_m(0, 0));
+			world_loc.emplace_back(x_m(0, 0), y_m(0, 0), z_m(0, 0));
 		}
 	}
+
+	original_loc = world_loc;
 }
 
 void BezierCurve::draw() {

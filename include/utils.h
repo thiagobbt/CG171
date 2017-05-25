@@ -59,7 +59,7 @@ namespace utils {
             fill();
         }
 
-        Matrix(const Coordinate& c, size_t d = 3) : dim_x(1), dim_y(d) {
+        Matrix(const Coordinate& c, size_t d = 4) : dim_x(1), dim_y(d) {
             data.reserve(d);
             data.push_back(c.get_x());
             data.push_back(c.get_y());

@@ -6,6 +6,7 @@
 #include "Line.h"
 #include "Point.h"
 #include "Polygon.h"
+#include "SurfaceBezier.h"
 #include "World.h"
 #include "utils.h"
 #include <cassert>
@@ -54,6 +55,15 @@ bool Controller::add_bspline_curve(const string& id, const std::vector<Coordinat
     if (res) {
         World::instance().update_obj(id);
         cb::add_to_obj_list(id, "B-Spline");
+    }
+    return res;
+}
+
+bool Controller::add_bezier_surface(const string& id, const std::vector<Coordinate>& coords, utils::Color c) {
+    bool res = World::instance().add_obj(id, new SurfaceBezier(coords, c));
+    if (res) {
+        World::instance().update_obj(id);
+        cb::add_to_obj_list(id, "BezierSurface");
     }
     return res;
 }

@@ -217,17 +217,17 @@ namespace cb {
         gtk_widget_queue_draw(window_widget);
     }
 
-    static void btn_in_cb() {
-        log_print("In\n");
-        ctrl.pan_z(20);
-        gtk_widget_queue_draw(window_widget);
-    }
+    // static void btn_in_cb() {
+    //     log_print("In\n");
+    //     ctrl.pan_z(20);
+    //     gtk_widget_queue_draw(window_widget);
+    // }
 
-    static void btn_out_cb() {
-        log_print("Out\n");
-        ctrl.pan_z(-20);
-        gtk_widget_queue_draw(window_widget);
-    }
+    // static void btn_out_cb() {
+    //     log_print("Out\n");
+    //     ctrl.pan_z(-20);
+    //     gtk_widget_queue_draw(window_widget);
+    // }
 
     static void btn_up_cb() {
         log_print("Up\n");
@@ -241,29 +241,29 @@ namespace cb {
         gtk_widget_queue_draw(window_widget);
     }
 
-    static void btn_rotate_rx_cb() {
-        log_print("Rotate x right\n");
-        ctrl.rotate(-15, 0, 0);
-        gtk_widget_queue_draw(window_widget);
-    }
+    // static void btn_rotate_rx_cb() {
+    //     log_print("Rotate x right\n");
+    //     ctrl.rotate(-15, 0, 0);
+    //     gtk_widget_queue_draw(window_widget);
+    // }
 
-    static void btn_rotate_lx_cb() {
-        log_print("Rotate x left\n");
-        ctrl.rotate(15, 0, 0);
-        gtk_widget_queue_draw(window_widget);
-    }
+    // static void btn_rotate_lx_cb() {
+    //     log_print("Rotate x left\n");
+    //     ctrl.rotate(15, 0, 0);
+    //     gtk_widget_queue_draw(window_widget);
+    // }
 
-    static void btn_rotate_ry_cb() {
-        log_print("Rotate y right\n");
-        ctrl.rotate(0, -15, 0);
-        gtk_widget_queue_draw(window_widget);
-    }
+    // static void btn_rotate_ry_cb() {
+    //     log_print("Rotate y right\n");
+    //     ctrl.rotate(0, -15, 0);
+    //     gtk_widget_queue_draw(window_widget);
+    // }
 
-    static void btn_rotate_ly_cb() {
-        log_print("Rotate y left\n");
-        ctrl.rotate(0, 15, 0);
-        gtk_widget_queue_draw(window_widget);
-    }
+    // static void btn_rotate_ly_cb() {
+    //     log_print("Rotate y left\n");
+    //     ctrl.rotate(0, 15, 0);
+    //     gtk_widget_queue_draw(window_widget);
+    // }
 
     static void btn_rotate_rz_cb() {
         log_print("Rotate z right\n");
@@ -829,6 +829,16 @@ namespace cb {
                     return false;
                 }
 
+                // if (!ctrl.add_bezier_curve("test_pyramid", {
+                //         {100, 100, 10},
+                //         {100, 150, 50},
+                //         {200, 200, 100},
+                //         {200, 250, 150},
+                //         }, {1, 0, 0})) {
+                //     log_print("   Error: Object name repetition\n");
+                //     return false;
+                // }
+
                 gtk_widget_queue_draw (window_widget);
                 break;
             case GDK_KEY_C:
@@ -851,7 +861,51 @@ namespace cb {
                     return false;
                 }
 
+                // if (!ctrl.add_bspline_curve("test_pyramid", 
+                //         {
+                //             {100, 100, 10},
+                //             {100, 150, 50},
+                //             {200, 200, 100},
+                //             {200, 250, 150},
+                //             {100, 150, 200},
+                //             {100, 100, 200},
+                //         }
+                //     , {1, 0, 0})) {
+                //     log_print("   Error: Object name repetition\n");
+                //     return false;
+                // }
+
                 gtk_widget_queue_draw (window_widget);
+                break;
+            case GDK_KEY_g:
+                log_print("Add test bezier surface\n");
+
+                if (!ctrl.add_bezier_surface("test_pyramid", 
+                        {
+                            {100, 100, 100},
+                            {100, 150, 200},
+                            {100, 170, 300},
+                            {100, 100, 400},
+                            {200, 150, 100},
+                            {200, 170, 200},
+                            {200, 190, 300},
+                            {200, 100, 400},
+                            {300, 150, 100},
+                            {300, 170, 200},
+                            {300, 190, 300},
+                            {300, 150, 400},
+                            {400, 100, 100},
+                            {400, 130, 200},
+                            {400, 180, 300},
+                            {400, 150, 400},
+                        }
+                    , {1, 0, 0})) {
+                    log_print("   Error: Object name repetition\n");
+                    return false;
+                }
+
+                gtk_widget_queue_draw (window_widget);
+
                 break;
         }
 
@@ -963,11 +1017,11 @@ namespace cb {
         GtkWidget *btn_pan_right = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_pan_right"));
         g_signal_connect(btn_pan_right, "button_press_event", G_CALLBACK(btn_right_cb), NULL);
 
-        GtkWidget *btn_pan_in = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_pan_in"));
-        g_signal_connect(btn_pan_in, "button_press_event", G_CALLBACK(btn_in_cb), NULL);
+        // GtkWidget *btn_pan_in = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_pan_in"));
+        // g_signal_connect(btn_pan_in, "button_press_event", G_CALLBACK(btn_in_cb), NULL);
 
-        GtkWidget *btn_pan_out = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_pan_out"));
-        g_signal_connect(btn_pan_out, "button_press_event", G_CALLBACK(btn_out_cb), NULL);
+        // GtkWidget *btn_pan_out = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_pan_out"));
+        // g_signal_connect(btn_pan_out, "button_press_event", G_CALLBACK(btn_out_cb), NULL);
 
         GtkWidget *btn_zoom_in = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_zoom_in"));
         g_signal_connect(btn_zoom_in, "button_press_event", G_CALLBACK(btn_zoom_in_cb), NULL);
@@ -975,17 +1029,17 @@ namespace cb {
         GtkWidget *btn_zoom_out = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_zoom_out"));
         g_signal_connect(btn_zoom_out, "button_press_event", G_CALLBACK(btn_zoom_out_cb), NULL);
 
-        GtkWidget *btn_rotate_rx = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_rx"));
-        g_signal_connect(btn_rotate_rx, "button_press_event", G_CALLBACK(btn_rotate_rx_cb), NULL);
+        // GtkWidget *btn_rotate_rx = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_rx"));
+        // g_signal_connect(btn_rotate_rx, "button_press_event", G_CALLBACK(btn_rotate_rx_cb), NULL);
 
-        GtkWidget *btn_rotate_lx = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_lx"));
-        g_signal_connect(btn_rotate_lx, "button_press_event", G_CALLBACK(btn_rotate_lx_cb), NULL);
+        // GtkWidget *btn_rotate_lx = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_lx"));
+        // g_signal_connect(btn_rotate_lx, "button_press_event", G_CALLBACK(btn_rotate_lx_cb), NULL);
 
-        GtkWidget *btn_rotate_ry = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_ry"));
-        g_signal_connect(btn_rotate_ry, "button_press_event", G_CALLBACK(btn_rotate_ry_cb), NULL);
+        // GtkWidget *btn_rotate_ry = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_ry"));
+        // g_signal_connect(btn_rotate_ry, "button_press_event", G_CALLBACK(btn_rotate_ry_cb), NULL);
 
-        GtkWidget *btn_rotate_ly = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_ly"));
-        g_signal_connect(btn_rotate_ly, "button_press_event", G_CALLBACK(btn_rotate_ly_cb), NULL);
+        // GtkWidget *btn_rotate_ly = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_ly"));
+        // g_signal_connect(btn_rotate_ly, "button_press_event", G_CALLBACK(btn_rotate_ly_cb), NULL);
 
         GtkWidget *btn_rotate_rz = GTK_WIDGET(gtk_builder_get_object(GTK_BUILDER(gtkBuilder), "btn_rotate_rz"));
         g_signal_connect(btn_rotate_rz, "button_press_event", G_CALLBACK(btn_rotate_rz_cb), NULL);

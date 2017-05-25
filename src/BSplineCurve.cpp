@@ -37,8 +37,16 @@ void BSplineCurve::update_coords() {
 			{original_loc[i][1]}
 		};
 
+		const utils::Matrix gbs_z = {
+			{original_loc[i-3][2]}, 
+			{original_loc[i-2][2]}, 
+			{original_loc[i-1][2]}, 
+			{original_loc[i][2]}
+		};
+
 		utils::Matrix abcd_x = mbs * gbs_x;
 		utils::Matrix abcd_y = mbs * gbs_y;
+		utils::Matrix abcd_z = mbs * gbs_z;
 
 		utils::Matrix fd_helper = {
 			{0, 0, 0, 1},
@@ -49,11 +57,13 @@ void BSplineCurve::update_coords() {
 
 		utils::Matrix fd_x = fd_helper * abcd_x;
 		utils::Matrix fd_y = fd_helper * abcd_y;
+		utils::Matrix fd_z = fd_helper * abcd_z;
 
 		double vx = fd_x(0, 0);
 		double vy = fd_y(0, 0);
+		double vz = fd_z(0, 0);
 
-		world_loc.emplace_back(vx, vy);
+		world_loc.emplace_back(vx, vy, vz);
 
 		for (double t = 0; t < 1; t += delta) {
 			fd_x(0, 0) += fd_x(0, 1);
@@ -64,7 +74,11 @@ void BSplineCurve::update_coords() {
 			fd_y(0, 1) += fd_y(0, 2);
 			fd_y(0, 2) += fd_y(0, 3);
 
-			world_loc.emplace_back(fd_x(0, 0), fd_y(0, 0));
+			fd_z(0, 0) += fd_z(0, 1);
+			fd_z(0, 1) += fd_z(0, 2);
+			fd_z(0, 2) += fd_z(0, 3);
+
+			world_loc.emplace_back(fd_x(0, 0), fd_y(0, 0), fd_z(0, 0));
 		}
 	}
 }

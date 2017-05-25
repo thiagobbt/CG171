@@ -22,16 +22,18 @@ Window::Window() {
 
 void Window::move(double x, double y, double z) {
     auto m = utils::Transformation3D::rotation_matrix_x(-angle_x);
-    m = m * utils::Transformation3D::rotation_matrix_y(-angle_y);
-    m = m * utils::Transformation3D::rotation_matrix_z(-angle_z);
-    m = m * utils::Transformation3D::translation_matrix(x, y, z);
-    m = m * utils::Transformation3D::rotation_matrix_x(angle_x);
-    m = m * utils::Transformation3D::rotation_matrix_y(angle_y);
-    m = m * utils::Transformation3D::rotation_matrix_z(angle_z);
+    m *= utils::Transformation3D::rotation_matrix_y(-angle_y);
+    m *= utils::Transformation3D::rotation_matrix_z(-angle_z);
+    m *= utils::Transformation3D::translation_matrix(x, y, z);
+    m *= utils::Transformation3D::rotation_matrix_x(angle_x);
+    m *= utils::Transformation3D::rotation_matrix_y(angle_y);
+    m *= utils::Transformation3D::rotation_matrix_z(angle_z);
 
     start_point = (utils::Matrix(start_point, 4) * m).to_coord();
     end_point = (utils::Matrix(end_point, 4) * m).to_coord();
     cop = (utils::Matrix(cop, 4) * m).to_coord();
+    vpn.first = (utils::Matrix(vpn.first, 4) * m).to_coord();
+    vpn.second = (utils::Matrix(vpn.second, 4) * m).to_coord();
 }
 
 void Window::zoom(double zoom) {
@@ -49,6 +51,16 @@ void Window::zoom(double zoom) {
 
     start_point = Coordinate(new_start_x, new_start_y);
     end_point = Coordinate(new_end_x, new_end_y);
+
+    // auto midpoint = (start_point + end_point)/2;
+
+    // cop[0] = midpoint[0];
+    // vpn.first[0] = midpoint[0];
+    // vpn.second[0] = midpoint[0];
+
+    // cop[1] = midpoint[1];
+    // vpn.first[1] = midpoint[1];
+    // vpn.second[1] = midpoint[1];
 }
 
 double Window::get_current_zoom() const {
@@ -59,32 +71,49 @@ void Window::rotate(double theta_x, double theta_y, double theta_z) {
     angle_x = std::fmod(angle_x + theta_x, 360);
     angle_y = std::fmod(angle_y + theta_y, 360);
     angle_z = std::fmod(angle_z + theta_z, 360);
+
+    // auto rotation = utils::Transformation3D::rotation_matrix_x(theta_x);
+    // rotation *= utils::Transformation3D::rotation_matrix_y(theta_y);
+    // rotation *= utils::Transformation3D::rotation_matrix_z(theta_z);
+    // cop = (utils::Matrix(cop, 4) * rotation).to_coord();
+    // vpn.first = (utils::Matrix(vpn.first, 4) * rotation).to_coord();
+    // vpn.second = (utils::Matrix(vpn.second, 4) * rotation).to_coord();
 }
 
 const Coordinate Window::perspective(const Coordinate& coord) const {
+    // return Coordinate(coord[0], coord[1]);
+    using utils::Transformation3D::translation_matrix;
+    using utils::Transformation3D::rotation_matrix_x;
+    using utils::Transformation3D::rotation_matrix_y;
     auto p = coord;
-    auto transformation = utils::Transformation3D::translation_matrix(-cop[0], -cop[1], -cop[2]);
+    auto transformation = translation_matrix(-cop[0], -cop[1], -cop[2]);
 
     Coordinate xAxis(1, 0, 0);
     Coordinate yAxis(0, 1, 0);
     Coordinate vector = vpn.second - vpn.first;
     double tx = acos((xAxis * vector) / vector.norm()) * 180 / M_PI;
     double ty = acos((yAxis * vector) / vector.norm()) * 180 / M_PI;
-    transformation *= utils::Transformation3D::rotation_matrix_x(90 - tx);
-    transformation *= utils::Transformation3D::rotation_matrix_y(90 - ty);
-    p = (utils::Matrix(p, 4) * transformation).to_coord();
+    transformation *= rotation_matrix_x(90 - tx);
+    transformation *= rotation_matrix_y(90 - ty);
+    p *= transformation;
 
     double d = p[2] - cop[2];
     double correctionFactor = p[2] / d;
     p[0] /= correctionFactor;
     p[1] /= correctionFactor;
 
-    p = (utils::Matrix(p, 4) * utils::Transformation3D::translation_matrix(cop[0], cop[1], cop[2])).to_coord();
+    p *= translation_matrix(cop[0], cop[1], cop[2]);
 
     return p;
 }
 
 const Coordinate Window::to_viewport(const Coordinate& coord) const {
+    if (coord.get_z() > -cop.get_z()) {
+        auto tmp = coord;
+        tmp[2] = -cop.get_z();
+        return tmp;
+    }
+
     double width  = viewport.second.get_x() - viewport.first.get_x();
     double height = viewport.second.get_y() - viewport.first.get_y();
     double x = (coord.get_x() + 1) / 2 * width + viewport.first.get_x();
@@ -100,10 +129,10 @@ const utils::Matrix Window::normalizerMatrix() const {
     double depth = std::abs(end_point.get_z() - start_point.get_z());
 
     utils::Matrix normalizer = utils::Transformation3D::translation_matrix(-center.get_x(), -center.get_y(), -center.get_z());
-    normalizer = normalizer * utils::Transformation3D::rotation_matrix_x(-angle_x);
-    normalizer = normalizer * utils::Transformation3D::rotation_matrix_y(-angle_y);
-    normalizer = normalizer * utils::Transformation3D::rotation_matrix_z(-angle_z);
-    normalizer = normalizer * utils::Transformation3D::scaling_matrix(2 / width, 2 / height,  2 / depth);
+    normalizer *= utils::Transformation3D::rotation_matrix_x(-angle_x);
+    normalizer *= utils::Transformation3D::rotation_matrix_y(-angle_y);
+    normalizer *= utils::Transformation3D::rotation_matrix_z(-angle_z);
+    normalizer *= utils::Transformation3D::scaling_matrix(2 / width, 2 / height,  2 / depth);
     return normalizer;
 }
 

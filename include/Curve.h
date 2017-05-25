@@ -9,6 +9,7 @@ class Curve : public Object {
     utils::Color color;
  public:
     virtual void draw() = 0;
+    Drawable& drawable() { return *drawable_obj; }
     void clip();
 };
 

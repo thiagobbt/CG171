@@ -14,6 +14,7 @@ class Object {
     std::vector<Coordinate> win_loc;
 
  public:
+    virtual ~Object() {}
     virtual void draw() = 0;
     virtual void clip() = 0;
     void transform(utils::Matrix&);
